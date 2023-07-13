@@ -10,6 +10,7 @@ import "datatables.net-buttons/js/buttons.flash"
 import "datatables.net-buttons/js/buttons.html5"
 import "datatables.net-buttons/js/buttons.print"
 import { Link } from 'react-router-dom';
+import { Button } from 'reactstrap';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
@@ -41,23 +42,7 @@ const Project = () => {
         });
       };
     useEffect(() => {
-        // setTimeout(() => {
-        //     $('#example').DataTable(
-        //         {
-        //             pagingType: 'full_numbers',
-        //               pageLength: 20,
-        //               processing: true,
-        //               dom: 'Bfrtip',
-        //               buttons: [ {
-        //                 extend: 'print',
-        //                 text: "Print",
-        //                 className:"shadow-none btn btn-primary",
-        //             }],
-        //         }
-        //     );
-        //     } ,
-        //     2000
-        //     );
+        
     
         getProject()
 
@@ -80,14 +65,14 @@ const Project = () => {
             button:true,
             sortable:false,
         },
-        {
-            name:'Del',
-            selector: "delete",
-            cell: () => <Icon.Trash />,
-            grow:0,
-            width:'auto',
-            wrap: true
-        },
+        // {
+        //     name:'Del',
+        //     selector: "delete",
+        //     cell: () => <Icon.Trash />,
+        //     grow:0,
+        //     width:'auto',
+        //     wrap: true
+        // },
         {
           name: "Code",
           selector: "opportunity_code",
@@ -132,40 +117,24 @@ const Project = () => {
           },
       ]
       
-      // const deleteRecord = (id) => {
-        
-      //   Swal.fire({
-      //     title: `Are you sure? ${id}`,
-      //     text: "You won't be able to revert this!",
-      //     icon: 'warning',
-      //     showCancelButton: true,
-      //     confirmButtonColor: '#3085d6',
-      //     cancelButtonColor: '#d33',
-      //     confirmButtonText: 'Yes, delete it!'
-      //   }).then((result) => {
-      //     if (result.isConfirmed) {
-      //       api.post('/project/deleteProject',{project_id:id}).then(res=>{
-      //         console.log(res)
-      //         Swal.fire(
-      //           'Deleted!',
-      //           'Your Tender has been deleted.',
-      //           'success'
-      //         )
-      //         getProject()
-
-      //       })
-      //     }
-      //   })
-
-      // }
       
   return (
-    <div className="MainDiv">
-    <div className=" pt-xs-25">
-<BreadCrumbs/>
-          <CommonTable
-          loading={loading}
-          title="Project List">
+   
+<div className="MainDiv">
+      <div className=" pt-xs-25">
+        <BreadCrumbs/>
+
+        <CommonTable
+                loading={loading}
+          title="Project List"
+          Button={
+            <Link to="/ProjectDetails">
+              <Button color="primary" className="shadow-none">
+                Add New
+              </Button>
+            </Link>
+          }
+        >
           <thead>
                   <tr >
                   {columns.map(cell=>{
@@ -175,10 +144,10 @@ const Project = () => {
           </thead>
           <tbody>
             {project && project.map((element,i)=>{
-                return (<tr key={element.title}>
+                return (<tr key={element.project_id}>
                 <td>{i+1}</td>
-                <td><Link to={`/projectEdit/${element.project_id}`}><Icon.Edit2 /></Link></td>
-                <td><Link to=""><span ><Icon.Trash2 /></span></Link></td>
+                <td><Link to={`/ProjectEdit/${element.project_id}`}><Icon.Edit2 /></Link></td>
+                {/* <td><Link to=""><span ><Icon.Trash2 /></span></Link></td> */}
                 <td>{element.project_code}</td>
                 <td>{element.title}</td>
                 <td>{element.company_name}</td>

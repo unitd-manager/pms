@@ -9,7 +9,7 @@ export default function ProjectButton({UpdateData,applyChanges,backToList,naviga
         UpdateData: PropTypes.any,
         navigate: PropTypes.any,
         applyChanges: PropTypes.func,
-        backToList: PropTypes.func
+        backToList: PropTypes.func,
       }
   return (
     <Form>

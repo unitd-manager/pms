@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane } from 'reactstrap';
+import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -7,7 +7,7 @@ import ComponentCard from '../../components/ComponentCard';
 import DuctingCostModal from '../../components/ProjectModal/DuctingCostModal';
 import message from '../../components/Message';
 import api from '../../constants/api';
-import ProjectButton from '../../components/ProjectTable/ProjectButton';
+// import ProjectButton from '../../components/ProjectTable/ProjectButton';
 import ProjectTask from '../smartconTables/ProjectTask';
 import CostingSummary from '../../components/projectTabContent/CostingSummary';
 import ProjectSummaryChart from '../../components/dashboard/ProjectSummaryChart';
@@ -20,6 +20,7 @@ import ProjectTimeSheetEdit from '../../components/ProjectTImeSheetEdit';
 import ProjectTeamEdit from '../../components/ProjectTeamEdit';
 import Tab from '../../components/ProjectTabs/Tab';
 import Stats from '../../components/dashboard/StatsPms';
+import ComponentCardV2 from '../../components/ComponentCardV2';
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -71,7 +72,6 @@ const ProjectEdit = () => {
     setActiveTab(tab);
   };
   // End for tab refresh navigation
-  //const [charges, setCharges]=useState([]);
   const [chargesdetails, setChargesDetails] = useState();
 
   const addContactToggles = () => {
@@ -87,18 +87,8 @@ const ProjectEdit = () => {
     setAddContactModalTeam(!addContactModalTeam);
   };
 
-  // Get Project By Id
+ 
 
-  const getProjectById = () => {
-    api
-      .post('/project/getProjectsByID', { project_id: id })
-      .then((res) => {
-        setProjectDetail(res.data.data);
-      })
-      .catch(() => {
-        message('Project not found', 'info');
-      });
-  };
 
   // Fetch Costing Summary
   const getCostingbySummary = () => {
@@ -235,6 +225,18 @@ const ProjectEdit = () => {
       });
   };
 
+   // Get Project By Id
+
+   const getProjectById = () => {
+    api
+      .post('/project/getProjectsByIDs', { project_id: id })
+      .then((res) => {
+        setProjectDetail(res.data.data[0]);
+      })
+      .catch(() => {
+        message('Project not found', 'info');
+      });
+  };
   // Edit Project
 
   const handleInputs = (e) => {
@@ -242,12 +244,13 @@ const ProjectEdit = () => {
   };
 
   const UpdateData = () => {
-    api.post('/project/edit-Project', projectDetail).then(() => {
-      message('Record editted successfully', 'success');
-      setTimeout(() => {
-        window.location.reload();
-      }, 300);
-    });
+    api
+      .post('/project/edit-Project', projectDetail)
+      .then(() => {
+        message('Record editted successfully', 'success');
+        getProjectById();
+      })
+      .catch(() => {});
   };
   //Getting data from milestone
   const getMilestone = () => {
@@ -287,15 +290,6 @@ const ProjectEdit = () => {
       .catch(() => {});
   };
 
-  // const getStats = () => {
-  //   api.post('/stats/getStatsId', { employee_id: id })
-  //     .then((res) => {
-  //       setStats(res.data.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log('error: ', error);
-  //     });
-  // };
 
   useEffect(() => {
     getCostingbySummary();
@@ -315,32 +309,70 @@ const ProjectEdit = () => {
   return (
     <>
       <BreadCrumbs />
-      <ProjectButton
-        UpdateData={UpdateData}
-        navigate={navigate}
-        applyChanges={applyChanges}
-        backToList={backToList}
-      ></ProjectButton>
+      <Form>
+    <FormGroup>
+      <ComponentCardV2>
+        <Row>
+          <Col>
+            <Button className='shadow-none'
+              color="primary"
+              onClick={() => {
+                UpdateData();
+                navigate('/Project');
+              }}
+            >
+              Save
+            </Button>
+          </Col>
+          <Col>
+            <Button className='shadow-none'
+              color="primary"
+              onClick={() => {
+                UpdateData();
+                applyChanges();
+              }}
+            >
+              Apply
+            </Button>
+          </Col>
+
+         
+          <Col>
+            <Button className='shadow-none'
+              color="dark"
+              onClick={() => {
+                backToList();
+              }}
+            >
+              Back to List
+            </Button>
+          </Col>
+        </Row>
+      </ComponentCardV2>
+    </FormGroup>
+  </Form>
       <Form>
         <FormGroup>
           <ComponentCard
-            title={`Project Details | Code: ${projectDetail && projectDetail.project_code} | 
+            title={`Project Details | Code: ${projectDetail && projectDetail.title} | 
             Category : ${projectDetail && projectDetail.category} | 
             Company :  ${projectDetail && projectDetail.company_name}  | 
             Status : ${projectDetail && projectDetail.status} `}
           >
             <Row>
-              <Col md="3">
+            <Col md="3">
                 <FormGroup>
-                  <Label>Title</Label>
+                  <Label>
+                    Title<span className="required">*</span>
+                  </Label>
                   <Input
                     type="text"
                     name="title"
-                    defaultValue={projectDetail && projectDetail.title}
+                    value={projectDetail && projectDetail.title}
                     onChange={handleInputs}
                   />
-                </FormGroup>
-              </Col>
+                  </FormGroup>
+                  </Col>
 
               <Col md="3">
                 <FormGroup>

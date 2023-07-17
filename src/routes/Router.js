@@ -115,9 +115,7 @@ const CASL = Loadable(lazy(() => import('../views/apps/accessControlCASL/AccessC
 const Error = Loadable(lazy(() => import('../views/auth/Error')));
 // const RegisterFormik = Loadable(lazy(() => import('../views/auth/RegisterFormik')));
 const LoginFormik = Loadable(lazy(() => import('../views/auth/LoginFormik')));
-// const Maintanance = Loadable(lazy(() => import('../views/auth/Maintanance')));
-// const LockScreen = Loadable(lazy(() => import('../views/auth/LockScreen')));
-// const RecoverPassword = Loadable(lazy(() => import('../views/auth/RecoverPassword')));
+
 
 const DataTable = Loadable(lazy(() => import('../views/cubosale/Projects')));
 const Reports = Loadable(lazy(() => import('../views/cubosale/Reports')));
@@ -224,6 +222,7 @@ const ProjectTaskTable = Loadable(lazy(() => import('../views/smartconTables/Pro
 const ProjectTimeSheetTable = Loadable(lazy(() => import('../views/smartconTables/ProjectTimesheet')));
 const Section = Loadable(lazy(() => import('../views/smartconTables/Section')));
 const SectionDetails = Loadable(lazy(() => import('../views/detailTable/SectionDetails')));
+const ProjectDetails = Loadable(lazy(() => import('../views/detailTable/ProjectDetails')));
 const SettingDetails = Loadable(lazy(() => import('../views/detailTable/SettingDetails')));
 const MilestoneDetails = Loadable(lazy(() => import('../views/detailTable/MilestoneDetails')));
 const ProjectTimesheetDetails = Loadable(lazy(() => import('../views/detailTable/ProjectTimesheetDetails')));
@@ -323,7 +322,7 @@ const Routernew = () => {
           <Route path="/TrainingEdit/:id" name="trainingdata" element={<TrainingEdit />}></Route>
           <Route path="/ContentEdit/:id" name="contentdata" element={<ContentEdit />}></Route>
           <Route path="/VehicleEdit/:id" name="vehicledata" element={<VehicleEdit />}></Route>
-          <Route path="/projectEdit/:id" name="projectdata" element={<ProjectEdit />}></Route>
+          <Route path="/ProjectEdit/:id" name="projectdata" element={<ProjectEdit />}></Route>
           <Route path="/clientEdit/:id" name="clienttdata" element={<ClientEdit />}></Route>
           <Route path="/leadEdit/:id" name="leaddata" element={<LeadEdit />}></Route>
           <Route path="/sectionEdit/:id" name="sectiondata" element={<SectionEdit />}></Route>
@@ -570,6 +569,7 @@ const Routernew = () => {
           ></Route>
           <Route path="/Section" name="sectiondata" element={<Section />}></Route>
           <Route path="/SectionDetails" name="sectiondata" element={<SectionDetails />}></Route>
+          <Route path="/ProjectDetails" name="sectiondata" element={<ProjectDetails />}></Route>
           <Route path="/Setting" name="settingdata" element={<SettingTable />}></Route>
           <Route path="/MilestoneList" name="milestonedata" element={<MilestoneListTable />}></Route>
           <Route path="/MilestoneDetails" name="milestonedata" element={<MilestoneDetails />}></Route>

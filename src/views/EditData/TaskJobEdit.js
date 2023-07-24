@@ -217,6 +217,13 @@ const TaskJobEdit = () => {
       wrap: true,
     },
     {
+      name: 'Task Type',
+      selector: 'task_type',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
       name: 'Actual Hours',
       selector: 'actual_hours',
       sortable: true,
@@ -560,6 +567,7 @@ const TaskJobEdit = () => {
                                 <td>{element.end_date ? element.end_date : ''}</td>
                                 <td>{element.completion}</td>
                                 <td>{element.status}</td>
+                                <td>{element.task_type}</td>
                                 <td>{element.hours}</td>
                                 <td>{element.first_name}</td>
                               </tr>

@@ -51,9 +51,11 @@ export default function ProjectTask({
     first_name: '',
     start_date: '',
     end_date: '',
-    hours: '',
     completion: '',
     status: '',
+    task_type: '',
+    actual_hours: '',
+    actual_completed_date: '',
     description:'',
   });
 
@@ -152,6 +154,9 @@ export default function ProjectTask({
     },
     {
       name: 'Status',
+    },
+    {
+      name: 'Task Type',
     },
     {
       name: 'File',
@@ -304,6 +309,25 @@ export default function ProjectTask({
                         </FormGroup>
                             </Col>
                             <Col md="4">
+                            <FormGroup>
+                          <Label>Task Type</Label>
+                          <Input
+                            type="select"
+                            name="task_type"
+                            onChange={handleInputsmilestone}
+                            value={insertTask && insertTask.task_type}
+                            >
+                            {' '}
+                            <option value="" selected="selected">
+                              Please Select
+                            </option>
+                            <option value="Development">Development</option>
+                            <option value="ChangeRequest">ChangeRequest</option>
+                            <option value="Issues">Issues</option>      
+                          </Input>
+                        </FormGroup>
+                            </Col>
+                            <Col md="4">
                               <FormGroup>
                                 <Label>Descrition</Label>
                                 <Input
@@ -381,6 +405,7 @@ export default function ProjectTask({
                   <td>{element.estimated_hours}</td>
                   <td>{element.completion}</td>
                   <td>{element.status}</td>
+                  <td>{element.task_type}</td>
                   <td>
                       <span
                         onClick={() => {

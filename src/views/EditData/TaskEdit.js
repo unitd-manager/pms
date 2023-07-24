@@ -456,8 +456,25 @@ const TaskEdit = () => {
                           <option value="OnHold">OnHold</option>
                         </Input>
                       </FormGroup>
+                    </Col><Col md="3">
+                      <FormGroup>
+                        <Label>Task Type</Label>
+                        <Input
+                          type="select"
+                          onChange={handleInputs}
+                          value={projectTask && projectTask.task_type}
+                          name="status"
+                        >
+                          {' '}
+                          <option value="" selected="selected">
+                            Please Select
+                          </option>
+                          <option value="Development">Development</option>
+                            <option value="ChangeRequest">ChangeRequest</option>
+                            <option value="Issues">Issues</option>     
+                        </Input>
+                      </FormGroup>
                     </Col>
-
                     <Col md="3">
                       <FormGroup>
                         <Label>Completion</Label>

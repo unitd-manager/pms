@@ -352,7 +352,7 @@ const ProjectEdit = () => {
       <Form>
         <FormGroup>
           <ComponentCard
-            title={`Project Details | Code: ${projectDetail && projectDetail.title} | 
+            title={`Project Details | Code: ${projectDetail && projectDetail.project_code} | 
             Category : ${projectDetail && projectDetail.category} | 
             Company :  ${projectDetail && projectDetail.company_name}  | 
             Status : ${projectDetail && projectDetail.status} `}

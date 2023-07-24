@@ -75,7 +75,7 @@ const Project = () => {
         // },
         {
           name: "Code",
-          selector: "opportunity_code",
+          selector: "project_code",
           sortable: true,
           grow:0,
           wrap: true

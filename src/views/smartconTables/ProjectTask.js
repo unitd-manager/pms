@@ -141,13 +141,13 @@ export default function ProjectTask({
       name: 'End Date',
     },
     {
-      name: 'Actual Completed Date',
+      name: 'Actual Comp Date',
     },
     {
       name: 'Actual Hours',
     },
     {
-      name: 'Estimated Hours',
+      name: 'Est Hours',
     },
     {
       name: 'Completion',
@@ -244,7 +244,7 @@ export default function ProjectTask({
                             </Col>
                             <Col md="3">
                               <FormGroup>
-                                <Label>Actual Completed date</Label>
+                                <Label>Actual Comp date</Label>
                                 <Input
                                   type="date"
                                   onChange={handleInputsmilestone}
@@ -268,7 +268,7 @@ export default function ProjectTask({
                             </Col>
                             <Col md="4">
                               <FormGroup>
-                                <Label>Estimated Hours</Label>
+                                <Label>Est Hours</Label>
                                 <Input
                                   type="text"
                                   name="estimated_hours"

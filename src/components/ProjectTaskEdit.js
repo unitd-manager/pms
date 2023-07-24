@@ -160,7 +160,7 @@ const ProjectTaskEdit = ({
                       </Col>
                       <Col md="3">
                         <FormGroup>
-                          <Label>Actual Completed date</Label>
+                          <Label>Actual Comp date</Label>
                           <Input
                             type="date"
                             onChange={handleInputs}
@@ -182,7 +182,7 @@ const ProjectTaskEdit = ({
                       </Col>
                       <Col md="4">
                         <FormGroup>
-                          <Label>Estimated Hours</Label>
+                          <Label>Est Hours</Label>
                           <Input
                             type="numbers"
                             name="estimated_hours"

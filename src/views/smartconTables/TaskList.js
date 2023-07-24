@@ -118,7 +118,7 @@ const ProjectTask = () => {
       wrap: true,
     },
     {
-      name: 'Estimated Hours',
+      name: 'Est Hours',
       selector: 'estimated_hours',
       sortable: true,
       grow: 0,

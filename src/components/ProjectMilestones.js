@@ -111,7 +111,7 @@ getMilestone:PropTypes.func,
       
     },
     {
-      name: 'Actual Completed Date',
+      name: 'Actual Comp Date',
       
     },
     {
@@ -184,7 +184,7 @@ getMilestone:PropTypes.func,
                         </Col>
                         <Col md="3">
                           <FormGroup>
-                            <Label>Actual Completed date</Label>
+                            <Label>Actual Comp date</Label>
                             <Input
                               type="date"
                               onChange={handleInputsmilestone}

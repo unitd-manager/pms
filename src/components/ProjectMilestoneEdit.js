@@ -135,7 +135,7 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
                         </Col>
                         <Col md="3">
                           <FormGroup>
-                            <Label>Actual Completed Date</Label>
+                            <Label>Actual Comp Date</Label>
                             <Input
                               type="date"
                               onChange={handleInputs}

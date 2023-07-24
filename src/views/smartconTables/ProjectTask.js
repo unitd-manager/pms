@@ -54,7 +54,6 @@ export default function ProjectTask({
     completion: '',
     status: '',
     task_type: '',
-    actual_hours: '',
     actual_completed_date: '',
     description:'',
   });
@@ -159,6 +158,9 @@ export default function ProjectTask({
       name: 'Task Type',
     },
     {
+      name: 'Priority',
+    },
+    {
       name: 'File',
     },
   ];
@@ -242,30 +244,7 @@ export default function ProjectTask({
                                 />
                               </FormGroup>
                             </Col>
-                            <Col md="3">
-                              <FormGroup>
-                                <Label>Actual Comp date</Label>
-                                <Input
-                                  type="date"
-                                  onChange={handleInputsmilestone}
-                                  value={
-                                    insertTask && moment(insertTask.actual_completed_date).format('YYYY-MM-DD')
-                                  }
-                                  name="actual_completed_date"
-                                />
-                              </FormGroup>
-                            </Col>
-                            <Col md="4">
-                              <FormGroup>
-                                <Label>Actual Hours</Label>
-                                <Input
-                                  type="text"
-                                  name="actual_hours"
-                                  onChange={handleInputsmilestone}
-                                  value={insertTask && insertTask.actual_hours}
-                                />
-                              </FormGroup>
-                            </Col>
+                            
                             <Col md="4">
                               <FormGroup>
                                 <Label>Est Hours</Label>
@@ -324,6 +303,28 @@ export default function ProjectTask({
                             <option value="Development">Development</option>
                             <option value="ChangeRequest">ChangeRequest</option>
                             <option value="Issues">Issues</option>      
+                          </Input>
+                        </FormGroup>
+                            </Col>
+                            <Col md="4">
+                            <FormGroup>
+                          <Label>Priority</Label>
+                          <Input
+                            type="select"
+                            name="priority"
+                            onChange={handleInputsmilestone}
+                            value={insertTask && insertTask.priority}
+                            >
+                            {' '}
+                            <option value="" selected="selected">
+                              Please Select
+                            </option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>    
+                            <option value="4">4</option>      
+                            <option value="5">5</option>      
+  
                           </Input>
                         </FormGroup>
                             </Col>
@@ -406,6 +407,7 @@ export default function ProjectTask({
                   <td>{element.completion}</td>
                   <td>{element.status}</td>
                   <td>{element.task_type}</td>
+                  <td>{element.priority}</td>
                   <td>
                       <span
                         onClick={() => {

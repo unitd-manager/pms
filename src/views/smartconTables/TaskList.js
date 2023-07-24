@@ -111,6 +111,13 @@ const ProjectTask = () => {
       wrap: true,
     },
     {
+      name: 'Priority',
+      selector: 'priority',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
       name: 'Actual Hours',
       selector: 'actual_hours',
       sortable: true,
@@ -180,6 +187,7 @@ const ProjectTask = () => {
                     <td>{element.completion}</td>
                     <td>{element.status}</td>
                     <td>{element.task_type}</td>
+                    <td>{element.priority}</td>
                     <td>{element.actual_hours}</td>
                     <td>{element.estimated_hours}</td>
                     <td>{element.first_name}</td>

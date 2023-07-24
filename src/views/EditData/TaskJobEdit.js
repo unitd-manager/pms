@@ -482,12 +482,8 @@ const TaskJobEdit = () => {
                                     <Col md="4">
                                       <FormGroup>
                                         <Label>Actual Hours</Label>
-                                        <Input
-                                          type="text"
-                                          name="actual_hours"
-                                          onChange={handleTaskInputs}
-                                          value={taskeditData && taskeditData.actual_hours}
-                                        />
+                                        <br />
+                  <span>{taskeditData && taskeditData.actual_hours}</span>
                                       </FormGroup>
                                     </Col>
                                   </Row>

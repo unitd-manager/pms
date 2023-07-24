@@ -456,14 +456,15 @@ const TaskEdit = () => {
                           <option value="OnHold">OnHold</option>
                         </Input>
                       </FormGroup>
-                    </Col><Col md="3">
+                    </Col>
+                    <Col md="3">
                       <FormGroup>
                         <Label>Task Type</Label>
                         <Input
                           type="select"
                           onChange={handleInputs}
                           value={projectTask && projectTask.task_type}
-                          name="status"
+                          name="task_type"
                         >
                           {' '}
                           <option value="" selected="selected">
@@ -472,6 +473,27 @@ const TaskEdit = () => {
                           <option value="Development">Development</option>
                             <option value="ChangeRequest">ChangeRequest</option>
                             <option value="Issues">Issues</option>     
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                    <Col md="3">
+                      <FormGroup>
+                        <Label>Priority</Label>
+                        <Input
+                          type="select"
+                          onChange={handleInputs}
+                          value={projectTask && projectTask.priority}
+                          name="priority"
+                        >
+                          {' '}
+                          <option value="" selected="selected">
+                            Please Select
+                          </option>
+                          <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option> 
+                            <option value="4">4</option> 
+                            <option value="5">5</option>     
                         </Input>
                       </FormGroup>
                     </Col>
@@ -488,11 +510,18 @@ const TaskEdit = () => {
                     </Col>
                     <Col md="3">
                       <FormGroup>
-                        <Label>Hours</Label>
+                        <Label>Actual Hours</Label>
+                        <br />
+                  <span>{projectTask && projectTask.actual_hours}</span>
+                      </FormGroup>
+                    </Col>
+                    <Col md="3">
+                      <FormGroup>
+                        <Label>Estimated Hours</Label>
                         <Input
                           type="number"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.hours}
+                          value={projectTask && projectTask.estimated_hours}
                           name="hours"
                         />
                       </FormGroup>

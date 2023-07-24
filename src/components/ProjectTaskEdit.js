@@ -160,7 +160,7 @@ const ProjectTaskEdit = ({
                       </Col>
                       <Col md="3">
                         <FormGroup>
-                          <Label>Actual Comp date</Label>
+                          <Label>Act Comp date</Label>
                           <Input
                             type="date"
                             onChange={handleInputs}
@@ -172,12 +172,8 @@ const ProjectTaskEdit = ({
                       <Col md="4">
                         <FormGroup>
                           <Label>Actual Hours</Label>
-                          <Input
-                            type="numbers"
-                            name="actual_hours"
-                            onChange={handleInputs}
-                            value={taskProject && taskProject.actual_hours}
-                          />
+                          <br />
+                  <span>{taskProject && taskProject.actual_hours}</span>
                         </FormGroup>
                       </Col>
                       <Col md="4">
@@ -230,6 +226,46 @@ const ProjectTaskEdit = ({
                             <option value="InProgress">InProgress</option>
                             <option value="Completed">Completed</option>
                             <option value="OnHold">OnHold</option>
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col md="4">
+                        <FormGroup>
+                          <Label>Task type</Label>
+                          <Input
+                            type="select"
+                            name="task_type"
+                            onChange={handleInputs}
+                            value={taskProject && taskProject.task_type}
+                            >
+                            {' '}
+                            <option value="" selected="selected">
+                              Please Select
+                            </option>
+                            <option value="Development">Development</option>
+                            <option value="ChangeRequest">ChangeRequest</option>
+                            <option value="Issues">Issues</option>
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col md="4">
+                        <FormGroup>
+                          <Label>Priority</Label>
+                          <Input
+                            type="select"
+                            name="priroity"
+                            onChange={handleInputs}
+                            value={taskProject && taskProject.priroity}
+                            >
+                            {' '}
+                            <option value="" selected="selected">
+                              Please Select
+                            </option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option> 
                           </Input>
                         </FormGroup>
                       </Col>

@@ -1,5 +1,6 @@
 import { Row, Col } from 'reactstrap';
 import Stats from '../../components/dashboard/StatsPms';
+import ActualHour from '../../components/dashboard/ActualHour';
 // import SalesOverview from '../../components/dashboard/classicDashboard/ProjectOverview';
 // import TenderSummaryCard from '../../components/dashboard/TenderSummaryCard';
 // import ProjectSummaryChart from '../../components/dashboard/ProjectSummaryChart';
@@ -26,6 +27,7 @@ const Classic = () => {
           <WorkpermitExpirySummary/> */}
           {/* <SalesOverview /> */}
           <Stats/>
+          <ActualHour/>
         </Col>
       </Row>
       {/*********************Email & Visitor ************************/}

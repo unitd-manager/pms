@@ -133,6 +133,19 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
                             />
                           </FormGroup>
                         </Col>
+                        <Col md="3">
+                          <FormGroup>
+                            <Label>Actual Completed Date</Label>
+                            <Input
+                              type="date"
+                              onChange={handleInputs}
+                              value={moment(milestoneEdit && milestoneEdit.actual_completed_date).format(
+                                'YYYY-MM-DD',
+                              )}                               
+                              name="actual_completed_date"
+                            />
+                          </FormGroup>
+                        </Col>
                         <Col md="4">
                         <FormGroup>
                           <Label>Status</Label>

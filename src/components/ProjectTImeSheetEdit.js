@@ -55,7 +55,7 @@ const ProjectTimeSheetEdit = ({ editTimeSheetModal, setEditTimeSheetEditModal, c
         message('Record editted successfully', 'success');
         getTimeSheetById();
         setTimeout(() => {
-          contactDatass(false);
+          setEditTimeSheetEditModal(false);
         }, 300);
       })
       .catch(() => {
@@ -97,8 +97,8 @@ const ProjectTimeSheetEdit = ({ editTimeSheetModal, setEditTimeSheetEditModal, c
                           <Input
                             type="text"
                             onChange={handleInputs}
-                            value={timeSheetProject && timeSheetProject.timesheet_title}
-                            name="timesheet_title"
+                            value={timeSheetProject && timeSheetProject.task_title}
+                            name="task_title"
                           />
                         </FormGroup>
                       </Col>
@@ -144,8 +144,8 @@ const ProjectTimeSheetEdit = ({ editTimeSheetModal, setEditTimeSheetEditModal, c
                           <Input
                             type="numbers"
                             onChange={handleInputs}
-                            value={timeSheetProject && timeSheetProject.normal_hours}
-                            name="normal_hours"
+                            value={timeSheetProject && timeSheetProject.hours}
+                            name="hours"
                           />
                         </FormGroup>
                       </Col>

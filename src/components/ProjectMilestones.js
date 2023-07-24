@@ -111,6 +111,10 @@ getMilestone:PropTypes.func,
       
     },
     {
+      name: 'Actual Completed Date',
+      
+    },
+    {
       name: 'Status',
       
     },
@@ -175,6 +179,18 @@ getMilestone:PropTypes.func,
                               value={
                                 insertMilestones && moment(insertMilestones.to_date).format('YYYY-MM-DD')} 
                               name="to_date"
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col md="3">
+                          <FormGroup>
+                            <Label>Actual Completed date</Label>
+                            <Input
+                              type="date"
+                              onChange={handleInputsmilestone}
+                              value={
+                                insertMilestones && moment(insertMilestones.actual_completed_date).format('YYYY-MM-DD')} 
+                              name="actual_completed_date"
                             />
                           </FormGroup>
                         </Col>
@@ -259,6 +275,7 @@ getMilestone:PropTypes.func,
                     <td>{element.description}</td>
                     <td>{element.from_date}</td>
                     <td>{element.to_date}</td>
+                    <td>{element.actual_completed_date}</td>
                     <td>{element.status}</td>
                   </tr>
                 );

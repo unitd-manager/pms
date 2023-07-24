@@ -139,7 +139,13 @@ export default function ProjectTask({
       name: 'End Date',
     },
     {
-      name: 'Hours',
+      name: 'Actual Completed Date',
+    },
+    {
+      name: 'Actual Hours',
+    },
+    {
+      name: 'Estimated Hours',
     },
     {
       name: 'Completion',
@@ -231,14 +237,38 @@ export default function ProjectTask({
                                 />
                               </FormGroup>
                             </Col>
+                            <Col md="3">
+                              <FormGroup>
+                                <Label>Actual Completed date</Label>
+                                <Input
+                                  type="date"
+                                  onChange={handleInputsmilestone}
+                                  value={
+                                    insertTask && moment(insertTask.actual_completed_date).format('YYYY-MM-DD')
+                                  }
+                                  name="actual_completed_date"
+                                />
+                              </FormGroup>
+                            </Col>
                             <Col md="4">
                               <FormGroup>
-                                <Label>Hours</Label>
+                                <Label>Actual Hours</Label>
                                 <Input
                                   type="text"
-                                  name="hours"
+                                  name="actual_hours"
                                   onChange={handleInputsmilestone}
-                                  value={insertTask && insertTask.hours}
+                                  value={insertTask && insertTask.actual_hours}
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md="4">
+                              <FormGroup>
+                                <Label>Estimated Hours</Label>
+                                <Input
+                                  type="text"
+                                  name="estimated_hours"
+                                  onChange={handleInputsmilestone}
+                                  value={insertTask && insertTask.estimated_hours}
                                 />
                               </FormGroup>
                             </Col>
@@ -346,7 +376,9 @@ export default function ProjectTask({
                   <td>{element.first_name}</td>
                   <td>{moment(element.start_date).format('YYYY-MM-DD')}</td>
                   <td>{moment(element.end_date).format('YYYY-MM-DD')}</td>
-                  <td>{element.hours}</td>
+                  <td>{moment(element.actual_completed_date).format('YYYY-MM-DD')}</td>
+                  <td>{element.actual_hours}</td>
+                  <td>{element.estimated_hours}</td>
                   <td>{element.completion}</td>
                   <td>{element.status}</td>
                   <td>
@@ -371,7 +403,6 @@ export default function ProjectTask({
                         desc="TaskRelated Data"
                         recordType="RelatedPicture"
                         mediaType={attachmentData.modelType}
-                        projectTaskId={element.project_task_id}
                         updateFile={updateFile}
                         setUpdateFile={setUpdateFile}
                       />

@@ -10,7 +10,7 @@ import message from '../../components/Message';
 const ProjectTimesheetDetails = () => {
   //All state variables
   const [projectTimesheet, setProjectTimesheet] = useState({
-    timesheet_title: '',
+    task_title: '',
   });
 //Navigation and Parameters
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const ProjectTimesheetDetails = () => {
   };
 //Insert Milestone
   const insertTimesheet = () => {
-    if (projectTimesheet.timesheet_title !== '')
+    if (projectTimesheet.task_title !== '')
     api.post('/projecttimesheet/insertTimeSheet', projectTimesheet)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
@@ -54,7 +54,7 @@ const ProjectTimesheetDetails = () => {
                       {' '}
                       Title <span className="required"> *</span>{' '}
                     </Label>
-                    <Input type="text" name="timesheet_title" onChange={handleInputs} />
+                    <Input type="text" name="task_title" onChange={handleInputs} />
                     </Col>
                 </Row>
               </FormGroup>

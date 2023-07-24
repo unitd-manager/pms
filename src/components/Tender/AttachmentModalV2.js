@@ -79,8 +79,9 @@ const AttachmentModalV2 = ({
           setUpdateFile(!updateFile);
           setTimeout(() => {
             setAttachmentModal(false);
+            getFiles()
           }, 100);
-          setTimeout(getFiles,100)
+          
         })
         .catch(() => {
           message('Unable to upload File', 'error');

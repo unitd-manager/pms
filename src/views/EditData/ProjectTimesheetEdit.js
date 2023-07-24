@@ -182,8 +182,8 @@ const handleDataEditor = (e, type) => {
                         <Input
                           type="text"
                           onChange={handleInputs}
-                          value={timeSheet && timeSheet.timesheet_title}
-                          name="timeSheet_title"
+                          value={timeSheet && timeSheet.task_title}
+                          name="task_title"
                         />
                       </FormGroup>
                     </Col>
@@ -218,8 +218,8 @@ const handleDataEditor = (e, type) => {
                         <Input
                           type="text"
                           onChange={handleInputs}
-                          value={timeSheet && timeSheet.normal_hours}
-                          name="normal_hours"
+                          value={timeSheet && timeSheet.hours}
+                          name="hours"
                         />
                       </FormGroup>
                     </Col>

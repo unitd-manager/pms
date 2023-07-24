@@ -158,14 +158,36 @@ const ProjectTaskEdit = ({
                           />
                         </FormGroup>
                       </Col>
+                      <Col md="3">
+                        <FormGroup>
+                          <Label>Actual Completed date</Label>
+                          <Input
+                            type="date"
+                            onChange={handleInputs}
+                            value={moment(taskProject && taskProject.actual_completed_date).format('YYYY-MM-DD')}
+                            name="actual_completed_date"
+                          />
+                        </FormGroup>
+                      </Col>
                       <Col md="4">
                         <FormGroup>
-                          <Label>Hours</Label>
+                          <Label>Actual Hours</Label>
                           <Input
-                            type="text"
-                            name="hours"
+                            type="numbers"
+                            name="actual_hours"
                             onChange={handleInputs}
-                            value={taskProject && taskProject.hours}
+                            value={taskProject && taskProject.actual_hours}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col md="4">
+                        <FormGroup>
+                          <Label>Estimated Hours</Label>
+                          <Input
+                            type="numbers"
+                            name="estimated_hours"
+                            onChange={handleInputs}
+                            value={taskProject && taskProject.estimated_hours}
                           />
                         </FormGroup>
                       </Col>

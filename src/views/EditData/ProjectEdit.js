@@ -7,10 +7,8 @@ import ComponentCard from '../../components/ComponentCard';
 import DuctingCostModal from '../../components/ProjectModal/DuctingCostModal';
 import message from '../../components/Message';
 import api from '../../constants/api';
-// import ProjectButton from '../../components/ProjectTable/ProjectButton';
 import ProjectTask from '../smartconTables/ProjectTask';
 import CostingSummary from '../../components/projectTabContent/CostingSummary';
-import ProjectSummaryChart from '../../components/dashboard/ProjectSummaryChart';
 import ProjectTimeSheet from '../smartconTables/ProjectTimesheet';
 import ProjectTeam from '../smartconTables/ProjectTeam';
 import ProjectMilestones from '../../components/ProjectMilestones';
@@ -524,7 +522,6 @@ const ProjectEdit = () => {
               gTotal5={gTotal5}
               getCostingbySummary={getCostingbySummary}
             ></CostingSummary>
-            <ProjectSummaryChart />
           </TabPane>
           {/* Tab 3 Materials Purchased */}
           <TabPane tabId="3">

@@ -207,7 +207,7 @@ const TaskEdit = () => {
     },
     {
       name: 'Title',
-      selector: 'timesheet_title',
+      selector: 'task_title',
       sortable: true,
       grow: 0,
       wrap: true,
@@ -228,7 +228,7 @@ const TaskEdit = () => {
     },
     {
       name: 'Hours',
-      selector: 'normal_hours',
+      selector: 'hours',
       sortable: true,
       grow: 0,
       wrap: true,
@@ -417,6 +417,17 @@ const TaskEdit = () => {
                     </Col>
                     <Col md="3">
                       <FormGroup>
+                        <Label>Actual Completed Date</Label>
+                        <Input
+                          type="date"
+                          onChange={handleInputs}
+                          value={moment(projectTask && projectTask.actual_completed_date).format('YYYY-MM-DD')}
+                          name="actual_completed_date"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="3">
+                      <FormGroup>
                         <Label>Name</Label>
                         <Input
                           type="text"
@@ -464,8 +475,8 @@ const TaskEdit = () => {
                         <Input
                           type="number"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.actual_hours}
-                          name="actual_hours"
+                          value={projectTask && projectTask.hours}
+                          name="hours"
                         />
                       </FormGroup>
                     </Col>
@@ -536,11 +547,11 @@ const TaskEdit = () => {
                                             <Label>Title</Label>
                                             <Input
                                               type="text"
-                                              name="timesheet_title"
+                                              name="task_title"
                                               onChange={handleTaskInputs}
                                               value={
                                                 timesheeteditdata &&
-                                                timesheeteditdata.timesheet_title
+                                                timesheeteditdata.task_title
                                               }
                                             />
                                           </FormGroup>
@@ -672,10 +683,10 @@ const TaskEdit = () => {
                                         </span>
                                       </Link>
                                     </td>
-                                    <td>{element.timesheet_title}</td>
+                                    <td>{element.task_title}</td>
                                     <td>{element.date ? element.date : ''}</td>
                                     <td>{element.first_name}</td>
-                                    <td>{element.normal_hours}</td>
+                                    <td>{element.hours}</td>
                                     <td>{element.status}</td>
                                     <td>{element.description}</td>
                                   </tr>

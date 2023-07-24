@@ -248,6 +248,17 @@ const MilestoneEdit = () => {
                     </Col>
                     <Col md="3">
                       <FormGroup>
+                        <Label>Actual Completed Date</Label>
+                        <Input
+                          type="date"
+                          onChange={handleInputs}
+                          value={milestone && moment(milestone.actual_completed_date).format('YYYY-MM-DD')}
+                          name="actual_completed_date"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="3">
+                      <FormGroup>
                         <Label>Status</Label>
                         <Input
                           type="select"

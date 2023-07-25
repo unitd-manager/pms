@@ -16,7 +16,6 @@ import {
   CardBody,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import * as Icon from 'react-feather';
 import message from '../../components/Message';
 import api from '../../constants/api';
@@ -71,6 +70,8 @@ export default function ProjectTeam({
         message('Team inserted successfully.', 'success');
         getTeamById();
         setTimeout(() => {addContactToggleTeam(false)}, 300);
+        window.location.reload();
+
       })
       .catch(() => {
         message('Network connection error.', 'error');
@@ -158,7 +159,6 @@ export default function ProjectTeam({
               color="primary"
               onClick={() => {
                 insertTeamMember();
-                addContactModalTeam(false);
               }}
             >
               Submit
@@ -190,7 +190,6 @@ export default function ProjectTeam({
                   <tr key={element.project_team_id}>
                     <td>{index + 1}</td>
                     <td>
-                    <Link to="">
                         <span
                           onClick={() => {
                             setContactDataTeam(element);
@@ -199,7 +198,6 @@ export default function ProjectTeam({
                         >
                         <Icon.Edit2 />
                         </span>
-                      </Link>
                     </td>
                     <td>{element.first_name}</td>
                     <td>{element.department}</td>

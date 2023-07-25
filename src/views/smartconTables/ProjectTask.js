@@ -98,6 +98,8 @@ export default function ProjectTask({
           message('Task inserted successfully.', 'success');
           getTaskById()
           setTimeout(() => {addContactToggle(false)}, 300);
+          window.location.reload();
+
         })
         .catch(() => {
           message('Network connection error.', 'error');

@@ -16,7 +16,6 @@ import {
   CardBody,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import * as Icon from 'react-feather';
 import moment from 'moment';
 import message from '../../components/Message';
@@ -82,6 +81,8 @@ export default function ProjectTimeSheet({
         message('TimeSheet inserted successfully.', 'success');
         getTimeSheetById();
         setTimeout(() => {addContactToggless(false) }, 300);
+        window.location.reload();
+        
       })
       .catch(() => {
         message('Network connection error.', 'error');
@@ -310,7 +311,6 @@ export default function ProjectTimeSheet({
               color="primary"
               onClick={() => {
                 inserttimeSheets();
-                addContactModalss(false);
               }}
             >
               Submit
@@ -342,7 +342,6 @@ export default function ProjectTimeSheet({
                   <tr key={element.projecttimesheet_id}>
                     <td>{index + 1}</td>
                     <td>
-                    <Link to="">
                         <span
                           onClick={() => {
                             setContactDatass(element);
@@ -351,7 +350,6 @@ export default function ProjectTimeSheet({
                         >
                         <Icon.Edit2 />
                         </span>
-                      </Link>
                     </td>
                     <td>{element.task_title}</td>
                     <td>{element.first_name}</td>

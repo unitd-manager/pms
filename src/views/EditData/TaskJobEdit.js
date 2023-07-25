@@ -118,7 +118,7 @@ const TaskJobEdit = () => {
         setProjectTaskDetails(res.data.data);
       })
       .catch(() => {
-        message('Loan Data Not Found', 'info');
+        message('Team Data Not Found', 'info');
       });
   };
   //attachments

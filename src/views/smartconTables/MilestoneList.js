@@ -92,6 +92,12 @@ const MilestoneList = () => {
       grow: 0,
     },
     {
+      name: 'Act Date',
+      selector: 'actual_completed_date',
+      sortable: true,
+      grow: 0,
+    },
+    {
       name: 'Status',
       selector: 'status',
       sortable: true,
@@ -137,6 +143,7 @@ const MilestoneList = () => {
                       <td>{element.description}</td>
                       <td>{moment(element.from_date).format('YYYY-MM-DD')}</td>
                       <td>{moment(element.to_date).format('YYYY-MM-DD')}</td>
+                      <td>{moment(element.actual_completed_date).format('YYYY-MM-DD')}</td>
                       <td>{element.status}</td>
                     </tr>
                 );

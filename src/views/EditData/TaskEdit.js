@@ -42,6 +42,7 @@ import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponent
 const TaskEdit = () => {
   //All state variable
   const [projectTask, setProjectTask] = useState();
+  const [employeeProject, setEmployeeProject] = useState();
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [activeTab, setActiveTab] = useState('1');
   const [timeSheet, setTimesheet] = useState(null);
@@ -124,6 +125,16 @@ const TaskEdit = () => {
       }
     });
   };  
+  //  Gettind data from Job By Id
+  const JobTask = () => {
+    api
+      .get('/jobinformation/getEmployee')
+      .then((res) => {
+        console.log(res.data.data);
+        setEmployeeProject(res.data.data);
+      })
+      .catch(() => {});
+  };
 
   //Update task
   const editTask = () => {
@@ -150,17 +161,7 @@ const TaskEdit = () => {
         message('Loan Data Not Found', 'info');
       });
   };
-  //getting data from project timesheet
-  const getProjectTimesheetById = () => {
-    api
-      .post('/projecttimesheet/getTaskTimeSheetById', { project_task_id: id })
-      .then((res) => {
-        setTimesheetEditData(res.data.data);
-      })
-      .catch(() => {
-        message('Loan Data Not Found', 'info');
-      });
-  };
+ 
 
   const handleTaskInputs = (e) => {
     setTimesheetEditData({ ...timesheeteditdata, [e.target.name]: e.target.value });
@@ -254,7 +255,7 @@ const TaskEdit = () => {
     getTimesheet();
     getMilestonename();
     getProjectname();
-    getProjectTimesheetById();
+    JobTask();
   }, [id]);
 
   return (
@@ -430,11 +431,21 @@ const TaskEdit = () => {
                       <FormGroup>
                         <Label>Name</Label>
                         <Input
-                          type="text"
+                          type="select"
+                          name="employee_id"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.first_name}
-                          name="first_name"
-                        />
+                          value={projectTask && projectTask.employee_id}
+                        >
+                          <option value="" defaultValue="selected"></option>
+                          {employeeProject &&
+                            employeeProject.map((ele) => {
+                              return (
+                                <option key={ele.employee_id} value={ele.employee_id}>
+                                  {ele.first_name}
+                                </option>
+                              );
+                            })}
+                        </Input>
                       </FormGroup>
                     </Col>
                     <Col md="3">

@@ -22,11 +22,7 @@ const ProjectTaskDetails = () => {
 
   // Milestone data in taskdetails
   const handleInputs = (e) => {
-    const { name, value } = e.target;
-    setTaskDetails((prevDetails) => ({
-      ...prevDetails,
-      [name]: value,
-    }));
+    setTaskDetails({ ...taskdetails, [e.target.name]: e.target.value });
   };
 
   // Api call for getting project name dropdown

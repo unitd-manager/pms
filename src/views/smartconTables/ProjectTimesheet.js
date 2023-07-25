@@ -48,6 +48,8 @@ export default function ProjectTimeSheet({
     hours:"",
     status:"",
     description:"",
+    project_milestone_id:"",
+    project_task_id:""
   });
 
    const[employeeTime,setEmployee] = useState()
@@ -72,7 +74,7 @@ export default function ProjectTimeSheet({
     const newContactWithCompany = insertTimeSheet;
     newContactWithCompany.project_id = id;
 
-    if (insertTimeSheet.task_title !== '')
+   
     api.post('/projecttimesheet/insertTimeSheet', newContactWithCompany)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
@@ -84,14 +86,47 @@ export default function ProjectTimeSheet({
       .catch(() => {
         message('Network connection error.', 'error');
       });
-      else {
-        message('Please fill all required fields.', 'error');
-      }
+    
+  };
+  const [milestones, setMilestones] = useState([]);
+  const [taskdetail, setTaskDetail] = useState([]);
+
+   // Api call for getting project name dropdown
+   const getMilestoneName = () => {
+    api
+      .get('/projecttimesheet/getMilestoneTitle')
+      .then((res) => {
+        setMilestones(res.data.data);
+      })
+      .catch(() => {
+        message('Milestone not found', 'info');
+      });
+  };
+
+  // Api call for getting milestone dropdown based on project ID
+  const getTaskName = (projectId) => {
+    api
+      .post('/projecttimesheet/getTaskByID', { project_milestone_id: projectId })
+      .then((res) => {
+        setTaskDetail(res.data.data);
+      })
+      .catch(() => {
+        message('Task not found', 'info');
+      });
   };
 
  useEffect(() => {
     editJobById();
+    getMilestoneName();
   }, [id]);
+
+  useEffect(() => {
+    if (insertTimeSheet.project_milestone_id) {
+      // Use taskdetails.project_milestone_id directly to get the selected project ID
+      const selectedTask = insertTimeSheet.project_milestone_id;
+      getTaskName(selectedTask);
+    }
+  }, [insertTimeSheet.project_milestone_id]);
 
   //Structure of timeSheetById list view
   const Projecttimesheetcolumn = [
@@ -148,16 +183,40 @@ export default function ProjectTimeSheet({
                     <Form>
                       <Row>
                       <Col md="4">
-                          <FormGroup>
-                            <Label>Title</Label>
-                            <Input
-                              type="text"
-                              name="task_title"
-                              onChange={handleInputsTime}
-                              value={insertTimeSheet && insertTimeSheet.task_title}
-                            />
-                          </FormGroup>
-                        </Col>
+                    <FormGroup>
+                      <Label>Milestone Title</Label>
+                      <Input type="select" name="milestone_title"   onChange={(e) => {
+                        handleInputsTime(e)
+                  const selectedTask = e.target.value;
+                  getTaskName(selectedTask);
+                }}>
+                        <option>Select Project</option>
+                        {milestones &&
+                          milestones.map((e) => (
+                            <option key={e.project_milestone_id} value={e.project_milestone_id}>
+                              {e.milestone_title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md="4">
+                    <FormGroup>
+                      <Label>Task</Label>
+                      <Input type="select" name="project_task_id" onChange={handleInputsTime}>
+                        <option>Select Task</option>
+                        {taskdetail &&
+                          taskdetail.map((e) => (
+                            <option
+                              key={e.project_milestone_id}
+                              value={e.project_task_id}
+                            >
+                              {e.task_title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
                           <Col md="4">
                               <FormGroup>
                                 <Label>Staff</Label>

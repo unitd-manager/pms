@@ -57,6 +57,8 @@ export default function ProjectTask({
     actual_completed_date: '',
     description:'',
   });
+  const [projectdetail, setProjectDetail] = useState([]);
+  const [milestoneDetail, setMilestones] = useState([]);
 
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
@@ -104,6 +106,30 @@ export default function ProjectTask({
         message( 'error');
     }
   };
+   // Api call for getting project name dropdown
+   const getProjectnames = () => {
+    api
+      .get('/projecttask/getProjectTitle')
+      .then((res) => {
+        setProjectDetail(res.data.data);
+      })
+      .catch(() => {
+        message('Projects not found', 'info');
+      });
+  };
+
+  // Api call for getting milestone dropdown based on project ID
+  const getMilestones = (projectId) => {
+    api
+      .post('/projecttask/getMilestoneById', { project_id: projectId })
+      .then((res) => {
+        setMilestones(res.data.data);
+      })
+      .catch(() => {
+        message('Milestones not found', 'info');
+      });
+  };
+
   //attachments
   const dataForAttachment = () => {
     setDataForAttachment({
@@ -114,7 +140,16 @@ export default function ProjectTask({
   useEffect(() => {
     editJobById();
     dataForAttachment();
+    getProjectnames();
   }, [id]);
+
+  useEffect(() => {
+    if (insertTask.project_id) {
+      // Use taskdetails.project_id directly to get the selected project ID
+      const selectedProject = insertTask.project_id;
+      getMilestones(selectedProject);
+    }
+  }, [insertTask.project_id]);
 
 
   //Structure of projectTask list view
@@ -181,7 +216,43 @@ export default function ProjectTask({
                       <CardBody>
                         <Form>
                           <Row>
+                          
                             <Col md="4">
+                    <FormGroup>
+                      <Label>Project Title</Label>
+                      <Input type="select" name="project_id"   onChange={(e) => {
+                        handleInputsmilestone(e)
+                  const selectedProject = e.target.value;
+                  getMilestones(selectedProject);
+                }}>
+                        <option>Select Project</option>
+                        {projectdetail &&
+                          projectdetail.map((e) => (
+                            <option key={e.project_id} value={e.project_id}>
+                              {e.title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md="4">
+                    <FormGroup>
+                      <Label>Milestone</Label>
+                      <Input type="select" name="project_milestone_id" onChange={handleInputsmilestone}>
+                        <option>Select Milestone</option>
+                        {milestoneDetail &&
+                          milestoneDetail.map((e) => (
+                            <option
+                              key={e.project_id}
+                              value={e.project_milestone_id}
+                            >
+                              {e.milestone_title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md="4">
                               <FormGroup>
                                 <Label>Title</Label>
                                 <Input

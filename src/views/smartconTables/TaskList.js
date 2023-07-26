@@ -119,7 +119,7 @@ const ProjectTask = () => {
     },
     {
       name: 'Actual Hours',
-      selector: 'actual_hours',
+      selector: '',
       sortable: true,
       grow: 0,
       wrap: true,

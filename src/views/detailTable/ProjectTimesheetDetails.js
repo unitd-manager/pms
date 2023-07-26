@@ -74,6 +74,7 @@ const ProjectTimesheetDetails = () => {
       getTaskName(selectedTask);
     }
   }, [projectTimesheet.project_milestone_id]);
+  
   return (
     <div>
       <BreadCrumbs />
@@ -88,7 +89,7 @@ const ProjectTimesheetDetails = () => {
                 <Col md="4">
                     <FormGroup>
                       <Label>Milestone Title</Label>
-                      <Input type="select" name="milestone_title"   onChange={(e) => {
+                      <Input type="select" name="project_milestone_id"   onChange={(e) => {
                         handleInputs(e)
                   const selectedTask = e.target.value;
                   getTaskName(selectedTask);

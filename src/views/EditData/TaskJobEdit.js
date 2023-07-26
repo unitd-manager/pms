@@ -40,7 +40,7 @@ const TaskJobEdit = () => {
   //const [projectTask, setProjectTask] = useState(null);
   const [projectTeam, setProjectTeam] = useState();
   //const [taskdetails, setTaskDetails] = useState();
-  const [projecttaskdetails, setProjectTaskDetails] = useState();
+  const [projecttaskdetails, setProjectTaskDetails] = useState([]);
   const [activeTab, setActiveTab] = useState('1');
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [addTaskModal, setAddTaskModal] = useState(false);
@@ -100,20 +100,20 @@ const TaskJobEdit = () => {
       });
   };
   const [taskeditData, setTaskEditData] = useState();
-  //getting payment data By Loan Id
+  //getting  data By  Id
   const getProjectTaskById = () => {
     api
-      .post('/Projectteam/getTeamTaskById', { project_team_id: id })
+      .post('/projectteam/getTeamTaskById', { project_team_id: id })
       .then((res) => {
         setTaskEditData(res.data.data[0]);
       })
       .catch(() => {
-        message('Loan Data Not Found', 'info');
+        message('Team Data Not Found', 'info');
       });
   };
   const getTaskById = () => {
     api
-      .post('/Projectteam/getTeamTaskById', { project_team_id: id })
+      .post('/projectteam/getTeamTaskById', { project_team_id: id })
       .then((res) => {
         setProjectTaskDetails(res.data.data);
       })
@@ -154,7 +154,7 @@ const TaskJobEdit = () => {
 
   const editTaskData = () => {
     api
-      .post('/Projecttask/editTask', taskeditData)
+      .post('/projecttask/editTask', taskeditData)
       .then(() => {
         message('Record editted successfully', 'success');
         window.location.reload();
@@ -224,8 +224,22 @@ const TaskJobEdit = () => {
       wrap: true,
     },
     {
+      name: 'Priority',
+      selector: 'priority',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
       name: 'Actual Hours',
-      selector: 'actual_hours',
+      selector: '',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
+      name: 'Est Hours',
+      selector: 'estimated_hours',
       sortable: true,
       grow: 0,
       wrap: true,
@@ -237,14 +251,23 @@ const TaskJobEdit = () => {
       grow: 0,
       wrap: true,
     },
+    {
+      name: 'Description',
+      selector: 'description',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
   ];
 
   useEffect(() => {
     getTeamById();
     editJob();
     getProjectTaskById();
-    getTaskById();
+    getTaskById()
   }, [id]);
+
+  
 
   return (
     <>
@@ -544,7 +567,7 @@ const TaskJobEdit = () => {
                         {projecttaskdetails &&
                           projecttaskdetails.map((element, index) => {
                             return (
-                              <tr key={element.project_task_id}>
+                              <tr key={element.employee_id}>
                                 <td>{index + 1}</td>
                                 <td>
                                   <Link to="">
@@ -558,14 +581,17 @@ const TaskJobEdit = () => {
                                     </span>
                                   </Link>
                                 </td>
-                                <td>{element.task_title}</td>
-                                <td>{element.start_date ? element.start_date : ''}</td>
-                                <td>{element.end_date ? element.end_date : ''}</td>
-                                <td>{element.completion}</td>
-                                <td>{element.status}</td>
-                                <td>{element.task_type}</td>
-                                <td>{element.hours}</td>
-                                <td>{element.first_name}</td>
+                    <td>{element.task_title}</td>
+                    <td>{element.start_date ? moment(element.start_date).format('DD-MM-YYYY') : ''}</td>
+                    <td>{element.end_date ? moment(element.end_date).format('DD-MM-YYYY') : ''}</td>
+                    <td>{element.completion}</td>
+                    <td>{element.status}</td>
+                    <td>{element.task_type}</td>
+                    <td>{element.priority}</td>
+                    <td>{element.actual_hours}</td>
+                    <td>{element.estimated_hours}</td>
+                    <td>{element.first_name}</td>
+                    <td>{element.description}</td>
                               </tr>
                             );
                           })}

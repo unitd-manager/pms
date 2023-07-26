@@ -40,10 +40,13 @@ export default function ProjectTeam({
 
   };
   const [insertTeam, setInsertTeam] = useState({
-   employee_id:''
+   employee_id:'',
+   project_task_id:'',
+   project_milestone_id:''
   });
-
-   const[employeeTeam,setEmployeeTeam] = useState()
+  const [milestonesJob, setMilestonesJob] = useState([]);
+const [taskdetailJob, setTaskDetailJob] = useState([]);
+ const[employeeTeam,setEmployeeTeam] = useState()
 
     // Gettind data from Job By Id
   const editJobByIdTeams = () => {
@@ -67,7 +70,7 @@ export default function ProjectTeam({
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
         console.log(insertedDataId);
-        message('Team inserted successfully.', 'success');
+        message(' inserted successfully.', 'success');
         getTeamById();
         setTimeout(() => {addContactToggleTeam(false)}, 300);
         window.location.reload();
@@ -78,10 +81,45 @@ export default function ProjectTeam({
       });
       
   };
+    // Api call for getting project name dropdown
+    const getMilestoneName = () => {
+      api
+        .get('/projecttimesheet/getMilestoneTitle')
+        .then((res) => {
+          setMilestonesJob(res.data.data);
+        })
+        .catch(() => {
+          message('Milestone not found', 'info');
+        });
+    };
+  
+    // Api call for getting milestone dropdown based on project ID
+    const getTaskName = (projectId) => {
+      api
+        .post('/projecttimesheet/getTaskByID', { project_milestone_id: projectId })
+        .then((res) => {
+          setTaskDetailJob(res.data.data);
+        })
+        .catch(() => {
+          message('Task not found', 'info');
+        });
+    };
 
  useEffect(() => {
     editJobByIdTeams();
   }, [id]);
+
+  useEffect(() => { 
+    getMilestoneName();
+  }, []);
+  useEffect(() => {
+    if (insertTeam.project_milestone_id) {
+      // Use taskdetails.project_milestone_id directly to get the selected project ID
+      const selectedTask = insertTeam.project_milestone_id;
+      getTaskName(selectedTask);
+    }
+  }, [insertTeam.project_milestone_id]);
+
 
   //Structure of teamById list view
   const ProjectTeamColumn = [
@@ -125,6 +163,41 @@ export default function ProjectTeam({
                   <CardBody>
                     <Form>
                       <Row>
+                      <Col md="4">
+                    <FormGroup>
+                      <Label>Milestone Title</Label>
+                      <Input type="select" name="project_milestone_id"   onChange={(e) => {
+                        handleInputsTime(e)
+                  const selectedTask = e.target.value;
+                  getTaskName(selectedTask);
+                }}>
+                        <option>Select Project</option>
+                        {milestonesJob &&
+                          milestonesJob.map((e) => (
+                            <option key={e.project_milestone_id} value={e.project_milestone_id}>
+                              {e.milestone_title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md="4">
+                    <FormGroup>
+                      <Label>Task</Label>
+                      <Input type="select" name="project_task_id" onChange={handleInputsTime}>
+                        <option>Select Task</option>
+                        {taskdetailJob &&
+                          taskdetailJob.map((e) => (
+                            <option
+                              key={e.project_milestone_id}
+                              value={e.project_task_id}
+                            >
+                              {e.task_title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
                         <Col md="4">
                         <FormGroup>
               <Label>Name</Label>

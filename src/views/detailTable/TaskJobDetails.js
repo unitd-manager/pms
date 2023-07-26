@@ -11,7 +11,10 @@ const TaskJobDetails = () => {
   //All state variables
   const [employeeTeam, setEmployeeTeam] = useState();
   const [teamdetails, setTeamDetails] = useState({
-employee_id:'',first_name:''});
+employee_id:'',first_name:'',project_task_id:'',project_milestone_id:''});
+const [milestonesTeam, setMilestonesTeam] = useState([]);
+const [taskdetailTeam, setTaskDetailTeam] = useState([]);
+
 //Navigation and Parameters
 const { id } = useParams();
 const navigate = useNavigate();
@@ -45,9 +48,44 @@ const navigate = useNavigate();
       });
      
   };
+  // Api call for getting project name dropdown
+  const getMilestoneName = () => {
+    api
+      .get('/projecttimesheet/getMilestoneTitle')
+      .then((res) => {
+        setMilestonesTeam(res.data.data);
+      })
+      .catch(() => {
+        message('Milestone not found', 'info');
+      });
+  };
+
+  // Api call for getting milestone dropdown based on project ID
+  const getTaskName = (projectId) => {
+    api
+      .post('/projecttimesheet/getTaskByID', { project_milestone_id: projectId })
+      .then((res) => {
+        setTaskDetailTeam(res.data.data);
+      })
+      .catch(() => {
+        message('Task not found', 'info');
+      });
+  };
   useEffect(() => {
     editJob();
   }, [id]); 
+
+  useEffect(() => { 
+    getMilestoneName();
+  }, []);
+  useEffect(() => {
+    if (teamdetails.project_milestone_id) {
+      // Use taskdetails.project_milestone_id directly to get the selected project ID
+      const selectedTask = teamdetails.project_milestone_id;
+      getTaskName(selectedTask);
+    }
+  }, [teamdetails.project_milestone_id]);
+
    return (
     <div>
       <BreadCrumbs />
@@ -59,6 +97,41 @@ const navigate = useNavigate();
           <Form>
               <FormGroup>
                 <Row>
+                <Col md="4">
+                    <FormGroup>
+                      <Label>Milestone Title</Label>
+                      <Input type="select" name="project_milestone_id"   onChange={(e) => {
+                        handleInputsTeamDetails(e)
+                  const selectedTask = e.target.value;
+                  getTaskName(selectedTask);
+                }}>
+                        <option>Select Project</option>
+                        {milestonesTeam &&
+                          milestonesTeam.map((e) => (
+                            <option key={e.project_milestone_id} value={e.project_milestone_id}>
+                              {e.milestone_title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md="4">
+                    <FormGroup>
+                      <Label>Task</Label>
+                      <Input type="select" name="project_task_id" onChange={handleInputsTeamDetails}>
+                        <option>Select Task</option>
+                        {taskdetailTeam &&
+                          taskdetailTeam.map((e) => (
+                            <option
+                              key={e.project_milestone_id}
+                              value={e.project_task_id}
+                            >
+                              {e.task_title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
                   <Col md="12">
                     <Label>
                       {' '}

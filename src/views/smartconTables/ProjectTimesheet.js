@@ -186,7 +186,7 @@ export default function ProjectTimeSheet({
                       <Col md="4">
                     <FormGroup>
                       <Label>Milestone Title</Label>
-                      <Input type="select" name="milestone_title"   onChange={(e) => {
+                      <Input type="select" name="project_milestone_id"   onChange={(e) => {
                         handleInputsTime(e)
                   const selectedTask = e.target.value;
                   getTaskName(selectedTask);

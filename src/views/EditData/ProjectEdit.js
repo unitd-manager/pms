@@ -18,6 +18,7 @@ import ProjectTimeSheetEdit from '../../components/ProjectTImeSheetEdit';
 import ProjectTeamEdit from '../../components/ProjectTeamEdit';
 import Tab from '../../components/ProjectTabs/Tab';
 import Stats from '../../components/dashboard/StatsPms';
+import StatsPmsDue from '../../components/dashboard/StatsPmsDue';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 
 const ProjectEdit = () => {
@@ -509,6 +510,7 @@ const ProjectEdit = () => {
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
              <Stats/>
+             <StatsPmsDue></StatsPmsDue>
           </TabPane>
           {/* Tab 2 */}
           <TabPane tabId="2">

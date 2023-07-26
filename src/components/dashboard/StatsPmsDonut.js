@@ -75,7 +75,7 @@ const StatsPmsDonut = () => {
     labels: [
       'With Due',
       'Due',
-      'OverDue',
+      'Over Due',
     ],
   };
 

@@ -1,29 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
+import React, { useEffect, useState } from 'react';
+import { Col, FormGroup, Label, Input } from 'reactstrap';
 import Chart from 'react-apexcharts';
-import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../ComponentCard';
 import api from '../../constants/api';
 
+const Stats = () => {
+  const [taskTitles, setTaskTitles] = useState([]);
+  const [actualHourData, setActualHourData] = useState([]);
+  const [estimatedHourData, setEstimatedHourData] = useState([]);
+  const [employees, setEmployees] = useState([]);
 
-const ActualHour = () => {
-    const [actualHour, setActualHour] = useState([]);
-    const [employeeHour, setEmployeeHour] = useState([]);
 
+  const HourData = (selectedEmployeeId) => {
+    // Make API call to retrieve the data
+    api
+    .post('/stats/getActualHourStats', { employee_id: selectedEmployeeId })
+    .then((response) => {
+      // Check if the response data is not empty
+      if (response.data && response.data.data && response.data.data.length > 0) {
+        // Assuming the response data is an array of objects with keys: task_title, total_actual_hours, and estimated_hours
+        const hourData = response.data.data;
+        const titles = hourData.map((item) => item.task_title);
+        const actualHours = hourData.map((item) => item.total_actual_hours);
+        const estimatedHours = hourData.map((item) => item.estimated_hours);
 
-     // Get the list of employees from the API
-  const getActual = (employeeId) => {
-    api.post('/stats/getActualHours', { employee_id: employeeId })
-      .then((res) => {
-        setActualHour(res.data.data);
-      })
-      .catch(() => {});
+        setTaskTitles(titles);
+        setActualHourData(actualHours);
+        setEstimatedHourData(estimatedHours);
+      } else {
+        // If the response data is empty, reset the state to show an empty chart or display a message
+        setTaskTitles([]);
+        setActualHourData([]);
+        setEstimatedHourData([]);
+      }
+    })
   };
 
   useEffect(() => {
     api.get('jobinformation/getEmployee')
       .then((res) => {
-        setEmployeeHour(res.data.data);
+        setEmployees(res.data.data);
       })
       .catch((error) => {
         console.log('Error fetching employees:', error);
@@ -31,8 +47,8 @@ const ActualHour = () => {
   }, []);
 
 
-const optionscolumn = {
-    colors: ['#745af2', '#263238', '#4fc3f7'],
+  const optionscolumn = {
+    colors: ['#745af2', '#263238'],
     chart: {
       fontFamily: "'Rubik', sans-serif",
     },
@@ -52,7 +68,7 @@ const optionscolumn = {
       colors: ['transparent'],
     },
     xaxis: {
-      categories: actualHour,
+      categories: taskTitles,
       labels: {
         style: {
           cssClass: 'grey--text lighten-2--text fill-color',
@@ -61,7 +77,7 @@ const optionscolumn = {
     },
     yaxis: {
       title: {
-        text: '$ (thousands)',
+        text: 'Hours',
         color: '#8898aa',
       },
       labels: {
@@ -77,7 +93,7 @@ const optionscolumn = {
       theme: 'dark',
       y: {
         formatter(val) {
-          return `$ ${val} thousands`;
+          return `${val} hours`;
         },
       },
     },
@@ -94,75 +110,48 @@ const optionscolumn = {
       },
     },
   };
+  
 
-  let seriescolumn = [
+  const seriescolumn = [
     {
-      name: 'Actual Hours',
-      data: [], // Updated dynamically below
+      name: 'Actual Hour',
+      data: actualHourData,
     },
     {
-      name: 'Estimated Hours',
-      data: [], // Updated dynamically below
+      name: 'Estimated Hour',
+      data: estimatedHourData,
     },
+  
+   
   ];
 
-  useEffect(() => {
-    // Calculate seriescolumn data when actualHour updates
-    if (actualHour.length > 0) {
-      const actualData = actualHour.map((item) => item.actual_hours);
-      const estimatedData = actualHour.map((item) => item.estimated_hours);
-      seriescolumn = [
-        {
-          name: 'Actual Hours',
-          data: actualData,
-        },
-        {
-          name: 'Estimated Hours',
-          data: estimatedData,
-        },
-      ];
-    }
-  }, [actualHour]);
-
   return (
-    <div>
-              <BreadCrumbs />
-              <Row>
-      <Col md="6">
-        <ComponentCard title="Employee Name">
-          <Form>
-            <FormGroup>
+    <Col md="6">
+      <FormGroup>
               <Label for="employeeSelect">Select Employee</Label>
               <Input
                 type="select"
                 name="employee_id"
                 onChange={(e) => {
                   const selectedEmployeeId = e.target.value;
-                 
-                  getActual(selectedEmployeeId);
+                  HourData(selectedEmployeeId);
                 }}
               >
                 <option value="">Select Employee</option>
-                {employeeHour &&
-                  employeeHour.map((element) => (
+                {employees &&
+                  employees.map((element) => (
                     <option key={element.employee_id} value={element.employee_id}>
                       {element.first_name}
                     </option>
                   ))}
               </Input>
             </FormGroup>
-            </Form>
-            </ComponentCard>
-            </Col>
-            </Row>
+            
+      <ComponentCard title="Column Chart">
+        <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
+      </ComponentCard>
+    </Col>
+  );
+};
 
-        <Col md="6">
-          <ComponentCard title="Column Chart">
-            <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
-          </ComponentCard>
-        </Col>
-</div>
-  )
-}
-
-export default ActualHour;
+export default Stats;

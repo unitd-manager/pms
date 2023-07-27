@@ -4,14 +4,14 @@ import Chart from 'react-apexcharts';
 import api from '../../constants/api';
 import ComponentCard from '../ComponentCard';
 
-const StatsPmsDonut = () => {
+const StatsPmsDue = () => {
   const [employees, setEmployees] = useState([]);
   const [employeeStats, setEmployeeStats] = useState([]);
   const [data, setData] = useState([]);
 
   // Get the list of employees from the API
   const getEmployeeStats = (employeeId) => {
-    api.post('/stats/getStatsEmployeeId', { employee_id: employeeId })
+    api.post('/stats/getDueStatsEmployeeId', { employee_id: employeeId })
       .then((res) => {
         setData(res.data.data);
       })
@@ -90,7 +90,7 @@ const StatsPmsDonut = () => {
   return (
     <Row>
       <Col md="6">
-        <ComponentCard title="Employee Statistics">
+        <ComponentCard title="Employee Due Statistics">
           <Form>
             <FormGroup>
               <Label for="employeeSelect">Select Employee</Label>
@@ -124,11 +124,6 @@ const StatsPmsDonut = () => {
                       </Row>
                       <Row>
                         <Label>
-                          <b>Completion:</b> {ele.total_completion}
-                        </Label>
-                      </Row>
-                      <Row>
-                        <Label>
                           <b>Project:</b> {ele.title}
                         </Label>
                       </Row>
@@ -147,4 +142,4 @@ const StatsPmsDonut = () => {
   );
 };
 
-export default StatsPmsDonut;
+export default StatsPmsDue;

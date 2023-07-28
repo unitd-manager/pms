@@ -4,7 +4,7 @@ import Chart from 'react-apexcharts';
 import ComponentCard from '../ComponentCard';
 import api from '../../constants/api';
 
-const Stats = () => {
+const ActualHour = () => {
   const [taskTitles, setTaskTitles] = useState([]);
   const [actualHourData, setActualHourData] = useState([]);
   const [estimatedHourData, setEstimatedHourData] = useState([]);
@@ -154,4 +154,4 @@ const Stats = () => {
   );
 };
 
-export default Stats;
+export default ActualHour;

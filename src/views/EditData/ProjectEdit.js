@@ -18,8 +18,9 @@ import ProjectTimeSheetEdit from '../../components/ProjectTImeSheetEdit';
 import ProjectTeamEdit from '../../components/ProjectTeamEdit';
 import Tab from '../../components/ProjectTabs/Tab';
 import Stats from '../../components/dashboard/StatsPms';
-import StatsPmsDonut from '../../components/dashboard/StatsPmsDonut';
 import ComponentCardV2 from '../../components/ComponentCardV2';
+import CalendarApp from '../apps/calendar/CalendarApp';
+import ActualHour from '../../components/dashboard/ActualHour';
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -66,6 +67,8 @@ const ProjectEdit = () => {
     { id: '4', name: 'Team' },
     { id: '5', name: 'Task' },
     { id: '6', name: 'Timesheet' },
+    { id: '7', name: 'Calender' },
+
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -509,8 +512,9 @@ const ProjectEdit = () => {
         {/* Tab 1 */}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
-             <Stats/>
-             <StatsPmsDonut></StatsPmsDonut>
+             <Stats
+             id={id}></Stats>
+             <ActualHour/>
           </TabPane>
           {/* Tab 2 */}
           <TabPane tabId="2">
@@ -596,6 +600,9 @@ const ProjectEdit = () => {
               setEditTimeSheetEditModal={setEditTimeSheetEditModal}
               getTimeSheetById={getTimeSheetById}
             ></ProjectTimeSheetEdit>
+          </TabPane>
+          <TabPane tabId="7">
+            <CalendarApp/>
           </TabPane>
         </TabContent>
       </ComponentCard>

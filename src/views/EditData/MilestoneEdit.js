@@ -53,8 +53,7 @@ const MilestoneEdit = () => {
   const [addTaskModal, setAddTaskModal] = useState(false);
   const [employeeTeam, setEmployeeTeam] = useState();
   const [activeTab, setActiveTab] = useState('1');
-
-
+  const [actualCompletedDate, setActualCompletedDate] = useState('');
 
 
   //navigation and parameters
@@ -69,9 +68,24 @@ const MilestoneEdit = () => {
     if (activeTab !== tab) setActiveTab(tab);
   };
   //milestone data in milestone
-  const handleInputs = (e) => {
-    setMilestoneEdit({ ...milestone, [e.target.name]: e.target.value });
+  const updateActualCompletedDate = () => {
+    if (milestone && milestone.task_status === 'Completed') {
+      setActualCompletedDate(new Date().toISOString().substr(0, 10));
+    } else {
+      setActualCompletedDate('');
+    }
   };
+
+  const handleInputs = (e) => {
+    const { name, value } = e.target;
+
+    if (milestone && milestone.task_status === 'Completed') {
+      setActualCompletedDate(new Date().toISOString().substr(0, 10));
+    }
+
+    setMilestoneEdit({ ...milestone, [name]: value });
+  };
+  
 
   // data in Description Modal
   const handleDataEditor = (e, type) => {
@@ -286,6 +300,10 @@ const MilestoneEdit = () => {
     getTaskById()
   }, [id]);
 
+  useEffect(() => {
+    updateActualCompletedDate();
+  }, [milestone && milestone.task_status]);
+  
   return (
     <>
       <BreadCrumbs />
@@ -428,8 +446,10 @@ const MilestoneEdit = () => {
                         <Input
                           type="date"
                           onChange={handleInputs}
-                          value={milestone && moment(milestone.actual_completed_date).format('YYYY-MM-DD')}
+                          value={actualCompletedDate}
                           name="actual_completed_date"
+                          disabled={milestone && milestone.task_status !== 'completed'} // Disable the input when status is not "completed"
+
                         />
                       </FormGroup>
                     </Col>

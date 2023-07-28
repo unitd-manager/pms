@@ -253,9 +253,9 @@ const ProjectTaskEdit = ({
                           <Label>Priority</Label>
                           <Input
                             type="select"
-                            name="priroity"
+                            name="priority"
                             onChange={handleInputs}
-                            value={taskProject && taskProject.priroity}
+                            value={taskProject && taskProject.priority}
                             >
                             {' '}
                             <option value="" selected="selected">

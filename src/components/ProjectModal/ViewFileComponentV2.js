@@ -4,13 +4,11 @@ import * as Icon from 'react-feather';
 import message from '../Message';
 import api from '../../constants/api';
 
-function ViewFileComponentV2({ moduleId, roomName, projectTaskId,updateFile}) {
+function ViewFileComponentV2({ moduleId, roomName,updateFile}) {
   ViewFileComponentV2.propTypes = {
     moduleId: PropTypes.string,
     roomName: PropTypes.string,
-    projectTaskId: PropTypes.string,
     updateFile:PropTypes.bool,
-    
   };
 
   const tableStyle = {};
@@ -19,10 +17,9 @@ function ViewFileComponentV2({ moduleId, roomName, projectTaskId,updateFile}) {
 
   const getFiles = () => {
     api
-      .post('/file/getListOfFiles', { record_id: moduleId, room_name: roomName, project_task_id: projectTaskId })
+      .post('/file/getListOfFiles', { record_id: moduleId, room_name: roomName })
       .then((res) => {
         setGetFile(res.data);
-        // setTimeout(getFiles, 100);
       })
       .catch(() => {
         message('Unable to fetch files', 'info');

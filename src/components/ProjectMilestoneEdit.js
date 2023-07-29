@@ -55,7 +55,6 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
 
   useEffect(() => {
     setMilestoneEdit(contactData);
-    console.log('meera',contactData)
   }, [contactData]);
 
   return (
@@ -81,7 +80,6 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
               <ComponentCard title="Milestone Details">
                 {' '}
                 <div>
-                  
                     <Form>
                       <Row>
                         <Col md="3">
@@ -109,7 +107,7 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
 
                         <Col md="3">
                           <FormGroup>
-                            <Label>from date</Label>
+                            <Label>From date</Label>
                             <Input
                               type="date"
                               onChange={handleInputs}
@@ -122,7 +120,7 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
                         </Col>
                         <Col md="3">
                           <FormGroup>
-                            <Label>to date</Label>
+                            <Label>To date</Label>
                             <Input
                               type="date"
                               onChange={handleInputs}
@@ -130,6 +128,19 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
                                 'YYYY-MM-DD',
                               )}                               
                               name="to_date"
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col md="3">
+                          <FormGroup>
+                            <Label>Actual Comp Date</Label>
+                            <Input
+                              type="date"
+                              onChange={handleInputs}
+                              value={moment(milestoneEdit && milestoneEdit.actual_completed_date).format(
+                                'YYYY-MM-DD',
+                              )}                               
+                              name="actual_completed_date"
                             />
                           </FormGroup>
                         </Col>

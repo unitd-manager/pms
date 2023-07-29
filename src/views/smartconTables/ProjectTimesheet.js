@@ -16,7 +16,6 @@ import {
   CardBody,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import * as Icon from 'react-feather';
 import moment from 'moment';
 import message from '../../components/Message';
@@ -42,12 +41,14 @@ export default function ProjectTimeSheet({
   };
 
   const [insertTimeSheet, setInsertTimesheet] = useState({
-    timesheet_title: "",
+    task_title: "",
     first_name:"",
     date:"",
-    normal_hours:"",
+    hours:"",
     status:"",
     description:"",
+    project_milestone_id:"",
+    project_task_id:""
   });
 
    const[employeeTime,setEmployee] = useState()
@@ -72,7 +73,7 @@ export default function ProjectTimeSheet({
     const newContactWithCompany = insertTimeSheet;
     newContactWithCompany.project_id = id;
 
-    if (insertTimeSheet.timesheet_title !== '')
+   
     api.post('/projecttimesheet/insertTimeSheet', newContactWithCompany)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
@@ -80,18 +81,53 @@ export default function ProjectTimeSheet({
         message('TimeSheet inserted successfully.', 'success');
         getTimeSheetById();
         setTimeout(() => {addContactToggless(false) }, 300);
+        window.location.reload();
+        
       })
       .catch(() => {
         message('Network connection error.', 'error');
       });
-      else {
-        message('Please fill all required fields.', 'error');
-      }
+    
+  };
+  const [milestones, setMilestones] = useState([]);
+  const [taskdetail, setTaskDetail] = useState([]);
+
+   // Api call for getting project name dropdown
+   const getMilestoneName = () => {
+    api
+      .get('/projecttimesheet/getMilestoneTitle')
+      .then((res) => {
+        setMilestones(res.data.data);
+      })
+      .catch(() => {
+        message('Milestone not found', 'info');
+      });
+  };
+
+  // Api call for getting milestone dropdown based on project ID
+  const getTaskName = (projectId) => {
+    api
+      .post('/projecttimesheet/getTaskByID', { project_milestone_id: projectId })
+      .then((res) => {
+        setTaskDetail(res.data.data);
+      })
+      .catch(() => {
+        message('Task not found', 'info');
+      });
   };
 
  useEffect(() => {
     editJobById();
+    getMilestoneName();
   }, [id]);
+
+  useEffect(() => {
+    if (insertTimeSheet.project_milestone_id) {
+      // Use taskdetails.project_milestone_id directly to get the selected project ID
+      const selectedTask = insertTimeSheet.project_milestone_id;
+      getTaskName(selectedTask);
+    }
+  }, [insertTimeSheet.project_milestone_id]);
 
   //Structure of timeSheetById list view
   const Projecttimesheetcolumn = [
@@ -148,37 +184,66 @@ export default function ProjectTimeSheet({
                     <Form>
                       <Row>
                       <Col md="4">
-                          <FormGroup>
-                            <Label>Title</Label>
-                            <Input
-                              type="text"
-                              name="timesheet_title"
-                              onChange={handleInputsTime}
-                              value={insertTimeSheet && insertTimeSheet.timesheet_title}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col md="4">
-                        <FormGroup>
-              <Label>Staff</Label>
-              <Input
-                type="select"
-                name="employee_id"
-                onChange={(e) => {
-                  handleInputsTime(e);
+                    <FormGroup>
+                      <Label>Milestone Title</Label>
+                      <Input type="select" name="project_milestone_id"   onChange={(e) => {
+                        handleInputsTime(e)
+                  const selectedTask = e.target.value;
+                  getTaskName(selectedTask);
                 }}>
-                <option value="" selected >Please Select</option>
-                {employeeTime &&
-                  employeeTime.map((ele) => {
-                    return (
-                      ele.e_count === 0 && (<option key={ele.employee_id} value={ele.employee_id}>
-                        {ele.first_name}
-                      </option>)
-                    );
-                  })}
-              </Input>                
-            </FormGroup>
-                        </Col>
+                        <option>Select Project</option>
+                        {milestones &&
+                          milestones.map((e) => (
+                            <option key={e.project_milestone_id} value={e.project_milestone_id}>
+                              {e.milestone_title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md="4">
+                    <FormGroup>
+                      <Label>Task</Label>
+                      <Input type="select" name="project_task_id" onChange={handleInputsTime}>
+                        <option>Select Task</option>
+                        {taskdetail &&
+                          taskdetail.map((e) => (
+                            <option
+                              key={e.project_milestone_id}
+                              value={e.project_task_id}
+                            >
+                              {e.task_title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                          <Col md="4">
+                              <FormGroup>
+                                <Label>Staff</Label>
+                                <Input
+                                  type="select"
+                                  name="employee_id"
+                                  onChange={(e) => {
+                                    handleInputsTime(e);
+                                  }}
+                                >
+                                  <option value="" selected>
+                                    Please Select
+                                  </option>
+                                  {employeeTime &&
+                                    employeeTime.map((ele) => {
+                                      return (
+                                        ele.e_count === 0 && (
+                                          <option key={ele.employee_id} value={ele.employee_id}>
+                                            {ele.first_name}
+                                          </option>
+                                        )
+                                      );
+                                    })}
+                                </Input>
+                              </FormGroup>
+                            </Col>
                         <Col md="3">
                       <FormGroup>
                         <Label>Date</Label>
@@ -197,26 +262,31 @@ export default function ProjectTimeSheet({
                         <Input
                           type="number"
                           onChange={handleInputsTime}
-                          value={insertTimeSheet && insertTimeSheet.normal_hours}
-                          name="normal_hours"
+                          value={insertTimeSheet && insertTimeSheet.hours}
+                          name="hours"
                         />
                       </FormGroup>
                     </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Status</Label>
-                        <Input
-                          type="select"
-                          onChange={handleInputsTime}
-                          value={insertTimeSheet && insertTimeSheet.status}
-                          name="status"
-                        >
-                           <option defaultValue="selected">Please Select</option>
-                        <option value="Completed">Completed</option>
-                        <option value="Cancelled">Cancelled</option>
-                        <option value="Started">Started</option></Input>
-                      </FormGroup>
-                    </Col>
+                    <Col md="4">
+                            <FormGroup>
+                          <Label>Status</Label>
+                          <Input
+                            type="select"
+                            name="status"
+                            onChange={handleInputsTime}
+                            value={insertTimeSheet && insertTimeSheet.status}
+                            >
+                            {' '}
+                            <option value="" selected="selected">
+                              Please Select
+                            </option>
+                            <option value="Pending">Pending</option>
+                            <option value="InProgress">InProgress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="OnHold">OnHold</option>
+                          </Input>
+                        </FormGroup>
+                            </Col>
                     <Col md="3">
                       <FormGroup>
                         <Label>Description</Label>
@@ -241,7 +311,6 @@ export default function ProjectTimeSheet({
               color="primary"
               onClick={() => {
                 inserttimeSheets();
-                addContactModalss(false);
               }}
             >
               Submit
@@ -273,7 +342,6 @@ export default function ProjectTimeSheet({
                   <tr key={element.projecttimesheet_id}>
                     <td>{index + 1}</td>
                     <td>
-                    <Link to="">
                         <span
                           onClick={() => {
                             setContactDatass(element);
@@ -282,12 +350,11 @@ export default function ProjectTimeSheet({
                         >
                         <Icon.Edit2 />
                         </span>
-                      </Link>
                     </td>
-                    <td>{element.timesheet_title}</td>
+                    <td>{element.task_title}</td>
                     <td>{element.first_name}</td>
                   <td>{moment(element.date).format('YYYY-MM-DD')}</td>
-                    <td>{element.normal_hours}</td>
+                    <td>{element.hours}</td>
                     <td>{element.status}</td>
                     <td>{element.description}</td>
                   </tr>

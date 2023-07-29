@@ -158,14 +158,32 @@ const ProjectTaskEdit = ({
                           />
                         </FormGroup>
                       </Col>
+                      <Col md="3">
+                        <FormGroup>
+                          <Label>Act Comp date</Label>
+                          <Input
+                            type="date"
+                            onChange={handleInputs}
+                            value={moment(taskProject && taskProject.actual_completed_date).format('YYYY-MM-DD')}
+                            name="actual_completed_date"
+                          />
+                        </FormGroup>
+                      </Col>
                       <Col md="4">
                         <FormGroup>
-                          <Label>Hours</Label>
+                          <Label>Actual Hours</Label>
+                          <br />
+                  <span>{taskProject && taskProject.actual_hours}</span>
+                        </FormGroup>
+                      </Col>
+                      <Col md="4">
+                        <FormGroup>
+                          <Label>Est Hours</Label>
                           <Input
-                            type="text"
-                            name="hours"
+                            type="numbers"
+                            name="estimated_hours"
                             onChange={handleInputs}
-                            value={taskProject && taskProject.hours}
+                            value={taskProject && taskProject.estimated_hours}
                           />
                         </FormGroup>
                       </Col>
@@ -208,6 +226,46 @@ const ProjectTaskEdit = ({
                             <option value="InProgress">InProgress</option>
                             <option value="Completed">Completed</option>
                             <option value="OnHold">OnHold</option>
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col md="4">
+                        <FormGroup>
+                          <Label>Task type</Label>
+                          <Input
+                            type="select"
+                            name="task_type"
+                            onChange={handleInputs}
+                            value={taskProject && taskProject.task_type}
+                            >
+                            {' '}
+                            <option value="" selected="selected">
+                              Please Select
+                            </option>
+                            <option value="Development">Development</option>
+                            <option value="ChangeRequest">ChangeRequest</option>
+                            <option value="Issues">Issues</option>
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col md="4">
+                        <FormGroup>
+                          <Label>Priority</Label>
+                          <Input
+                            type="select"
+                            name="priority"
+                            onChange={handleInputs}
+                            value={taskProject && taskProject.priority}
+                            >
+                            {' '}
+                            <option value="" selected="selected">
+                              Please Select
+                            </option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option> 
                           </Input>
                         </FormGroup>
                       </Col>

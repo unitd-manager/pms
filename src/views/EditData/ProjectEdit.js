@@ -7,10 +7,8 @@ import ComponentCard from '../../components/ComponentCard';
 import DuctingCostModal from '../../components/ProjectModal/DuctingCostModal';
 import message from '../../components/Message';
 import api from '../../constants/api';
-// import ProjectButton from '../../components/ProjectTable/ProjectButton';
 import ProjectTask from '../smartconTables/ProjectTask';
 import CostingSummary from '../../components/projectTabContent/CostingSummary';
-import ProjectSummaryChart from '../../components/dashboard/ProjectSummaryChart';
 import ProjectTimeSheet from '../smartconTables/ProjectTimesheet';
 import ProjectTeam from '../smartconTables/ProjectTeam';
 import ProjectMilestones from '../../components/ProjectMilestones';
@@ -21,6 +19,8 @@ import ProjectTeamEdit from '../../components/ProjectTeamEdit';
 import Tab from '../../components/ProjectTabs/Tab';
 import Stats from '../../components/dashboard/StatsPms';
 import ComponentCardV2 from '../../components/ComponentCardV2';
+import CalendarApp from '../apps/calendar/CalendarApp';
+import ActualHour from '../../components/dashboard/ActualHour';
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -67,6 +67,8 @@ const ProjectEdit = () => {
     { id: '4', name: 'Team' },
     { id: '5', name: 'Task' },
     { id: '6', name: 'Timesheet' },
+    { id: '7', name: 'Calender' },
+
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -354,7 +356,7 @@ const ProjectEdit = () => {
       <Form>
         <FormGroup>
           <ComponentCard
-            title={`Project Details | Code: ${projectDetail && projectDetail.title} | 
+            title={`Project Details | Code: ${projectDetail && projectDetail.project_code} | 
             Category : ${projectDetail && projectDetail.category} | 
             Company :  ${projectDetail && projectDetail.company_name}  | 
             Status : ${projectDetail && projectDetail.status} `}
@@ -510,7 +512,9 @@ const ProjectEdit = () => {
         {/* Tab 1 */}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
-             <Stats/>
+             <Stats
+             id={id}></Stats>
+             <ActualHour/>
           </TabPane>
           {/* Tab 2 */}
           <TabPane tabId="2">
@@ -524,7 +528,6 @@ const ProjectEdit = () => {
               gTotal5={gTotal5}
               getCostingbySummary={getCostingbySummary}
             ></CostingSummary>
-            <ProjectSummaryChart />
           </TabPane>
           {/* Tab 3 Materials Purchased */}
           <TabPane tabId="3">
@@ -597,6 +600,9 @@ const ProjectEdit = () => {
               setEditTimeSheetEditModal={setEditTimeSheetEditModal}
               getTimeSheetById={getTimeSheetById}
             ></ProjectTimeSheetEdit>
+          </TabPane>
+          <TabPane tabId="7">
+            <CalendarApp/>
           </TabPane>
         </TabContent>
       </ComponentCard>

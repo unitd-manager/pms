@@ -51,11 +51,14 @@ export default function ProjectTask({
     first_name: '',
     start_date: '',
     end_date: '',
-    hours: '',
     completion: '',
     status: '',
+    task_type: '',
+    actual_completed_date: '',
     description:'',
   });
+  const [projectdetail, setProjectDetail] = useState([]);
+  const [milestoneDetail, setMilestones] = useState([]);
 
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
@@ -95,6 +98,8 @@ export default function ProjectTask({
           message('Task inserted successfully.', 'success');
           getTaskById()
           setTimeout(() => {addContactToggle(false)}, 300);
+          window.location.reload();
+
         })
         .catch(() => {
           message('Network connection error.', 'error');
@@ -103,6 +108,30 @@ export default function ProjectTask({
         message( 'error');
     }
   };
+   // Api call for getting project name dropdown
+   const getProjectnames = () => {
+    api
+      .get('/projecttask/getProjectTitle')
+      .then((res) => {
+        setProjectDetail(res.data.data);
+      })
+      .catch(() => {
+        message('Projects not found', 'info');
+      });
+  };
+
+  // Api call for getting milestone dropdown based on project ID
+  const getMilestones = (projectId) => {
+    api
+      .post('/projecttask/getMilestoneById', { project_id: projectId })
+      .then((res) => {
+        setMilestones(res.data.data);
+      })
+      .catch(() => {
+        message('Milestones not found', 'info');
+      });
+  };
+
   //attachments
   const dataForAttachment = () => {
     setDataForAttachment({
@@ -113,7 +142,16 @@ export default function ProjectTask({
   useEffect(() => {
     editJobById();
     dataForAttachment();
+    getProjectnames();
   }, [id]);
+
+  useEffect(() => {
+    if (insertTask.project_id) {
+      // Use taskdetails.project_id directly to get the selected project ID
+      const selectedProject = insertTask.project_id;
+      getMilestones(selectedProject);
+    }
+  }, [insertTask.project_id]);
 
 
   //Structure of projectTask list view
@@ -139,13 +177,25 @@ export default function ProjectTask({
       name: 'End Date',
     },
     {
-      name: 'Hours',
+      name: 'Actual Comp Date',
+    },
+    {
+      name: 'Actual Hours',
+    },
+    {
+      name: 'Est Hours',
     },
     {
       name: 'Completion',
     },
     {
       name: 'Status',
+    },
+    {
+      name: 'Task Type',
+    },
+    {
+      name: 'Priority',
     },
     {
       name: 'File',
@@ -168,7 +218,43 @@ export default function ProjectTask({
                       <CardBody>
                         <Form>
                           <Row>
+                          
                             <Col md="4">
+                    <FormGroup>
+                      <Label>Project Title</Label>
+                      <Input type="select" name="project_id"   onChange={(e) => {
+                        handleInputsmilestone(e)
+                  const selectedProject = e.target.value;
+                  getMilestones(selectedProject);
+                }}>
+                        <option>Select Project</option>
+                        {projectdetail &&
+                          projectdetail.map((e) => (
+                            <option key={e.project_id} value={e.project_id}>
+                              {e.title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md="4">
+                    <FormGroup>
+                      <Label>Milestone</Label>
+                      <Input type="select" name="project_milestone_id" onChange={handleInputsmilestone}>
+                        <option>Select Milestone</option>
+                        {milestoneDetail &&
+                          milestoneDetail.map((e) => (
+                            <option
+                              key={e.project_id}
+                              value={e.project_milestone_id}
+                            >
+                              {e.milestone_title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md="4">
                               <FormGroup>
                                 <Label>Title</Label>
                                 <Input
@@ -231,14 +317,15 @@ export default function ProjectTask({
                                 />
                               </FormGroup>
                             </Col>
+                            
                             <Col md="4">
                               <FormGroup>
-                                <Label>Hours</Label>
+                                <Label>Est Hours</Label>
                                 <Input
                                   type="text"
-                                  name="hours"
+                                  name="estimated_hours"
                                   onChange={handleInputsmilestone}
-                                  value={insertTask && insertTask.hours}
+                                  value={insertTask && insertTask.estimated_hours}
                                 />
                               </FormGroup>
                             </Col>
@@ -270,6 +357,47 @@ export default function ProjectTask({
                             <option value="InProgress">InProgress</option>
                             <option value="Completed">Completed</option>
                             <option value="OnHold">OnHold</option>
+                          </Input>
+                        </FormGroup>
+                            </Col>
+                            <Col md="4">
+                            <FormGroup>
+                          <Label>Task Type</Label>
+                          <Input
+                            type="select"
+                            name="task_type"
+                            onChange={handleInputsmilestone}
+                            value={insertTask && insertTask.task_type}
+                            >
+                            {' '}
+                            <option value="" selected="selected">
+                              Please Select
+                            </option>
+                            <option value="Development">Development</option>
+                            <option value="ChangeRequest">ChangeRequest</option>
+                            <option value="Issues">Issues</option>      
+                          </Input>
+                        </FormGroup>
+                            </Col>
+                            <Col md="4">
+                            <FormGroup>
+                          <Label>Priority</Label>
+                          <Input
+                            type="select"
+                            name="priority"
+                            onChange={handleInputsmilestone}
+                            value={insertTask && insertTask.priority}
+                            >
+                            {' '}
+                            <option value="" selected="selected">
+                              Please Select
+                            </option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>    
+                            <option value="4">4</option>      
+                            <option value="5">5</option>      
+  
                           </Input>
                         </FormGroup>
                             </Col>
@@ -346,9 +474,13 @@ export default function ProjectTask({
                   <td>{element.first_name}</td>
                   <td>{moment(element.start_date).format('YYYY-MM-DD')}</td>
                   <td>{moment(element.end_date).format('YYYY-MM-DD')}</td>
-                  <td>{element.hours}</td>
+                  <td>{moment(element.actual_completed_date).format('YYYY-MM-DD')}</td>
+                  <td>{element.actual_hours}</td>
+                  <td>{element.estimated_hours}</td>
                   <td>{element.completion}</td>
                   <td>{element.status}</td>
+                  <td>{element.task_type}</td>
+                  <td>{element.priority}</td>
                   <td>
                       <span
                         onClick={() => {
@@ -371,7 +503,6 @@ export default function ProjectTask({
                         desc="TaskRelated Data"
                         recordType="RelatedPicture"
                         mediaType={attachmentData.modelType}
-                        projectTaskId={element.project_task_id}
                         updateFile={updateFile}
                         setUpdateFile={setUpdateFile}
                       />

@@ -71,7 +71,7 @@ const ProjectTimeSheet = () => {
     },
     {
       name: 'Title',
-      selector: 'timesheet_title',
+      selector: 'task_title',
       sortable: true,
       grow: 0,
       wrap: true,
@@ -147,7 +147,7 @@ const ProjectTimeSheet = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.timesheet_title}</td>
+                    <td>{element.task_title}</td>
                     <td>{element.date ? moment(element.date).format('DD-MM-YYYY') : ''}</td>
                     <td>{element.first_name}</td>
                     <td>{element.hours}</td>

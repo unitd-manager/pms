@@ -22,6 +22,7 @@ import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponent
 const ProjectTimesheetEdit = () => {
   //All state variable
   const [timeSheet, setProjectTimesheet] = useState();
+  const [employeeTimesheet, setEmployeeTimesheet] = useState();
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [attachmentData, setDataForAttachment] = useState({
     modelType: '',
@@ -66,12 +67,24 @@ const handleDataEditor = (e, type) => {
   //getting data from timeSheet by Id
   const getTimesheetById = () => {
     api.post('/projecttimesheet/getTimeSheetById', { project_timesheet_id: id }).then((res) => {
-      setProjectTimesheet(res.data.data[0]);
-      convertHtmlToDraft(res.data.data[0].description);
-
+      const timeSheetData = res.data.data[0];
+      setProjectTimesheet(timeSheetData);
+      if (timeSheetData.description) {
+        convertHtmlToDraft(timeSheetData.description);
+      }
     });
-  };
+  };  
 
+   //  Gettind data from Job By Id
+   const JobTime = () => {
+    api
+      .get('/jobinformation/getEmployee')
+      .then((res) => {
+        console.log(res.data.data);
+        setEmployeeTimesheet(res.data.data);
+      })
+      .catch(() => {});
+  };
   //Update timeSheet
   const editTimesheet = () => {
     api
@@ -93,6 +106,7 @@ const handleDataEditor = (e, type) => {
 
   useEffect(() => {
     getTimesheetById();
+    JobTime();
   }, [id]);
 
   return (
@@ -182,8 +196,8 @@ const handleDataEditor = (e, type) => {
                         <Input
                           type="text"
                           onChange={handleInputs}
-                          value={timeSheet && timeSheet.timesheet_title}
-                          name="timeSheet_title"
+                          value={timeSheet && timeSheet.task_title}
+                          name="task_title"
                         />
                       </FormGroup>
                     </Col>
@@ -205,11 +219,21 @@ const handleDataEditor = (e, type) => {
                       <FormGroup>
                         <Label>Name</Label>
                         <Input
-                          type="text"
+                          type="select"
+                          name="employee_id"
                           onChange={handleInputs}
-                          value={timeSheet && timeSheet.first_name}
-                          name="first_name"
-                        />
+                          value={timeSheet && timeSheet.employee_id}
+                        >
+                          <option value="" defaultValue="selected"></option>
+                          {employeeTimesheet &&
+                            employeeTimesheet.map((ele) => {
+                              return (
+                                <option key={ele.employee_id} value={ele.employee_id}>
+                                  {ele.first_name}
+                                </option>
+                              );
+                            })}
+                        </Input>
                       </FormGroup>
                     </Col>
                     <Col md="3">
@@ -218,8 +242,8 @@ const handleDataEditor = (e, type) => {
                         <Input
                           type="text"
                           onChange={handleInputs}
-                          value={timeSheet && timeSheet.normal_hours}
-                          name="normal_hours"
+                          value={timeSheet && timeSheet.hours}
+                          name="hours"
                         />
                       </FormGroup>
                     </Col>

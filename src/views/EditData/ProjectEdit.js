@@ -21,6 +21,7 @@ import Stats from '../../components/dashboard/StatsPms';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import CalendarApp from '../apps/calendar/CalendarApp';
 import ActualHour from '../../components/dashboard/ActualHour';
+import AverageIssues from '../../components/dashboard/AverageIssues';
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -514,6 +515,7 @@ const ProjectEdit = () => {
              <Stats
              id={id}></Stats>
              <ActualHour/>
+             <AverageIssues/>
           </TabPane>
           {/* Tab 2 */}
           <TabPane tabId="2">

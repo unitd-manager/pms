@@ -425,7 +425,6 @@ const ProjectEdit = () => {
                   <Label>Company</Label>
                   <Input
                     type="text"
-                    disabled
                     name="company_name"
                     defaultValue={projectDetail && projectDetail.company_name}
                     onChange={handleInputs}

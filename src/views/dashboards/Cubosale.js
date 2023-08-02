@@ -14,7 +14,7 @@ import ActualHour from '../../components/dashboard/ActualHour';
 
 const Classic = () => {
   return (
-    <>
+    <>s
       {/*********************Sales Overview ************************/}
       <Row>
         <Col lg="12">

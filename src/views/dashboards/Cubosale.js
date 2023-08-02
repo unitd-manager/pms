@@ -3,6 +3,8 @@ import Stats from '../../components/dashboard/StatsPms';
 import StatsPmsDonut from '../../components/dashboard/StatsPmsDonut';
 import ActualHour from '../../components/dashboard/ActualHour';
 import MilestoneCompleted from '../../components/dashboard/MilestoneCompletedChart';
+import AverageIssues from '../../components/dashboard/AverageIssues';
+
 // import SalesOverview from '../../components/dashboard/classicDashboard/ProjectOverview';
 // import TenderSummaryCard from '../../components/dashboard/TenderSummaryCard';
 // import ProjectSummaryChart from '../../components/dashboard/ProjectSummaryChart';
@@ -32,6 +34,7 @@ const Classic = () => {
           <StatsPmsDonut></StatsPmsDonut>
           <ActualHour/>
           <MilestoneCompleted/>
+          <AverageIssues/>
         </Col>
       </Row>
       {/*********************Email & Visitor ************************/}

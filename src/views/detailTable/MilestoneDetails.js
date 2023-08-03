@@ -12,6 +12,7 @@ const MilestoneDetails = () => {
   const [projectdetails, setProjectDetails] = useState();
   const [milestoneDetails, setMilestoneDetails] = useState({
     milestone_title: '',
+    project_id:'',
   });
 
   //Navigation and Parameters
@@ -67,6 +68,7 @@ const MilestoneDetails = () => {
             <Form>
               <FormGroup>
                 <Row>
+                  
                   <Col md="12">
                     <FormGroup>
                       <Label>

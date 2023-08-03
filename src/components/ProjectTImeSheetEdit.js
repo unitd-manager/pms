@@ -21,17 +21,22 @@ import api from '../constants/api';
 import ComponentCard from './ComponentCard';
 
 
-const ProjectTimeSheetEdit = ({ editTimeSheetModal, setEditTimeSheetEditModal, contactDatass, getTimeSheetById }) => {
+const ProjectTimeSheetEdit = ({ editTimeSheetModal, setEditTimeSheetEditModal, contactDatass, getTimeSheetById, id }) => {
   ProjectTimeSheetEdit.propTypes = {
     editTimeSheetModal: PropTypes.bool,
     setEditTimeSheetEditModal: PropTypes.func,
     contactDatass: PropTypes.object,
     getTimeSheetById:PropTypes.func,
+    id:PropTypes.any,
+
   };
 
   //All state variable
   const [timeSheetProject, setTimeSheetProject] = useState();
   const [employeeTime, setEmployeeTime] = useState();
+  const [milestoneTimesheet, setMilestoneTimeSheet] = useState([]);
+  const [taskTimeSheet, setTaskTimeSheet] = useState([]);
+  
 
   // Gettind data from Job By Id
   const editJobByIdss = () => {
@@ -63,10 +68,47 @@ const ProjectTimeSheetEdit = ({ editTimeSheetModal, setEditTimeSheetEditModal, c
       });
   };
 
+   // Api call for getting milestone name dropdown
+   const getMilestoneTime = () => {
+    api
+      .post('/projecttimesheet/getMilestoneTitle',{ project_id: id })
+      .then((res) => {
+        setMilestoneTimeSheet(res.data.data);
+      })
+      .catch(() => {
+        message('Milestone not found', 'info');
+      });
+  };
+
+  // Api call for getting task dropdown based on project ID
+  const getTaskTime = (projectId) => {
+    api
+      .post('/projecttimesheet/getTaskByID', { project_milestone_id: projectId })
+      .then((res) => {
+        setTaskTimeSheet(res.data.data);
+      })
+      .catch(() => {
+        message('Task not found', 'info');
+      });
+  };
+
   useEffect(() => {
     editJobByIdss();
     setTimeSheetProject(contactDatass);
   }, [contactDatass]);
+
+  useEffect(() => { 
+    getMilestoneTime();
+  }, [id]);
+  useEffect(() => {
+    if (timeSheetProject && timeSheetProject.project_milestone_id) {
+      // Use taskdetails.project_milestone_id directly to get the selected project ID
+      const selectedTask = timeSheetProject.project_milestone_id;
+      getTaskTime(selectedTask);
+    }
+  }, [timeSheetProject && timeSheetProject.project_milestone_id]);
+
+
 
   return (
     <>
@@ -102,6 +144,49 @@ const ProjectTimeSheetEdit = ({ editTimeSheetModal, setEditTimeSheetEditModal, c
                           />
                         </FormGroup>
                       </Col>
+                      <Col md="4">
+                    <FormGroup>
+                      <Label>Milestone Title</Label>
+                      <Input type="select" 
+                      name="project_milestone_id"
+                    value={timeSheetProject && timeSheetProject.project_milestone_id}  
+                     onChange={(e) => {
+                        handleInputs(e)
+                  const selectedTask = e.target.value;
+                  getTaskTime(selectedTask);
+                }}>
+                        <option>Select Project</option>
+                        {milestoneTimesheet &&
+                          milestoneTimesheet.map((e) => (
+                            <option key={e.project_id} value={e.project_milestone_id}>
+                              {e.milestone_title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md="4">
+                    <FormGroup>
+                      <Label>Task</Label>
+                      <Input
+                    type="select"
+                    name="project_task_id"
+                    value={timeSheetProject && timeSheetProject.project_task_id}
+                    onChange={handleInputs}
+                    >
+                     <option defaultValue="selected">Please Select</option>
+                        {taskTimeSheet &&
+                          taskTimeSheet.map((e) => (
+                            <option
+                              key={e.project_milestone_id}
+                              value={e.project_task_id}
+                            >
+                              {e.task_title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
                       <Col md="4">
                         <FormGroup>
                           <Label>Staff</Label>

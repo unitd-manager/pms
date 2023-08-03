@@ -84,7 +84,7 @@ const [taskdetailJob, setTaskDetailJob] = useState([]);
     // Api call for getting project name dropdown
     const getMilestoneName = () => {
       api
-        .get('/projecttimesheet/getMilestoneTitle')
+        .post('/projecttimesheet/getMilestoneTitle',{ project_id: id })
         .then((res) => {
           setMilestonesJob(res.data.data);
         })
@@ -111,7 +111,7 @@ const [taskdetailJob, setTaskDetailJob] = useState([]);
 
   useEffect(() => { 
     getMilestoneName();
-  }, []);
+  }, [id]);
   useEffect(() => {
     if (insertTeam.project_milestone_id) {
       // Use taskdetails.project_milestone_id directly to get the selected project ID
@@ -174,7 +174,7 @@ const [taskdetailJob, setTaskDetailJob] = useState([]);
                         <option>Select Project</option>
                         {milestonesJob &&
                           milestonesJob.map((e) => (
-                            <option key={e.project_milestone_id} value={e.project_milestone_id}>
+                            <option key={e.project_id} value={e.project_milestone_id}>
                               {e.milestone_title}
                             </option>
                           ))}

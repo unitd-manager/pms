@@ -69,11 +69,8 @@ export default function ProjectTimeSheet({
   };
 //Insert Milestone
   const inserttimeSheets = () => {
-   
     const newContactWithCompany = insertTimeSheet;
     newContactWithCompany.project_id = id;
-
-   
     api.post('/projecttimesheet/insertTimeSheet', newContactWithCompany)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
@@ -95,7 +92,7 @@ export default function ProjectTimeSheet({
    // Api call for getting project name dropdown
    const getMilestoneName = () => {
     api
-      .get('/projecttimesheet/getMilestoneTitle')
+      .post('/projecttimesheet/getMilestoneTitle',{ project_id: id })
       .then((res) => {
         setMilestones(res.data.data);
       })
@@ -118,6 +115,9 @@ export default function ProjectTimeSheet({
 
  useEffect(() => {
     editJobById();
+  }, [id]);
+
+  useEffect(() => { 
     getMilestoneName();
   }, [id]);
 
@@ -194,7 +194,7 @@ export default function ProjectTimeSheet({
                         <option>Select Project</option>
                         {milestones &&
                           milestones.map((e) => (
-                            <option key={e.project_milestone_id} value={e.project_milestone_id}>
+                            <option key={e.project_id} value={e.project_milestone_id}>
                               {e.milestone_title}
                             </option>
                           ))}

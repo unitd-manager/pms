@@ -180,7 +180,7 @@ const ProjectTaskEdit = ({
                             type="date"
                             onChange={handleInputs}
                             value={moment(taskProject && taskProject.start_date).format(
-                              'DD-MM-YYYY',
+                              'YYYY-MM-DD',
                             )}
                             name="start_date"
                           />
@@ -192,7 +192,7 @@ const ProjectTaskEdit = ({
                           <Input
                             type="date"
                             onChange={handleInputs}
-                            value={moment(taskProject && taskProject.end_date).format('DD-MM-YYYY')}
+                            value={moment(taskProject && taskProject.end_date).format('YYYY-MM-DD')}
                             name="end_date"
                           />
                         </FormGroup>
@@ -203,7 +203,7 @@ const ProjectTaskEdit = ({
                           <Input
                             type="date"
                             onChange={handleInputs}
-                            value={moment(taskProject && taskProject.actual_completed_date).format('DD-MM-YYYY')}
+                            value={moment(taskProject && taskProject.actual_completed_date).format('YYYY-MM-DD')}
                             name="actual_completed_date"
                           />
                         </FormGroup>

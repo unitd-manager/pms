@@ -102,7 +102,7 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
                               type="date"
                               onChange={handleInputs}
                               value={moment(milestoneEdit && milestoneEdit.from_date).format(
-                                'DD-MM-YYYY',
+                                'YYYY-MM-DD',
                               )}                               
                               name="from_date"
                             />
@@ -115,7 +115,7 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
                               type="date"
                               onChange={handleInputs}
                               value={moment(milestoneEdit && milestoneEdit.to_date).format(
-                                'DD-MM-YYYY',
+                                'YYYY-MM-DD',
                               )}                               
                               name="to_date"
                             />

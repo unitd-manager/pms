@@ -16,7 +16,6 @@ import {
   CardBody,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import * as Icon from 'react-feather';
 import moment from 'moment';
 import api from '../constants/api';
@@ -56,10 +55,9 @@ getMilestone:PropTypes.func,
   };
 //Insert Milestone
   const insertMilestone = () => {
-   
+    if (insertMilestones.milestone_title !== ''){
     const newContactWithCompanyId = insertMilestones;
     newContactWithCompanyId.project_id = id;
-    if (insertMilestones.milestone_title !== '')
     api.post('/milestone/insertmilestone', newContactWithCompanyId)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
@@ -67,14 +65,16 @@ getMilestone:PropTypes.func,
         message('Milestone inserted successfully.', 'success');
         getMilestone();
         setTimeout(() => {addContactToggles(false)}, 300);
-        })
+        window.location.reload();
+
+      })
       .catch(() => {
         message('Network connection error.', 'error');
       });
-      else {
-        message('error', 'error');
-      }
-  };
+  } else {
+      message( 'error');
+  }
+};
 
 
   useEffect(() => {
@@ -125,7 +125,7 @@ getMilestone:PropTypes.func,
         <Col md="3">
           <FormGroup>
             <Button color="primary" className="shadow-none" onClick={addContactToggles.bind(null)}>
-              Add New Task{' '}
+              Add New {' '}
             </Button>
             <Modal size="xl" isOpen={addContactModals} toggle={addContactToggles.bind(null)}>
               <ModalHeader toggle={addContactToggles.bind(null)}>New Task</ModalHeader>
@@ -227,7 +227,6 @@ getMilestone:PropTypes.func,
                   color="primary"
                   onClick={() => {
                     insertMilestone();
-                    addContactModals(false);
                   }}
                 >
                   Submit
@@ -260,8 +259,7 @@ getMilestone:PropTypes.func,
                   <tr key={element.project_milestone_id}>
                     <td>{index + 1}</td>
                     <td>
-                    <Link to="">
-                        <span
+                     <span
                           onClick={() => {
                             setContactDatas(element);
                             setEditTaskEditModals(true);
@@ -269,7 +267,6 @@ getMilestone:PropTypes.func,
                         >
                           <Icon.Edit2 />
                         </span>
-                      </Link>
                     </td>
                     <td>{element.milestone_title}</td>
                     <td>{element.description}</td>

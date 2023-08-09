@@ -42,6 +42,7 @@ import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponent
 const TaskEdit = () => {
   //All state variable
   const [projectTask, setProjectTask] = useState();
+  const [employeeProject, setEmployeeProject] = useState();
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [activeTab, setActiveTab] = useState('1');
   const [timeSheet, setTimesheet] = useState(null);
@@ -54,6 +55,8 @@ const TaskEdit = () => {
   const [roomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState();
   const [description, setDescription] = useState('');
+  const [employeeTeam, setEmployeeTeam] = useState();
+
 
   //navigation and parameters
   const { id } = useParams();
@@ -103,7 +106,7 @@ const TaskEdit = () => {
         console.log(res.data.data[0]);
       })
       .catch(() => {
-        message('Company not found', 'info');
+        message('Milestone not found', 'info');
       });
   };
   const toggle = (tab) => {
@@ -124,6 +127,27 @@ const TaskEdit = () => {
       }
     });
   };  
+  //  Gettind data from Job By Id
+  const JobTask = () => {
+    api
+      .get('/jobinformation/getEmployee')
+      .then((res) => {
+        console.log(res.data.data);
+        setEmployeeProject(res.data.data);
+      })
+      .catch(() => {});
+  };
+
+  //  Gettind data from Job By Id
+  const editJob = () => {
+    api
+      .get('/jobinformation/getEmployee')
+      .then((res) => {
+        console.log(res.data.data);
+        setEmployeeTeam(res.data.data);
+      })
+      .catch(() => {});
+  };
 
   //Update task
   const editTask = () => {
@@ -150,17 +174,7 @@ const TaskEdit = () => {
         message('Loan Data Not Found', 'info');
       });
   };
-  //getting data from project timesheet
-  const getProjectTimesheetById = () => {
-    api
-      .post('/projecttimesheet/getTaskTimeSheetById', { project_task_id: id })
-      .then((res) => {
-        setTimesheetEditData(res.data.data);
-      })
-      .catch(() => {
-        message('Loan Data Not Found', 'info');
-      });
-  };
+ 
 
   const handleTaskInputs = (e) => {
     setTimesheetEditData({ ...timesheeteditdata, [e.target.name]: e.target.value });
@@ -172,9 +186,8 @@ const TaskEdit = () => {
     api
       .post('/Projecttimesheet/editTimeSheet', timesheeteditdata)
       .then(() => {
-        message('Record editted successfully', 'success');
-        //window.location.reload();
-      })
+        getTimesheet()   
+         })
       .catch(() => {
         message('Unable to edit record.', 'error');
       });
@@ -254,7 +267,8 @@ const TaskEdit = () => {
     getTimesheet();
     getMilestonename();
     getProjectname();
-    getProjectTimesheetById();
+    JobTask();
+    editJob();
   }, [id]);
 
   return (
@@ -376,9 +390,9 @@ const TaskEdit = () => {
 
                         <Input
                           type="select"
-                          name="milestone_title"
+                          name="project_milestone_id"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.milestone_title}
+                          value={projectTask && projectTask.project_milestone_id}
                         >
                           <option>Select Project</option>
                           {MileStonedetails &&
@@ -430,11 +444,21 @@ const TaskEdit = () => {
                       <FormGroup>
                         <Label>Name</Label>
                         <Input
-                          type="text"
+                          type="select"
+                          name="employee_id"
                           onChange={handleInputs}
-                          value={projectTask && projectTask.first_name}
-                          name="first_name"
-                        />
+                          value={projectTask && projectTask.employee_id}
+                        >
+                          <option value="" defaultValue="selected"></option>
+                          {employeeProject &&
+                            employeeProject.map((ele) => {
+                              return (
+                                <option key={ele.employee_id} value={ele.employee_id}>
+                                  {ele.first_name}
+                                </option>
+                              );
+                            })}
+                        </Input>
                       </FormGroup>
                     </Col>
                     <Col md="3">
@@ -623,13 +647,21 @@ const TaskEdit = () => {
                                           <FormGroup>
                                             <Label>Name</Label>
                                             <Input
-                                              type="text"
-                                              name="first_name"
-                                              onChange={handleTaskInputs}
-                                              value={
-                                                timesheeteditdata && timesheeteditdata.first_name
-                                              }
-                                            />
+                          type="select"
+                          name="employee_id"
+                          onChange={handleTaskInputs}
+                          value={timesheeteditdata && timesheeteditdata.employee_id}
+                        >
+                          <option value="" defaultValue="selected"></option>
+                          {employeeTeam &&
+                            employeeTeam.map((ele) => {
+                              return (
+                                <option key={ele.employee_id} value={ele.employee_id}>
+                                  {ele.first_name}
+                                </option>
+                              );
+                            })}
+                        </Input>
                                           </FormGroup>
                                         </Col>
                                       </Row>

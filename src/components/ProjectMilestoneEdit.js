@@ -93,17 +93,7 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
                             />
                           </FormGroup>
                         </Col>
-                        <Col md="3">
-                          <FormGroup>
-                            <Label>Description</Label>
-                            <Input
-                              type="textarea"
-                              onChange={handleInputs}
-                              value={milestoneEdit && milestoneEdit.description}
-                              name="description"
-                            />
-                          </FormGroup>
-                        </Col>
+
 
                         <Col md="3">
                           <FormGroup>
@@ -112,7 +102,7 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
                               type="date"
                               onChange={handleInputs}
                               value={moment(milestoneEdit && milestoneEdit.from_date).format(
-                                'YYYY-MM-DD',
+                                'DD-MM-YYYY',
                               )}                               
                               name="from_date"
                             />
@@ -125,7 +115,7 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
                               type="date"
                               onChange={handleInputs}
                               value={moment(milestoneEdit && milestoneEdit.to_date).format(
-                                'YYYY-MM-DD',
+                                'DD-MM-YYYY',
                               )}                               
                               name="to_date"
                             />
@@ -164,6 +154,17 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
                           </Input>
                         </FormGroup>
                       </Col>
+                      <Col md="12">
+                          <FormGroup>
+                            <Label>Description</Label>
+                            <Input
+                              type="textarea"
+                              onChange={handleInputs}
+                              value={milestoneEdit && milestoneEdit.description}
+                              name="description"
+                            />
+                          </FormGroup>
+                        </Col>
                       </Row>
                     </Form>
                   

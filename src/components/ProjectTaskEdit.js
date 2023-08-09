@@ -180,7 +180,7 @@ const ProjectTaskEdit = ({
                             type="date"
                             onChange={handleInputs}
                             value={moment(taskProject && taskProject.start_date).format(
-                              'YYYY-MM-DD',
+                              'DD-MM-YYYY',
                             )}
                             name="start_date"
                           />
@@ -192,7 +192,7 @@ const ProjectTaskEdit = ({
                           <Input
                             type="date"
                             onChange={handleInputs}
-                            value={moment(taskProject && taskProject.end_date).format('YYYY-MM-DD')}
+                            value={moment(taskProject && taskProject.end_date).format('DD-MM-YYYY')}
                             name="end_date"
                           />
                         </FormGroup>
@@ -203,7 +203,7 @@ const ProjectTaskEdit = ({
                           <Input
                             type="date"
                             onChange={handleInputs}
-                            value={moment(taskProject && taskProject.actual_completed_date).format('YYYY-MM-DD')}
+                            value={moment(taskProject && taskProject.actual_completed_date).format('DD-MM-YYYY')}
                             name="actual_completed_date"
                           />
                         </FormGroup>
@@ -237,17 +237,7 @@ const ProjectTaskEdit = ({
                           />
                         </FormGroup>
                       </Col>
-                      <Col md="4">
-                        <FormGroup>
-                          <Label>Description</Label>
-                          <Input
-                            type="textarea"
-                            name="description"
-                            onChange={handleInputs}
-                            value={taskProject && taskProject.description}
-                          />
-                        </FormGroup>
-                      </Col>
+                     
                       <Col md="4">
                         <FormGroup>
                           <Label>Status</Label>
@@ -306,6 +296,17 @@ const ProjectTaskEdit = ({
                             <option value="4">4</option>
                             <option value="5">5</option> 
                           </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col md="12">
+                        <FormGroup>
+                          <Label>Description</Label>
+                          <Input
+                            type="textarea"
+                            name="description"
+                            onChange={handleInputs}
+                            value={taskProject && taskProject.description}
+                          />
                         </FormGroup>
                       </Col>
                     </Row>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Card,
   CardBody,
@@ -10,17 +10,26 @@ import {
   Input,
   Form,
 } from 'reactstrap';
+import PropTypes from 'prop-types';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import EventData from './EventData';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.scss';
+import api from '../../../constants/api';
+
 
 moment.locale('en-GB');
 const localizer = momentLocalizer(moment);
 
-const CalendarApp = () => {
-  const [calevents, setCalEvents] = useState(EventData);
+const CalendarApp = ({
+  id,
+}) => {
+  CalendarApp.propTypes = {
+    
+    id: PropTypes.any,
+  };
+
+  const [eventData, setEventData] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = useState('');
   const [slot, setSlot] = useState();
@@ -54,23 +63,26 @@ const CalendarApp = () => {
       value: 'warning',
     },
   ];
+
   const addNewEventAlert = (slotInfo) => {
     setOpen(true);
     setSlot(slotInfo);
   };
+
   const editEvent = (event) => {
     setOpen(true);
-    const newEditEvent = calevents.find((elem) => elem.title === event.title);
+    const newEditEvent = eventData.find((elem) => elem.title === event.title);
     setColor(event.color);
     setTitle(newEditEvent.title);
     setColor(newEditEvent.color);
     setUpdate(event);
   };
+
   const updateEvent = (e) => {
     e.preventDefault();
 
-    setCalEvents(
-      calevents.map((elem) => {
+    setEventData(
+      eventData.map((elem) => {
         if (elem.title === update.title) {
           return { ...elem, title, color };
         }
@@ -82,14 +94,15 @@ const CalendarApp = () => {
     setColor('');
     setUpdate(null);
   };
+
   const inputChangeHandler = (e) => setTitle(e.target.value);
 
-  const selectinputChangeHandler = (id) => setColor(id);
+  const selectinputChangeHandler = (Calendarid) => setColor(Calendarid);
 
   const submitHandler = (e) => {
     e.preventDefault();
 
-    const newEvents = calevents;
+    const newEvents = eventData;
     newEvents.push({
       title,
       start: slot.start,
@@ -99,13 +112,15 @@ const CalendarApp = () => {
     setOpen(false);
     e.target.reset();
 
-    setCalEvents(newEvents);
+    setEventData(newEvents);
     setTitle('');
   };
+
   const deleteHandler = (event) => {
-    const updatecalEvents = calevents.filter((ind) => ind.title !== event.title);
-    setCalEvents(updatecalEvents);
+    const updatedEvents = eventData.filter((ind) => ind.title !== event.title);
+    setEventData(updatedEvents);
   };
+
   const handleClose = () => {
     setOpen(false);
     setTitle('');
@@ -116,25 +131,45 @@ const CalendarApp = () => {
     if (event.color) {
       return { className: `event-${event.color}` };
     }
-    return { className: `event-default` };
+    return { className: 'event-default' };
   };
 
+  useEffect(() => {
+    api
+      .post('/calendar/getCalendar',{ project_id: id })
+      .then((response) => {
+        console.log('API Response:', response.data);
+        const { data } = response.data;
+        const newEventData = data.map((item) => ({
+          title: item.task_title, // Assuming the title is available in the API response
+          start: new Date(item.start_date), // Convert the from_date to a Date object
+          end: new Date(item.end_date), // Convert the to_date to a Date object
+          color: 'primary', // Set a default color for the events, you can modify this based on your use case
+        }));
+        console.log('New Event Data:', newEventData);
+        setEventData(newEventData);
+      })
+      .catch((error) => {
+        console.log('Error fetching data:', error);
+      });
+  }, [id]);
+  
   return (
     <>
       <Card>
         <CardBody>
-          <Calendar
-            selectable
-            events={calevents}
-            defaultView="month"
-            scrollToTime={new Date(1970, 1, 1, 6)}
-            defaultDate={new Date()}
-            localizer={localizer}
-            style={{ height: 'calc(100vh - 350px' }}
-            onSelectEvent={(event) => editEvent(event)}
-            onSelectSlot={(slotInfo) => addNewEventAlert(slotInfo)}
-            eventPropGetter={(event) => eventColors(event)}
-          />
+        <Calendar
+  selectable
+  events={eventData}
+  defaultView="month"
+  scrollToTime={new Date(1970, 1, 1, 6)}
+  defaultDate={new Date()}
+  localizer={localizer}
+  style={{ height: 'calc(100vh - 100px)' }} // Adjust the height value
+  onSelectEvent={(event) => editEvent(event)}
+  onSelectSlot={(slotInfo) => addNewEventAlert(slotInfo)}
+  eventPropGetter={(event) => eventColors(event)}
+/>
           <Modal isOpen={open}>
             <ModalHeader toggle={handleClose}>{update ? 'Update Event' : 'Add Event'}</ModalHeader>
             <Form onSubmit={update ? updateEvent : submitHandler}>

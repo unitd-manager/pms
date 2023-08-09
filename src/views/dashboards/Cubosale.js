@@ -5,6 +5,7 @@ import ActualHour from '../../components/dashboard/ActualHour';
 import MilestoneCompleted from '../../components/dashboard/MilestoneCompletedChart';
 import AverageIssues from '../../components/dashboard/AverageIssues';
 
+
 // import SalesOverview from '../../components/dashboard/classicDashboard/ProjectOverview';
 // import TenderSummaryCard from '../../components/dashboard/TenderSummaryCard';
 // import ProjectSummaryChart from '../../components/dashboard/ProjectSummaryChart';
@@ -17,7 +18,7 @@ import AverageIssues from '../../components/dashboard/AverageIssues';
 
 const Classic = () => {
   return (
-    <>s
+    <>
       {/*********************Sales Overview ************************/}
       <Row>
         <Col lg="12">

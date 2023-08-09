@@ -3,40 +3,63 @@ import { Form, FormGroup, Label, Input, Row, Col, CardBody } from 'reactstrap';
 import Chart from 'react-apexcharts';
 import api from '../../constants/api';
 import ComponentCard from '../ComponentCard';
+import message from '../Message';
 
 const Stats = () => {
   const [employees, setEmployees] = useState([]);
   const [employeeStats, setEmployeeStats] = useState([]);
   const [data, setData] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
 
-  // Get the list of employees from the API
-  const getEmployeeStats = (employeeId) => {
-    api.post('/stats/getStatsEmployeeId', { employee_id: employeeId })
-      .then((res) => {
-        setData(res.data.data);
-      })
-      .catch(() => {});
-  };
-
-  // Get the employee statistics based on the selected employee
-  const getStats = (employeeId) => {
-    api.post('/stats/getStatsId', { employee_id: employeeId })
-      .then((res) => {
-        setEmployeeStats(res.data.data);
-      })
-      .catch(() => {});
-  };
-
-
-  useEffect(() => {
+  const getJobs = () => {
     api.get('jobinformation/getEmployee')
-      .then((res) => {
-        setEmployees(res.data.data);
+    .then((res) => {
+      setEmployees(res.data.data);
       })
-      .catch((error) => {
-        console.log('Error fetching employees:', error);
+      .catch(() => {});
+  };
+
+  const getProjectId = (projectId) => {
+    api
+      .post('/projecttask/getProjectTitleId', { employee_id: projectId })
+      .then((res) => {
+        setProjects(res.data.data);
+      })
+      .catch(() => {
+        message('Task not found', 'info');
       });
+  };
+  // Get the list of employees from the API
+  useEffect(() => {
+   getJobs();     
   }, []);
+
+  // Get the employee and project-specific statistics based on the selected employee and project
+  useEffect(() => {
+    if (selectedProject) {
+      api.post('/stats/getStatsEmployeeId', { employee_id: selectedEmployeeId, project_id: selectedProject })
+        .then((res) => {
+          setData(res.data.data);
+        })
+        .catch(() => {});
+      
+      api.post('/stats/getStatsId', { employee_id: selectedEmployeeId, project_id: selectedProject })
+        .then((res) => {
+          setEmployeeStats(res.data.data);
+        })
+        .catch(() => {});
+    }
+  }, [selectedProject, selectedEmployeeId]);
+
+  useEffect(() => { 
+    if (data && data.employee_id) {
+      const selectedEmpProject = data.employee_id;
+      getProjectId(selectedEmpProject);
+    }
+  }, [data && data.employee_id]);
+
 
   const optionsPie = {
     chart: {
@@ -65,7 +88,7 @@ const Stats = () => {
     colors: [
       'rgb(30, 136, 229)',
       'rgb(38, 198, 218)',
-      'rgb(236, 239, 241)',
+      'rgb(17, 249, 232)',
       'rgb(116, 90, 242)',
       '#ef5350',
     ],
@@ -93,7 +116,7 @@ const Stats = () => {
   return (
     <Row>
       <Col md="6">
-        <ComponentCard title="Employee Statistics">
+      <ComponentCard title="Employee Statistics">
           <Form>
             <FormGroup>
               <Label for="employeeSelect">Select Employee</Label>
@@ -101,9 +124,9 @@ const Stats = () => {
                 type="select"
                 name="employee_id"
                 onChange={(e) => {
-                  const selectedEmployeeId = e.target.value;
-                  getEmployeeStats(selectedEmployeeId);
-                  getStats(selectedEmployeeId);
+                  const selectedId = e.target.value;
+                  setSelectedEmployeeId(selectedId);
+                  getProjectId(selectedId);
                 }}
               >
                 <option value="">Select Employee</option>
@@ -115,22 +138,31 @@ const Stats = () => {
                   ))}
               </Input>
             </FormGroup>
+            <FormGroup>
+              <Label for="projectSelect">Select Project</Label>
+              <Input
+                type="select"
+                name="project_id"
+                onChange={(e) => {
+                  const selectedProjectId = e.target.value;
+                  setSelectedProject(selectedProjectId);
+                }}
+              >
+                <option value="">Select Project</option>
+                {projects &&
+                  projects.map((project) => (
+                    <option key={project.employee_id} value={project.project_id}>
+                      {project.title}
+                    </option>
+                  ))}
+              </Input>
+            </FormGroup>
             <CardBody>
               {data &&
                 data.map((ele) => (
-                  <Row key={ele.employee_id}>
+                  <Row key={ele.project_task_id}>
                     <Col md="6">
-                      <Row>
-                        <Label>
-                          <b>Title:</b> {ele.task_titles}
-                        </Label>
-                      </Row>
-                      <Row>
-                        <Label>
-                          <b>Completion:</b> {ele.total_completion}
-                        </Label>
-                      </Row>
-                      <Row>
+        <Row>
                         <Label>
                           <b>Project:</b> {ele.title}
                         </Label>

@@ -47,7 +47,7 @@ const ProjectEdit = () => {
   const [gTotal4, setGtotal4] = useState(0);
   const [gTotal5, setGtotal5] = useState(0);
   const [types, setTypes] = useState(0);
-  const [milestone, setMilestone] = useState();
+  const [milestoneById, setMilestone] = useState();
   const [taskById, setTaskById] = useState();
   const [contactDatas, setContactData] = useState();
   const [editTaskEditModal, setEditTaskEditModal] = useState(false);
@@ -258,7 +258,7 @@ const ProjectEdit = () => {
       .catch(() => {});
   };
   //Getting data from milestone
-  const getMilestone = () => {
+  const getMilestoneById = () => {
     api
       .post('/milestone/getMilestoneProjectById', { project_id: id })
       .then((res) => {
@@ -325,7 +325,7 @@ const ProjectEdit = () => {
     getFinancesChargesById();
     getOfficeOverheadsById();
     getLabourChargesById();
-    getMilestone();
+    getMilestoneById();
     getTaskById();
     getTimeSheetById();
     getTeamById();
@@ -535,7 +535,7 @@ const ProjectEdit = () => {
                 <FormGroup>
                   <Label>Project Manager</Label>
                   <Input
-                    type="select"
+                    type="text"
                     name="project_manager_id"
                     defaultValue={projectDetail && projectDetail.project_manager_id}
                     onChange={handleInputs}
@@ -559,8 +559,7 @@ const ProjectEdit = () => {
         {/* Tab 1 */}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
-             <Stats
-             id={id}></Stats>
+          <Stats   />
              <ActualHour/>
              <AverageIssues/>
           </TabPane>
@@ -585,11 +584,11 @@ const ProjectEdit = () => {
               addContactToggles={addContactToggles}
               addContactModals={addContactModals}
               setEditTaskEditModals={setEditTaskEditModals}
-              milestone={milestone}
-              getMilestone={getMilestone}
+              milestoneById={milestoneById}
+              getMilestoneById={getMilestoneById}
             ></ProjectMilestones>
             <ProjectMilestoneEdit
-            getMilestone={getMilestone}
+            getMilestoneById={getMilestoneById}
               contactData={contactData}
               editTaskEditModals={editTaskEditModals}
               setEditTaskEditModals={setEditTaskEditModals}
@@ -607,8 +606,8 @@ const ProjectEdit = () => {
               getTeamById={getTeamById}
             />
             <ProjectTeamEdit
-            id={id}
             getTeamById={getTeamById}
+            id={id}
               contactDataTeam={contactDataTeam}
               editTeamModal={editTeamModal}
               setEditTeamEditModal={setEditTeamEditModal}
@@ -653,7 +652,9 @@ const ProjectEdit = () => {
             ></ProjectTimeSheetEdit>
           </TabPane>
           <TabPane tabId="7">
-            <CalendarApp/>
+            <CalendarApp
+             projectDetail={projectDetail}
+             id={id}></CalendarApp>
           </TabPane>
         </TabContent>
       </ComponentCard>

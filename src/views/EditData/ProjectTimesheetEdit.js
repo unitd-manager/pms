@@ -192,15 +192,26 @@ const handleDataEditor = (e, type) => {
                   <Row>
                     <Col md="3">
                       <FormGroup>
-                        <Label>Title</Label>
-                        <Input
-                          type="text"
-                          onChange={handleInputs}
-                          value={timeSheet && timeSheet.task_title}
-                          name="task_title"
-                        />
+                        <Label>Project Title</Label>
+                        <br />
+              <span>{timeSheet && timeSheet.title}</span>
                       </FormGroup>
                     </Col>
+                    <Col md="3">
+                      <FormGroup>
+                        <Label>Milestone Title</Label>
+                        <br />
+              <span>{timeSheet && timeSheet.milestone_title}</span>
+                      </FormGroup>
+                    </Col>
+                    <Col md="3">
+                      <FormGroup>
+                        <Label>Title</Label>
+                        <br />
+              <span>{timeSheet && timeSheet.task_title}</span>
+                      </FormGroup>
+                    </Col>
+
 
                     <Col md="3">
                       <FormGroup>

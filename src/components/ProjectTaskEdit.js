@@ -25,17 +25,21 @@ const ProjectTaskEdit = ({
   setEditTaskEditModal,
   contactDatas,
   getTaskById,
+  id,
 }) => {
   ProjectTaskEdit.propTypes = {
     editTaskEditModal: PropTypes.bool,
     setEditTaskEditModal: PropTypes.func,
     contactDatas: PropTypes.object,
     getTaskById: PropTypes.func,
+    id: PropTypes.any,
   };
 
   //All state variable
   const [taskProject, setTaskProject] = useState();
   const [employees, setEmployees] = useState();
+  const [milestonesTaskEdit, setMilestonesTaskEdit] = useState([]);
+
 
   // Gettind data from Job By Id
   const editJobByIds = () => {
@@ -47,6 +51,19 @@ const ProjectTaskEdit = ({
       })
       .catch(() => {});
   };
+
+   // Api call for getting project name dropdown
+   const getMilestoneTask = () => {
+    api
+      .post('/projecttimesheet/getMilestoneTitle',{ project_id: id })
+      .then((res) => {
+        setMilestonesTaskEdit(res.data.data);
+      })
+      .catch(() => {
+        message('Milestone not found', 'info');
+      });
+  };
+
 
   const handleInputs = (e) => {
     setTaskProject({ ...taskProject, [e.target.name]: e.target.value });
@@ -76,6 +93,10 @@ const ProjectTaskEdit = ({
     setTaskProject(contactDatas);
   }, [contactDatas]);
 
+  useEffect(() => { 
+    getMilestoneTask();
+  }, [id]);
+
   return (
     <>
       <Modal size="lg" isOpen={editTaskEditModal}>
@@ -91,7 +112,7 @@ const ProjectTaskEdit = ({
         </ModalHeader>
 
         <ModalBody>
-          {/* milestone Details */}
+          {/* task Details */}
           <Form>
             <FormGroup>
               <ComponentCard title="Task Details">
@@ -99,6 +120,24 @@ const ProjectTaskEdit = ({
                 <div>
                   <Form>
                     <Row>
+                    <Col md="4">
+                    <FormGroup>
+                      <Label>Milestone Title</Label>
+                      <Input type="select" 
+                      name="project_milestone_id"
+                    value={taskProject && taskProject.project_milestone_id}  
+                    onChange={handleInputs}
+                >
+                        <option>Select Project</option>
+                        {milestonesTaskEdit &&
+                          milestonesTaskEdit.map((e) => (
+                            <option key={e.project_id} value={e.project_milestone_id}>
+                              {e.milestone_title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
                       <Col md="3">
                         <FormGroup>
                           <Label>Title</Label>
@@ -198,17 +237,7 @@ const ProjectTaskEdit = ({
                           />
                         </FormGroup>
                       </Col>
-                      <Col md="4">
-                        <FormGroup>
-                          <Label>Description</Label>
-                          <Input
-                            type="textarea"
-                            name="description"
-                            onChange={handleInputs}
-                            value={taskProject && taskProject.description}
-                          />
-                        </FormGroup>
-                      </Col>
+                     
                       <Col md="4">
                         <FormGroup>
                           <Label>Status</Label>
@@ -267,6 +296,17 @@ const ProjectTaskEdit = ({
                             <option value="4">4</option>
                             <option value="5">5</option> 
                           </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col md="12">
+                        <FormGroup>
+                          <Label>Description</Label>
+                          <Input
+                            type="textarea"
+                            name="description"
+                            onChange={handleInputs}
+                            value={taskProject && taskProject.description}
+                          />
                         </FormGroup>
                       </Col>
                     </Row>

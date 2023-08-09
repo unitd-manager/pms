@@ -387,7 +387,6 @@ const TaskEdit = () => {
                     <Col md="3">
                       <FormGroup>
                         <Label>MileStone Title</Label>
-
                         <Input
                           type="select"
                           name="project_milestone_id"
@@ -398,7 +397,7 @@ const TaskEdit = () => {
                           {MileStonedetails &&
                             MileStonedetails.map((e) => {
                               return (
-                                <option key={e.project_milestone_id} value={e.milestone_title}>
+                                <option key={e.project_milestone_id} value={e.project_milestone_id}>
                                   {e.milestone_title}
                                 </option>
                               );

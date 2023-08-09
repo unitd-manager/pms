@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
@@ -12,9 +12,11 @@ const ProjectTimesheetDetails = () => {
   const [projectTimesheet, setProjectTimesheet] = useState({
     task_title: '',
     project_milestone_id:"",
-    project_task_id:""
+    project_task_id:"",
+    project_id:'',
   });
 //Navigation and Parameters
+const { id } = useParams();
   const navigate = useNavigate();
 //Timesheet data in projectTimesheet
   const handleInputs = (e) => {
@@ -22,30 +24,8 @@ const ProjectTimesheetDetails = () => {
   };
   const [milestones, setMilestones] = useState([]);
   const [taskdetail, setTaskDetail] = useState([]);
+  const [projectTime, setProjectTime] = useState([]);
 
-   // Api call for getting project name dropdown
-   const getMilestoneName = () => {
-    api
-      .get('/projecttimesheet/getMilestoneTitle')
-      .then((res) => {
-        setMilestones(res.data.data);
-      })
-      .catch(() => {
-        message('Milestone not found', 'info');
-      });
-  };
-
-  // Api call for getting milestone dropdown based on project ID
-  const getTaskName = (projectId) => {
-    api
-      .post('/projecttimesheet/getTaskByID', { project_milestone_id: projectId })
-      .then((res) => {
-        setTaskDetail(res.data.data);
-      })
-      .catch(() => {
-        message('Task not found', 'info');
-      });
-  };
 //Insert Timesheet
   const insertTimesheet = () => {
     api.post('/projecttimesheet/insertTimeSheet', projectTimesheet)
@@ -63,17 +43,63 @@ const ProjectTimesheetDetails = () => {
       
   };
 
+  //Api call for getting project name dropdown
+  const getProjectTime = () => {
+    api
+      .get('/projecttask/getProjectTitle')
+      .then((res) => {
+        setProjectTime(res.data.data);
+      })
+      .catch(() => {
+        message('Company not found', 'info');
+      });
+  };
+  // Api call for getting milestone dropdown based on project ID
+const getMilestoneTime = () => {
+  api
+    .post('/projecttimesheet/getMilestoneTitle', { project_id: projectTimesheet.project_id })
+    .then((res) => {
+      // Assuming the response data is an array of milestones with keys: milestone_id and milestone_title
+      const milestoneTimeSheet = res.data.data;
+      setMilestones(milestoneTimeSheet);
+    })
+    .catch(() => {
+      message('Milestone not found', 'info');
+    });
+};
+
+
+  // Api call for getting milestone dropdown based on project ID
+  const getTaskTime = (projectIds) => {
+    api
+      .post('/projecttimesheet/getTaskByID', { project_milestone_id: projectIds })
+      .then((res) => {
+        setTaskDetail(res.data.data);
+      })
+      .catch(() => {
+        message('Task not found', 'info');
+      });
+  };
   useEffect(() => {
-  
-    getMilestoneName();
-  }, []);
+    getProjectTime();
+  }, [id]); 
+
+  useEffect(() => { 
+    if (projectTimesheet.project_id) {
+      // Use taskdetails.project_id directly to get the selected project ID
+      const selectedTimesheet = projectTimesheet.project_id;
+      getMilestoneTime(selectedTimesheet);
+    }
+  }, [projectTimesheet.project_id]);
+
   useEffect(() => {
     if (projectTimesheet.project_milestone_id) {
       // Use taskdetails.project_milestone_id directly to get the selected project ID
       const selectedTask = projectTimesheet.project_milestone_id;
-      getTaskName(selectedTask);
+      getTaskTime(selectedTask);
     }
   }, [projectTimesheet.project_milestone_id]);
+
   
   return (
     <div>
@@ -86,18 +112,36 @@ const ProjectTimesheetDetails = () => {
           <Form>
               <FormGroup>
                 <Row>
+                <Col md="12">
+                    <FormGroup>
+                      <Label>Project Title</Label>
+                      <Input type="select" name="project_id"   onChange={(e) => {
+                        handleInputs(e)
+                  const selectedTimesheet = e.target.value;
+                  getMilestoneTime(selectedTimesheet);
+                }}>
+                        <option>Select Project</option>
+                        {projectTime &&
+                          projectTime.map((e) => (
+                            <option key={e.project_id} value={e.project_id}>
+                              {e.title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
                 <Col md="4">
                     <FormGroup>
                       <Label>Milestone Title</Label>
                       <Input type="select" name="project_milestone_id"   onChange={(e) => {
                         handleInputs(e)
                   const selectedTask = e.target.value;
-                  getTaskName(selectedTask);
+                  getTaskTime(selectedTask);
                 }}>
                         <option>Select Project</option>
                         {milestones &&
                           milestones.map((e) => (
-                            <option key={e.project_milestone_id} value={e.project_milestone_id}>
+                            <option key={e.project_id} value={e.project_milestone_id}>
                               {e.milestone_title}
                             </option>
                           ))}

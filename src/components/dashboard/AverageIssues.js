@@ -4,7 +4,7 @@ import Chart from 'react-apexcharts';
 import ComponentCard from '../ComponentCard';
 import api from '../../constants/api';
 
-const ActualHour = () => {
+const AverageIssues = () => {
   const [taskTitles, setTaskTitles] = useState([]);
   const [actualHourData, setActualHourData] = useState([]);
   const [estimatedHourData, setEstimatedHourData] = useState([]);
@@ -14,18 +14,20 @@ const ActualHour = () => {
   const HourData = (selectedEmployeeId) => {
     // Make API call to retrieve the data
     api
-    .post('/stats/getActualHourStats', { employee_id: selectedEmployeeId })
-    .then((response) => {
+    .post('/stats/getActualAveragestats', { employee_id: selectedEmployeeId })
+    .then((response) => { 
       // Check if the response data is not empty
       if (response.data && response.data.data && response.data.data.length > 0) {
-        // Assuming the response data is an array of objects with keys: task_title, total_actual_hours, and estimated_hours
+        
+      // Assuming the response data is an array of objects with keys: task_title, total_actual_hours, and estimated_hours
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const hourData = response.data.data;
         const titles = hourData.map((item) => item.task_title);
-        const actualHours = hourData.map((item) => item.total_actual_hours);
-        const estimatedHours = hourData.map((item) => item.estimated_hours);
+        const actualHours = hourData.map((item) => monthNames[item.month - 1]); 
+        const estimatedHours = hourData.map((item) => item.num_issues);
 
         setTaskTitles(titles);
-        setActualHourData(actualHours);
+       setActualHourData(actualHours);
         setEstimatedHourData(estimatedHours);
       } else {
         // If the response data is empty, reset the state to show an empty chart or display a message
@@ -45,7 +47,6 @@ const ActualHour = () => {
         console.log('Error fetching employees:', error);
       });
   }, []);
-
 
   const optionscolumn = {
     colors: ['#745af2', '#263238'],
@@ -68,8 +69,8 @@ const ActualHour = () => {
       colors: ['transparent'],
     },
     xaxis: {
-      categories: taskTitles,
-      labels: {
+      categories: actualHourData,  
+        labels: {
         style: {
           cssClass: 'grey--text lighten-2--text fill-color',
         },
@@ -77,9 +78,10 @@ const ActualHour = () => {
     },
     yaxis: {
       title: {
-        text: 'Hours',
+        text: 'Issues',
         color: '#8898aa',
       },
+     
       labels: {
         style: {
           cssClass: 'grey--text lighten-2--text fill-color',
@@ -93,7 +95,7 @@ const ActualHour = () => {
       theme: 'dark',
       y: {
         formatter(val) {
-          return `${val} hours`;
+          return `${val} issues`;
         },
       },
     },
@@ -114,16 +116,16 @@ const ActualHour = () => {
 
   const seriescolumn = [
     {
-      name: 'Actual Hour',
-      data: actualHourData,
+      name: 'Issues',
+      data: estimatedHourData.map((numIssues, index) => ({
+        x: taskTitles[index].join(", "), // Combine task_titles into a string
+        y: numIssues, // num_issues for the corresponding task_titles
+        label: taskTitles[index].join(", "),
+      })),
     },
-    {
-      name: 'Estimated Hour',
-      data: estimatedHourData,
-    },
-  
-   
   ];
+  
+
 
   return (
     <Col md="6">
@@ -154,4 +156,4 @@ const ActualHour = () => {
   );
 };
 
-export default ActualHour;
+export default AverageIssues;

@@ -27,18 +27,18 @@ export default function ProjectMilestones({
   addContactModals,
   setEditTaskEditModals,
   id,
-  milestone,
+  milestoneById,
   setContactDatas,
-  getMilestone
+  getMilestoneById
 }) {
   ProjectMilestones.propTypes = {
     addContactToggles: PropTypes.func,
     setEditTaskEditModals: PropTypes.func,
     addContactModals: PropTypes.bool,
     id:PropTypes.any,
-    milestone:PropTypes.any,
+    milestoneById:PropTypes.any,
     setContactDatas:PropTypes.func,
-getMilestone:PropTypes.func,
+getMilestoneById:PropTypes.func,
   };
   const [insertMilestones, setInsertMilestones] = useState({
     milestone_title: "",
@@ -63,7 +63,7 @@ getMilestone:PropTypes.func,
         const insertedDataId = res.data.data.insertId;
         console.log(insertedDataId);
         message('Milestone inserted successfully.', 'success');
-        getMilestone();
+        getMilestoneById();
         setTimeout(() => {addContactToggles(false)}, 300);
         window.location.reload();
 
@@ -253,8 +253,8 @@ getMilestone:PropTypes.func,
             </tr>
           </thead>
           <tbody>
-            {milestone &&
-              milestone.map((element, index) => {
+            {milestoneById &&
+              milestoneById.map((element, index) => {
                 return (
                   <tr key={element.project_milestone_id}>
                     <td>{index + 1}</td>

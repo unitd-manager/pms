@@ -11,9 +11,10 @@ const TaskJobDetails = () => {
   //All state variables
   const [employeeTeam, setEmployeeTeam] = useState();
   const [teamdetails, setTeamDetails] = useState({
-employee_id:'',first_name:'',project_task_id:'',project_milestone_id:''});
+employee_id:'',first_name:'',project_task_id:'',project_milestone_id:'',project_id:''});
 const [milestonesTeam, setMilestonesTeam] = useState([]);
 const [taskdetailTeam, setTaskDetailTeam] = useState([]);
+const [projectTeam, setProjectTeam] = useState([]);
 
 //Navigation and Parameters
 const { id } = useParams();
@@ -32,6 +33,7 @@ const navigate = useNavigate();
   const handleInputsTeamDetails = (e) => {
     setTeamDetails({ ...teamdetails, [e.target.name]: e.target.value });
   };
+ 
 
 //Insert Milestone
   const insertTeamDetails = () => {
@@ -48,17 +50,31 @@ const navigate = useNavigate();
       });
      
   };
-  // Api call for getting project name dropdown
-  const getMilestoneName = () => {
+   //Api call for getting project name dropdown
+   const getProjectTeam = () => {
     api
-      .get('/projecttimesheet/getMilestoneTitle')
+      .get('/projecttask/getProjectTitle')
       .then((res) => {
-        setMilestonesTeam(res.data.data);
+        setProjectTeam(res.data.data);
       })
       .catch(() => {
-        message('Milestone not found', 'info');
+        message('Company not found', 'info');
       });
   };
+  // Api call for getting milestone dropdown based on project ID
+const getMilestoneName = () => {
+  api
+    .post('/projecttimesheet/getMilestoneTitle', { project_id: teamdetails.project_id })
+    .then((res) => {
+      // Assuming the response data is an array of milestones with keys: milestone_id and milestone_title
+      const milestones = res.data.data;
+      setMilestonesTeam(milestones);
+    })
+    .catch(() => {
+      message('Milestone not found', 'info');
+    });
+};
+
 
   // Api call for getting milestone dropdown based on project ID
   const getTaskName = (projectId) => {
@@ -73,11 +89,17 @@ const navigate = useNavigate();
   };
   useEffect(() => {
     editJob();
+    getProjectTeam();
   }, [id]); 
 
   useEffect(() => { 
-    getMilestoneName();
-  }, []);
+    if (teamdetails.project_id) {
+      // Use taskdetails.project_id directly to get the selected project ID
+      const selectedProject = teamdetails.project_id;
+      getMilestoneName(selectedProject);
+    }
+  }, [teamdetails.project_id]);
+
   useEffect(() => {
     if (teamdetails.project_milestone_id) {
       // Use taskdetails.project_milestone_id directly to get the selected project ID
@@ -97,6 +119,24 @@ const navigate = useNavigate();
           <Form>
               <FormGroup>
                 <Row>
+                <Col md="12">
+                    <FormGroup>
+                      <Label>Project Title</Label>
+                      <Input type="select" name="project_id"   onChange={(e) => {
+                        handleInputsTeamDetails(e)
+                  const selectedProject = e.target.value;
+                  getMilestoneName(selectedProject);
+                }}>
+                        <option>Select Project</option>
+                        {projectTeam &&
+                          projectTeam.map((e) => (
+                            <option key={e.project_id} value={e.project_id}>
+                              {e.title}
+                            </option>
+                          ))}
+                      </Input>
+                    </FormGroup>
+                  </Col>
                 <Col md="4">
                     <FormGroup>
                       <Label>Milestone Title</Label>
@@ -108,7 +148,7 @@ const navigate = useNavigate();
                         <option>Select Project</option>
                         {milestonesTeam &&
                           milestonesTeam.map((e) => (
-                            <option key={e.project_milestone_id} value={e.project_milestone_id}>
+                            <option key={e.project_id} value={e.project_milestone_id}>
                               {e.milestone_title}
                             </option>
                           ))}

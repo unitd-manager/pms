@@ -7,11 +7,12 @@ import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { usePermify } from '@permify/react-role';
 import AuthLogo from '../../layouts/logo/AuthLogo';
-import { ReactComponent as LeftBg } from '../../assets/images/bg/login-bgleft.svg';
-import { ReactComponent as RightBg } from '../../assets/images/bg/login-bg-right.svg';
+// import { ReactComponent as LeftBg } from '../../assets/images/bg/login-bgleft.svg';
+// import { ReactComponent as RightBg } from '../../assets/images/bg/login-bg-right.svg';
 // import {Dashboards} from '../../components/dashboard/classicDashboard';
 import loginApi from '../../constants/api';
 import message from '../../components/Message';
+
 
 const LoginFormik = ({ setToken }) => {
   const { setUser } = usePermify();
@@ -76,8 +77,8 @@ const LoginFormik = ({ setToken }) => {
 
   return (
     <div className="loginBox">
-      <LeftBg className="position-absolute left bottom-0" />
-      <RightBg className="position-absolute end-0 top" />
+      {/* <LeftBg className="position-absolute left bottom-0" />
+      <RightBg className="position-absolute end-0 top" /> */}
       <Container fluid className="h-100">
         <Row className="justify-content-center align-items-center h-100">
           <Col lg="12" className="loginContainer">

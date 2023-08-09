@@ -45,7 +45,6 @@ export default function ProjectTask({
     getTaskById: PropTypes.func,
 
   };
-  console.log('rafi', taskById);
   const [insertTask, setInsertTask] = useState({
     task_title: '',
     first_name: '',
@@ -56,8 +55,8 @@ export default function ProjectTask({
     task_type: '',
     actual_completed_date: '',
     description:'',
+    project_milestone_id:'',
   });
-  const [projectdetail, setProjectDetail] = useState([]);
   const [milestoneDetail, setMilestones] = useState([]);
 
   const [attachmentData, setDataForAttachment] = useState({
@@ -82,11 +81,11 @@ export default function ProjectTask({
       .catch(() => {});
   };
   //Milestone data in milestoneDetails
-  const handleInputsmilestone = (e) => {
+  const handleInputsTask = (e) => {
     setInsertTask({ ...insertTask, [e.target.name]: e.target.value });
   };
   //Insert Milestone
-  const insertMilestone = () => {
+  const insertTaskData = () => {
     if (insertTask.task_title !== '') {
       const newContactWithCompanyId = insertTask;
       newContactWithCompanyId.project_id = id;
@@ -108,22 +107,12 @@ export default function ProjectTask({
         message( 'error');
     }
   };
-   // Api call for getting project name dropdown
-   const getProjectnames = () => {
-    api
-      .get('/projecttask/getProjectTitle')
-      .then((res) => {
-        setProjectDetail(res.data.data);
-      })
-      .catch(() => {
-        message('Projects not found', 'info');
-      });
-  };
+   
 
   // Api call for getting milestone dropdown based on project ID
-  const getMilestones = (projectId) => {
+  const getMilestoneTitle = () => {
     api
-      .post('/projecttask/getMilestoneById', { project_id: projectId })
+      .post('/projecttask/getMilestoneById', { project_id: id })
       .then((res) => {
         setMilestones(res.data.data);
       })
@@ -142,16 +131,10 @@ export default function ProjectTask({
   useEffect(() => {
     editJobById();
     dataForAttachment();
-    getProjectnames();
+    getMilestoneTitle();
   }, [id]);
 
-  useEffect(() => {
-    if (insertTask.project_id) {
-      // Use taskdetails.project_id directly to get the selected project ID
-      const selectedProject = insertTask.project_id;
-      getMilestones(selectedProject);
-    }
-  }, [insertTask.project_id]);
+  
 
 
   //Structure of projectTask list view
@@ -219,28 +202,10 @@ export default function ProjectTask({
                         <Form>
                           <Row>
                           
-                            <Col md="4">
-                    <FormGroup>
-                      <Label>Project Title</Label>
-                      <Input type="select" name="project_id"   onChange={(e) => {
-                        handleInputsmilestone(e)
-                  const selectedProject = e.target.value;
-                  getMilestones(selectedProject);
-                }}>
-                        <option>Select Project</option>
-                        {projectdetail &&
-                          projectdetail.map((e) => (
-                            <option key={e.project_id} value={e.project_id}>
-                              {e.title}
-                            </option>
-                          ))}
-                      </Input>
-                    </FormGroup>
-                  </Col>
                   <Col md="4">
                     <FormGroup>
                       <Label>Milestone</Label>
-                      <Input type="select" name="project_milestone_id" onChange={handleInputsmilestone}>
+                      <Input type="select" name="project_milestone_id" onChange={handleInputsTask}>
                         <option>Select Milestone</option>
                         {milestoneDetail &&
                           milestoneDetail.map((e) => (
@@ -260,7 +225,7 @@ export default function ProjectTask({
                                 <Input
                                   type="text"
                                   name="task_title"
-                                  onChange={handleInputsmilestone}
+                                  onChange={handleInputsTask}
                                   value={insertTask && insertTask.task_title}
                                 />
                               </FormGroup>
@@ -272,7 +237,7 @@ export default function ProjectTask({
                                   type="select"
                                   name="employee_id"
                                   onChange={(e) => {
-                                    handleInputsmilestone(e);
+                                    handleInputsTask(e);
                                   }}
                                 >
                                   <option value="" selected>
@@ -296,7 +261,7 @@ export default function ProjectTask({
                                 <Label>Start date</Label>
                                 <Input
                                   type="date"
-                                  onChange={handleInputsmilestone}
+                                  onChange={handleInputsTask}
                                   value={
                                     insertTask && moment(insertTask.start_date).format('YYYY-MM-DD')
                                   }
@@ -309,7 +274,7 @@ export default function ProjectTask({
                                 <Label>End date</Label>
                                 <Input
                                   type="date"
-                                  onChange={handleInputsmilestone}
+                                  onChange={handleInputsTask}
                                   value={
                                     insertTask && moment(insertTask.end_date).format('YYYY-MM-DD')
                                   }
@@ -324,7 +289,7 @@ export default function ProjectTask({
                                 <Input
                                   type="text"
                                   name="estimated_hours"
-                                  onChange={handleInputsmilestone}
+                                  onChange={handleInputsTask}
                                   value={insertTask && insertTask.estimated_hours}
                                 />
                               </FormGroup>
@@ -335,7 +300,7 @@ export default function ProjectTask({
                                 <Input
                                   type="text"
                                   name="completion"
-                                  onChange={handleInputsmilestone}
+                                  onChange={handleInputsTask}
                                   value={insertTask && insertTask.completion}
                                 />
                               </FormGroup>
@@ -346,7 +311,7 @@ export default function ProjectTask({
                           <Input
                             type="select"
                             name="status"
-                            onChange={handleInputsmilestone}
+                            onChange={handleInputsTask}
                             value={insertTask && insertTask.status}
                             >
                             {' '}
@@ -366,7 +331,7 @@ export default function ProjectTask({
                           <Input
                             type="select"
                             name="task_type"
-                            onChange={handleInputsmilestone}
+                            onChange={handleInputsTask}
                             value={insertTask && insertTask.task_type}
                             >
                             {' '}
@@ -385,7 +350,7 @@ export default function ProjectTask({
                           <Input
                             type="select"
                             name="priority"
-                            onChange={handleInputsmilestone}
+                            onChange={handleInputsTask}
                             value={insertTask && insertTask.priority}
                             >
                             {' '}
@@ -407,7 +372,7 @@ export default function ProjectTask({
                                 <Input
                                   type="textarea"
                                   name="description"
-                                  onChange={handleInputsmilestone}
+                                  onChange={handleInputsTask}
                                   value={insertTask && insertTask.description}
                                 />
                               </FormGroup>
@@ -424,7 +389,7 @@ export default function ProjectTask({
                   className="shadow-none"
                   color="primary"
                   onClick={() => {
-                    insertMilestone();
+                    insertTaskData();
                  
                   }}
                 >
@@ -472,9 +437,9 @@ export default function ProjectTask({
                   </td>
                   <td>{element.task_title}</td>
                   <td>{element.first_name}</td>
-                  <td>{moment(element.start_date).format('YYYY-MM-DD')}</td>
-                  <td>{moment(element.end_date).format('YYYY-MM-DD')}</td>
-                  <td>{moment(element.actual_completed_date).format('YYYY-MM-DD')}</td>
+                  <td>{moment(element.start_date).format('DD-MM-YYYY')}</td>
+                  <td>{moment(element.end_date).format('DD-MM-YYYY')}</td>
+                  <td>{(element.actual_completed_date)?moment(element.actual_completed_date).format('DD-MM-YYYY'):''}</td>
                   <td>{element.actual_hours}</td>
                   <td>{element.estimated_hours}</td>
                   <td>{element.completion}</td>

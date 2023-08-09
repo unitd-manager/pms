@@ -93,17 +93,7 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
                             />
                           </FormGroup>
                         </Col>
-                        <Col md="3">
-                          <FormGroup>
-                            <Label>Description</Label>
-                            <Input
-                              type="textarea"
-                              onChange={handleInputs}
-                              value={milestoneEdit && milestoneEdit.description}
-                              name="description"
-                            />
-                          </FormGroup>
-                        </Col>
+
 
                         <Col md="3">
                           <FormGroup>
@@ -164,6 +154,17 @@ const ProjectMilestoneEdit = ({ editTaskEditModals, setEditTaskEditModals,contac
                           </Input>
                         </FormGroup>
                       </Col>
+                      <Col md="12">
+                          <FormGroup>
+                            <Label>Description</Label>
+                            <Input
+                              type="textarea"
+                              onChange={handleInputs}
+                              value={milestoneEdit && milestoneEdit.description}
+                              name="description"
+                            />
+                          </FormGroup>
+                        </Col>
                       </Row>
                     </Form>
                   

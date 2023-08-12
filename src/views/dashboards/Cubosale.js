@@ -53,6 +53,7 @@ const Classic = () => {
           {/* <SalesOverview /> */}
           <PriorityStats/>
           <ActualHour/>
+          <AverageIssues/>
         </Col>
       </Row>
       {/*********************Email & Visitor ************************/}

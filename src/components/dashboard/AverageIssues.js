@@ -5,7 +5,7 @@ import ComponentCard from '../ComponentCard';
 import api from '../../constants/api';
 
 const AverageIssues = () => {
-  const [taskTitles, setTaskTitles] = useState([]);
+  //const [taskTitles, setTaskTitles] = useState([]);
   const [actualHourData, setActualHourData] = useState([]);
   const [estimatedHourData, setEstimatedHourData] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -22,16 +22,16 @@ const AverageIssues = () => {
       // Assuming the response data is an array of objects with keys: task_title, total_actual_hours, and estimated_hours
         const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const hourData = response.data.data;
-        const titles = hourData.map((item) => item.task_title);
+        //const titles = hourData.map((item) => item.task_title);
         const actualHours = hourData.map((item) => monthNames[item.month - 1]); 
         const estimatedHours = hourData.map((item) => item.num_issues);
 
-        setTaskTitles(titles);
+       // setTaskTitles(titles);
        setActualHourData(actualHours);
         setEstimatedHourData(estimatedHours);
       } else {
         // If the response data is empty, reset the state to show an empty chart or display a message
-        setTaskTitles([]);
+        //setTaskTitles([]);
         setActualHourData([]);
         setEstimatedHourData([]);
       }
@@ -117,11 +117,7 @@ const AverageIssues = () => {
   const seriescolumn = [
     {
       name: 'Issues',
-      data: estimatedHourData.map((numIssues, index) => ({
-        x: taskTitles[index].join(", "), // Combine task_titles into a string
-        y: numIssues, // num_issues for the corresponding task_titles
-        label: taskTitles[index].join(", "),
-      })),
+      data: estimatedHourData
     },
   ];
   

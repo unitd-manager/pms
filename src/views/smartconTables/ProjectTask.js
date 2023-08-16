@@ -437,9 +437,9 @@ export default function ProjectTask({
                   </td>
                   <td>{element.task_title}</td>
                   <td>{element.first_name}</td>
-                  <td>{moment(element.start_date).format('DD-MM-YYYY')}</td>
-                  <td>{moment(element.end_date).format('DD-MM-YYYY')}</td>
-                  <td>{(element.actual_completed_date)?moment(element.actual_completed_date).format('DD-MM-YYYY'):''}</td>
+                  <td>{moment(element.start_date).format('YYYY-MM-DD')}</td>
+                  <td>{moment(element.end_date).format('YYYY-MM-DD')}</td>
+                  <td>{(element.actual_completed_date)?moment(element.actual_completed_date).format('YYYY-MM-DD'):''}</td>
                   <td>{element.actual_hours}</td>
                   <td>{element.estimated_hours}</td>
                   <td>{element.completion}</td>

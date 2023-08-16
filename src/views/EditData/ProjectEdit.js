@@ -17,11 +17,11 @@ import ProjectTaskEdit from '../../components/ProjectTaskEdit';
 import ProjectTimeSheetEdit from '../../components/ProjectTImeSheetEdit';
 import ProjectTeamEdit from '../../components/ProjectTeamEdit';
 import Tab from '../../components/ProjectTabs/Tab';
-import Stats from '../../components/dashboard/StatsPms';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import CalendarApp from '../apps/calendar/CalendarApp';
 import ActualHour from '../../components/dashboard/ActualHour';
 import AverageIssues from '../../components/dashboard/AverageIssues';
+import StatsPmsProjectId from '../../components/dashboard/ProjectStats/StatsPmsProjectId';
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -559,8 +559,8 @@ const ProjectEdit = () => {
         {/* Tab 1 */}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
-          <Stats   />
-             <ActualHour/>
+<StatsPmsProjectId
+id={id}></StatsPmsProjectId>             <ActualHour/>
              <AverageIssues/>
           </TabPane>
           {/* Tab 2 */}

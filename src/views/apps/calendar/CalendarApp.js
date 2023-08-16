@@ -9,6 +9,9 @@ import {
   ModalFooter,
   Input,
   Form,
+  FormGroup,
+  Label,
+  Col
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
@@ -29,6 +32,7 @@ const CalendarApp = ({
     id: PropTypes.any,
   };
 
+  const [employees, setEmployees] = useState([]);
   const [eventData, setEventData] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = useState('');
@@ -134,9 +138,17 @@ const CalendarApp = ({
     return { className: 'event-default' };
   };
 
-  useEffect(() => {
+  const getJobs = () => {
+    api.post('projecttask/getEmployeeByID',{ project_id : id})
+    .then((res) => {
+      setEmployees(res.data.data);
+      })
+      .catch(() => {});
+  };
+
+  const CalendarId = (employeeId) => {
     api
-      .post('/calendar/getCalendar',{ project_id: id })
+      .post('/calendar/getCalendar',{ project_id: id , employee_id: employeeId  })
       .then((response) => {
         console.log('API Response:', response.data);
         const { data } = response.data;
@@ -152,10 +164,42 @@ const CalendarApp = ({
       .catch((error) => {
         console.log('Error fetching data:', error);
       });
-  }, [id]);
+  }
+  useEffect(() => {
+    getJobs();     
+   }, [id]);
+   useEffect(() => {
+    if (employees.project_id) {
+      // Use taskdetails.project_id directly to get the selected project ID
+      const selectedTask = employees.project_id;
+      CalendarId(selectedTask);
+    }
+  }, [employees.project_id]);
+
   
   return (
     <>
+<Col md="4">
+<FormGroup>
+              <Label for="employeeSelect">Select Employee</Label>
+              <Input
+                type="select"
+                name="employee_id"
+                onChange={(e) => {
+                  const selectedId = e.target.value;
+                  CalendarId(selectedId);
+                }}
+              >
+                <option value="">Select Employee</option>
+                {employees &&
+                  employees.map((element) => (
+                    <option key={element.project_id} value={element.employee_id}>
+                      {element.first_name}
+                    </option>
+                  ))}
+              </Input>
+            </FormGroup>
+            </Col>
       <Card>
         <CardBody>
         <Calendar
@@ -165,7 +209,7 @@ const CalendarApp = ({
   scrollToTime={new Date(1970, 1, 1, 6)}
   defaultDate={new Date()}
   localizer={localizer}
-  style={{ height: 'calc(100vh - 100px)' }} // Adjust the height value
+  style={{ height: 'calc(100vh - 350px)' }} // Adjust the height value
   onSelectEvent={(event) => editEvent(event)}
   onSelectSlot={(slotInfo) => addNewEventAlert(slotInfo)}
   eventPropGetter={(event) => eventColors(event)}

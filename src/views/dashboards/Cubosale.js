@@ -11,7 +11,7 @@ import AverageIssues from '../../components/dashboard/AverageIssues';
 // import SalesOverview from '../../components/dashboard/classicDashboard/ProjectOverview';
 // import TenderSummaryCard from '../../components/dashboard/TenderSummaryCard';
 // import ProjectSummaryChart from '../../components/dashboard/ProjectSummaryChart';
-// import TenderSummary from '../../components/dashboard/TenderSummary';
+import TaskSummary from '../../components/dashboard/TenderSummary';
 // import InvoiceSummary from '../../components/dashboard/InvoiceSummary';
 // import InvoiceSummaryChart from '../../components/dashboard/InvoiceSummaryChart';
 // import EmployeeSummary from '../../components/dashboard/ecommerceDashboard/EmployeeSummary';
@@ -24,9 +24,9 @@ const Classic = () => {
       {/*********************Sales Overview ************************/}
       <Row>
         <Col lg="12">
+          <TaskSummary />
           {/* <TenderSummaryCard />
           <ProjectSummaryChart/>
-          <TenderSummary />
           <InvoiceSummary/>
           <InvoiceSummaryChart/>
           <EmployeeSummary/>

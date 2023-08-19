@@ -8,45 +8,52 @@ const TenderSummary = () => {
 
   useEffect(() => {
     api.get('/projecttask/getAllCurrentTask').then((res) => {
-      console.log("projecttask",res)
+      console.log("projecttask",res.data.data)
       setProjectTask(res.data.data);
     });
   }, []);
 
   const columns = [
     {
-      name: "employee Name",
+      name: "Name",
       selector: "first_name",
       grow: 0,
       wrap: true,
     },
     {
-      name: "Start Date",
-      selector: "start_date",
+      name: "Project",
+      selector: "project_title",
       grow: 0,
       width: "auto",
       button: true,
       sortable: false,
     },
     {
-      name: "Task Title",
+      name: "Task",
       selector: "task_title",
       grow: 0,
       width: "auto",
       wrap: true,
     },
     {
-      name: "Status",
-      selector: "status",
+      name: "Hrs",
+      selector: "estimated_hours",
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: "Estimated Hours",
-      selector: "estimated_hours",
+      name: "Description",
+      selector: "description",
       sortable: true,
       grow: 2,
+      wrap: true,
+    },
+    {
+      name: "Total Hrs",
+      selector: "",
+      sortable: true,
+      grow: 0,
       wrap: true,
     },
   ];
@@ -67,10 +74,11 @@ const TenderSummary = () => {
                   return (
                     <tr key={element.employee_id}>
                       <td>{element.first_name}</td>
-                      <td>{element.start_date}</td>
+                      <td>{element.project_title}</td>
                       <td>{element.task_title}</td>
-                      <td>{element.status}</td>
                       <td>{element.estimated_hours}</td>
+                      <td>{element.description}</td>
+                      <td>{element.actual_hours}</td>
                     </tr>
                   );
                 })}

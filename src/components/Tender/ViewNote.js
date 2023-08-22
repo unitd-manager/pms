@@ -123,7 +123,7 @@ function ViewNote({ roomName, recordId, projectTaskId }) {
                   <Media body className="ms-3" style={{ width: '100%' }}>
                     <Media heading>
                       <div style={{ position: 'relative' }}>
-                        Hello {e.name}
+                        {e.first_name}
                         <p
                           style={{
                             position: 'absolute',

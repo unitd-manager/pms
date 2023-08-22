@@ -31,7 +31,7 @@ const ProjectTaskEdit = ({
     editTaskEditModal: PropTypes.bool,
     setEditTaskEditModal: PropTypes.func,
     contactDatas: PropTypes.object,
-    getTaskById: PropTypes.func,
+    getTaskById: PropTypes.any,
     id: PropTypes.any,
   };
 
@@ -40,22 +40,20 @@ const ProjectTaskEdit = ({
   const [employees, setEmployees] = useState();
   const [milestonesTaskEdit, setMilestonesTaskEdit] = useState([]);
 
-
   // Gettind data from Job By Id
   const editJobByIds = () => {
     api
       .get('/jobinformation/getEmployee')
       .then((res) => {
-        console.log(res.data.data);
         setEmployees(res.data.data);
       })
       .catch(() => {});
   };
 
-   // Api call for getting project name dropdown
-   const getMilestoneTask = () => {
+  // Api call for getting project name dropdown
+  const getMilestoneTask = () => {
     api
-      .post('/projecttimesheet/getMilestoneTitle',{ project_id: id })
+      .post('/projecttimesheet/getMilestoneTitle', { project_id: id })
       .then((res) => {
         setMilestonesTaskEdit(res.data.data);
       })
@@ -63,7 +61,6 @@ const ProjectTaskEdit = ({
         message('Milestone not found', 'info');
       });
   };
-
 
   const handleInputs = (e) => {
     setTaskProject({ ...taskProject, [e.target.name]: e.target.value });
@@ -88,12 +85,37 @@ const ProjectTaskEdit = ({
     }
   };
 
+  const [addNoteData, setAddNoteData] = useState({
+    comments: '',
+    room_name:'ProjectTaskEdit',
+    record_id: id,
+    creation_date: moment().format('DD-MM-YYYY'),
+  });
+
+  const handleData = (e) => {  
+    setAddNoteData((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+      project_task_id: taskProject?.project_task_id,
+    }));
+    };
+
+    const SubmitNote = () => {
+
+    api.post('/note/addNote', addNoteData).then(() => {
+      message('Add Note Successfully', 'success');
+      setTimeout(() => {
+        window.location.reload();
+      }, 400);
+    });
+  };
+
   useEffect(() => {
     editJobByIds();
     setTaskProject(contactDatas);
   }, [contactDatas]);
 
-  useEffect(() => { 
+  useEffect(() => {
     getMilestoneTask();
   }, [id]);
 
@@ -116,29 +138,28 @@ const ProjectTaskEdit = ({
           <Form>
             <FormGroup>
               <ComponentCard title="Task Details">
-                {' '}
-                <div>
                   <Form>
                     <Row>
-                    <Col md="4">
-                    <FormGroup>
-                      <Label>Milestone Title</Label>
-                      <Input type="select" 
-                      name="project_milestone_id"
-                    value={taskProject && taskProject.project_milestone_id}  
-                    onChange={handleInputs}
-                >
-                        <option>Select Project</option>
-                        {milestonesTaskEdit &&
-                          milestonesTaskEdit.map((e) => (
-                            <option key={e.project_id} value={e.project_milestone_id}>
-                              {e.milestone_title}
-                            </option>
-                          ))}
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                      <Col md="3">
+                      <Col md="4">
+                        <FormGroup>
+                          <Label>Milestone Title {taskProject && taskProject.project_task_id}</Label>
+                          <Input
+                            type="select"
+                            name="project_milestone_id"
+                            value={taskProject && taskProject.project_milestone_id}
+                            onChange={handleInputs}
+                          >
+                            <option>Select Project</option>
+                            {milestonesTaskEdit &&
+                              milestonesTaskEdit.map((e) => (
+                                <option key={e.project_id} value={e.project_milestone_id}>
+                                  {e.milestone_title}
+                                </option>
+                              ))}
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col md="4">
                         <FormGroup>
                           <Label>Title</Label>
                           <Input
@@ -172,8 +193,8 @@ const ProjectTaskEdit = ({
                           </Input>
                         </FormGroup>
                       </Col>
-                     
-                      <Col md="3">
+
+                      <Col md="4">
                         <FormGroup>
                           <Label>Start date</Label>
                           <Input
@@ -186,7 +207,7 @@ const ProjectTaskEdit = ({
                           />
                         </FormGroup>
                       </Col>
-                      <Col md="3">
+                      <Col md="4">
                         <FormGroup>
                           <Label>End date</Label>
                           <Input
@@ -197,13 +218,15 @@ const ProjectTaskEdit = ({
                           />
                         </FormGroup>
                       </Col>
-                      <Col md="3">
+                      <Col md="4">
                         <FormGroup>
                           <Label>Act Comp date</Label>
                           <Input
                             type="date"
                             onChange={handleInputs}
-                            value={moment(taskProject && taskProject.actual_completed_date).format('YYYY-MM-DD')}
+                            value={moment(taskProject && taskProject.actual_completed_date).format(
+                              'YYYY-MM-DD',
+                            )}
                             name="actual_completed_date"
                           />
                         </FormGroup>
@@ -212,7 +235,12 @@ const ProjectTaskEdit = ({
                         <FormGroup>
                           <Label>Actual Hours</Label>
                           <br />
-                  <span>{taskProject && taskProject.actual_hours}</span>
+                          <Input
+                            type="text"
+                            value={taskProject && taskProject.actual_hours}
+                            name="actual_hours"
+                            disabled
+                          />
                         </FormGroup>
                       </Col>
                       <Col md="4">
@@ -237,7 +265,7 @@ const ProjectTaskEdit = ({
                           />
                         </FormGroup>
                       </Col>
-                     
+
                       <Col md="4">
                         <FormGroup>
                           <Label>Status</Label>
@@ -246,7 +274,7 @@ const ProjectTaskEdit = ({
                             name="status"
                             onChange={handleInputs}
                             value={taskProject && taskProject.status}
-                            >
+                          >
                             {' '}
                             <option value="" selected="selected">
                               Please Select
@@ -266,7 +294,7 @@ const ProjectTaskEdit = ({
                             name="task_type"
                             onChange={handleInputs}
                             value={taskProject && taskProject.task_type}
-                            >
+                          >
                             {' '}
                             <option value="" selected="selected">
                               Please Select
@@ -285,7 +313,7 @@ const ProjectTaskEdit = ({
                             name="priority"
                             onChange={handleInputs}
                             value={taskProject && taskProject.priority}
-                            >
+                          >
                             {' '}
                             <option value="" selected="selected">
                               Please Select
@@ -294,7 +322,7 @@ const ProjectTaskEdit = ({
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
-                            <option value="5">5</option> 
+                            <option value="5">5</option>
                           </Input>
                         </FormGroup>
                       </Col>
@@ -309,9 +337,14 @@ const ProjectTaskEdit = ({
                           />
                         </FormGroup>
                       </Col>
+                      <Col md="12">
+                        <FormGroup>
+                          <Label>Add Note</Label>
+                          <textarea id="note" name="comments" rows="4" cols="83" onChange={handleData} />
+                        </FormGroup>
+                      </Col>
                     </Row>
                   </Form>
-                </div>
               </ComponentCard>
             </FormGroup>
           </Form>
@@ -323,6 +356,7 @@ const ProjectTaskEdit = ({
                 color="primary"
                 onClick={() => {
                   editTaskProject();
+                  SubmitNote();
                 }}
               >
                 Submit

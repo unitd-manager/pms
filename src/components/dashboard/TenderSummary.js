@@ -36,6 +36,13 @@ const TenderSummary = () => {
       wrap: true,
     },
     {
+      name: "Date",
+      selector: "date",
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
       name: "Hrs",
       selector: "estimated_hours",
       sortable: true,
@@ -74,9 +81,10 @@ const TenderSummary = () => {
                   return (
                     <tr key={element.employee_id}>
                       <td>{element.first_name}</td>
-                      <td>{element.project_title}</td>
+                      <td>{element.title}</td>
                       <td>{element.task_title}</td>
-                      <td>{element.estimated_hours}</td>
+                      <td>{element.date}</td>
+                      <td>{element.hours}</td>
                       <td>{element.description}</td>
                       <td>{element.actual_hours}</td>
                     </tr>

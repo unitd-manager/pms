@@ -31,6 +31,8 @@ const ProjectEdit = () => {
     navigate('/Project');
   };
 
+  console.log("project_id",id)
+
   const [projectDetail, setProjectDetail] = useState();
   const [company, setCompany] = useState();
   const [contact, setContact] = useState();

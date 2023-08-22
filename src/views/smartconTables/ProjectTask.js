@@ -485,7 +485,7 @@ export default function ProjectTask({
                     <td colSpan="14" style={{ borderRight: 1, borderWidth: 1 }}>
                       <ViewNote
                         recordId={id}
-                        roomName="ProjectTaskEdit"
+                        roomName={element?.title}
                         projectTaskId={element?.project_task_id}
                       />
                     </td>

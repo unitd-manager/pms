@@ -87,7 +87,6 @@ const ProjectTaskEdit = ({
 
   const [addNoteData, setAddNoteData] = useState({
     comments: '',
-    room_name:'ProjectTaskEdit',
     record_id: id,
     creation_date: moment().format('DD-MM-YYYY'),
   });
@@ -97,18 +96,22 @@ const ProjectTaskEdit = ({
       ...prevData,
       [e.target.name]: e.target.value,
       project_task_id: taskProject?.project_task_id,
+      room_name:taskProject?.title,
     }));
     };
 
-    const SubmitNote = () => {
 
-    api.post('/note/addNote', addNoteData).then(() => {
-      message('Add Note Successfully', 'success');
-      setTimeout(() => {
-        window.location.reload();
-      }, 400);
-    });
-  };
+    const SubmitNote = () => {
+      if (addNoteData.comments !== null) {
+        api.post('/note/addNote', addNoteData).then(() => {
+          message('Add Note Successfully', 'success');
+          setTimeout(() => {
+            window.location.reload();
+          }, 400);
+        });
+      }
+      return null;
+    };
 
   useEffect(() => {
     editJobByIds();

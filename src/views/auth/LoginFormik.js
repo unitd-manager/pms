@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Button, Label, FormGroup, Container, Row, Col, Card, CardBody, Input } from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
@@ -12,15 +12,18 @@ import AuthLogo from '../../layouts/logo/AuthLogo';
 // import {Dashboards} from '../../components/dashboard/classicDashboard';
 import loginApi from '../../constants/api';
 import message from '../../components/Message';
+import ProfileDD from '../../layouts/header/ProfileDD';
 
 
 const LoginFormik = ({ setToken }) => {
+  const [userEmail, setUserEmail] = useState(null);
   const { setUser } = usePermify();
   const getPermissions = (user) => {
     loginApi
       .post('/usergroup/getusergroupForLoginUser', { user_group_id: user.user_group_id })
       .then((res) => {
         const apiData = res.data.data;
+        setUserEmail(res.data.data.email); 
         const permissionArray = [];
         apiData.forEach((element) => {
           if (element.edit) permissionArray.push(`${element.section_title}-edit`);
@@ -41,7 +44,8 @@ const LoginFormik = ({ setToken }) => {
           roles: ['admin'],
           permissions: permissionArray,
         });
-        window.location.reload()
+      
+      window.location.reload()
       })
       .catch(() => {
         message('Network connection error.', 'error');
@@ -52,6 +56,9 @@ const LoginFormik = ({ setToken }) => {
     loginApi
       .post('/api/login', value)
       .then((res) => {
+        console.log('API Response:', res.data);
+        setUserEmail(res.data.data.email); 
+        console.log('User Email Set:', res.data.data.email);
         if (res && res.data.status === '400') {
           alert('Invalid Username or Password');
         } else {
@@ -98,7 +105,7 @@ const LoginFormik = ({ setToken }) => {
                   render={({ errors, touched }) => (
                     <Form>
                       <FormGroup>
-                        <Label htmlFor="email">Email Address</Label>
+                        <Label htmlFor="email">Email</Label>
                         <Field
                           name="email"
                           type="text"
@@ -145,7 +152,8 @@ const LoginFormik = ({ setToken }) => {
           </Col>
         </Row>
       </Container>
-    </div>
+      <ProfileDD userEmail={userEmail} /> 
+          </div>
   );
 };
 

@@ -15,6 +15,8 @@ employee_id:'',first_name:'',project_task_id:'',project_milestone_id:'',project_
 const [milestonesTeam, setMilestonesTeam] = useState([]);
 const [taskdetailTeam, setTaskDetailTeam] = useState([]);
 const [projectTeam, setProjectTeam] = useState([]);
+const [formSubmitted, setFormSubmitted] = useState(false);
+
 
 //Navigation and Parameters
 const { id } = useParams();
@@ -36,7 +38,12 @@ const navigate = useNavigate();
  
 
 //Insert Milestone
+
   const insertTeamDetails = () => {
+    if (!formSubmitted)
+    if (teamdetails.project_id !== '' &&
+    teamdetails.employee_id !== '' &&
+    teamdetails.project_task_id !=='') 
     api.post('/projectteam/insertTeam', teamdetails)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
@@ -48,6 +55,12 @@ const navigate = useNavigate();
       .catch(() => {
         message('Network connection error.', 'error');
       });
+  // Set formSubmitted to true to prevent further submissions
+ else  {   setFormSubmitted(true);
+      }  else {
+        message('Please fill all required fields', 'warning');
+        
+      }
      
   };
    //Api call for getting project name dropdown
@@ -142,6 +155,7 @@ const getMilestoneName = () => {
                       <Label>Milestone Title</Label>
                       <Input type="select" name="project_milestone_id"   onChange={(e) => {
                         handleInputsTeamDetails(e)
+                      
                   const selectedTask = e.target.value;
                   getTaskName(selectedTask);
                 }}>

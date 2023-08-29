@@ -1,6 +1,5 @@
 import { Row, Col } from 'reactstrap';
 import Stats from '../../components/dashboard/StatsPms';
-
 import StatsPmsDonut from '../../components/dashboard/StatsPmsDonut';
 import ActualHour from '../../components/dashboard/ActualHour';
 import PriorityStats from '../../components/dashboard/PriorityStats';
@@ -23,7 +22,7 @@ const Classic = () => {
     <>
       {/*********************Sales Overview ************************/}
       <Row>
-        <Col lg="12">
+        <Col lg="20" >
           {/* <TenderSummaryCard />
           <ProjectSummaryChart/>
           <TenderSummary />
@@ -38,22 +37,7 @@ const Classic = () => {
           <ActualHour/>
           <MilestoneCompleted/>
           <AverageIssues/>
-        </Col>
-      </Row>
-      <Row>
-        <Col lg="12">
-          {/* <TenderSummaryCard />
-          <ProjectSummaryChart/>
-          <TenderSummary />
-          <InvoiceSummary/>
-          <InvoiceSummaryChart/>
-          <EmployeeSummary/>
-          <PasspotExpirySummary />
-          <WorkpermitExpirySummary/> */}
-          {/* <SalesOverview /> */}
           <PriorityStats/>
-          <ActualHour/>
-          <AverageIssues/>
         </Col>
       </Row>
       {/*********************Email & Visitor ************************/}

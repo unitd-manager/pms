@@ -36,7 +36,8 @@ const MilestoneDetails = () => {
   };
   //Insert Milestone
   const insertMilestone = () => {
-    if (milestoneDetails.milestone_title !== ''){
+    if (milestoneDetails.milestone_title !== '' &&
+    milestoneDetails.project_id !== ''){
       api
         .post('/milestone/insertmilestone', milestoneDetails)
         .then((res) => {

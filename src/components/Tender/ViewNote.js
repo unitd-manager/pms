@@ -8,16 +8,19 @@ import img2 from '../../assets/images/users/user2.jpg';
 import message from '../Message';
 import api from '../../constants/api';
 
-function ViewNote({ roomName, recordId }) {
+function ViewNote({ roomName, recordId, projectTaskId }) {
   ViewNote.propTypes = {
     roomName: PropTypes.string,
     recordId: PropTypes.string,
+    projectTaskId: PropTypes.string,
   };
   const body = {
     width: '100%',
     marginBottom: '10px',
   };
 
+
+  console.log("projectTaskId", projectTaskId)
   const [getNote, setGetNote] = useState(null);
 
   const getNotes = () => {
@@ -25,6 +28,7 @@ function ViewNote({ roomName, recordId }) {
       .post('/note/getNotes', {
         record_id: recordId,
         room_name: roomName,
+        project_task_id :projectTaskId
       })
       .then((res) => {
         setGetNote(res.data.data);
@@ -64,90 +68,96 @@ function ViewNote({ roomName, recordId }) {
 
   return (
     <>
-      <Row style={{ marginTop: 20 }}>
-        {getNote &&
-          getNote.map((e, i) => {
-            return (
-              <>
-                {i % 2 === 0 ? (
-                  <Media className="d-flex" key={e.comment_id.toString()}>
-                    <Media left href="#">
-                      <Media
-                        object
-                        src={img1}
-                        alt="Generic placeholder image"
-                        width="40"
-                        style={{ borderRadius: 50 }}
-                      />
+  
+<Row style={{ marginTop: 20 }}>
+  {getNote &&
+    getNote.map((e, i) => {
+      if (projectTaskId === e.project_task_id) {
+        return (
+          <>
+            {i % 2 === 0 ? (
+              <Media className="d-flex" key={e.comment_id.toString()}>
+                <Media left href="#">
+                  <Media
+                    object
+                    src={img1}
+                    alt="Generic placeholder image"
+                    width="40"
+                    style={{ borderRadius: 50 }}
+                  />
+                </Media>
+    
+                <Media body className="ms-3" style={body}>
+                  <Media heading>
+                    <div style={{ position: 'relative' }}>
+                      {e.first_name}
+                      <p style={{ position: 'absolute', top: 0, right: 0, fontSize: 12 }}>
+                        {e.creation_date}
+                        <button
+                          type="button"
+                          className="btn"
+                          onClick={() => {
+                            deleteNotes(e.comment_id);
+                          }}
+                        >
+                          <Icon.Trash2 style={{ width: 20 }} />{' '}
+                        </button>
+                      </p>
+                    </div>
+                  </Media>
+                  {e.comments}
+                </Media>
+              </Media>
+            ) : (
+              <Media className="ms-3" key={e.comment_id.toString()}>
+                <Media className="d-flex my-4">
+                  <Media left href="#">
+                    <Media
+                      object
+                      src={img2}
+                      alt="Generic placeholder image"
+                      width="40"
+                      style={{ borderRadius: 50 }}
+                    />
+                  </Media>
+                  <Media body className="ms-3" style={{ width: '100%' }}>
+                    <Media heading>
+                      <div style={{ position: 'relative' }}>
+                        {e.first_name}
+                        <p
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            right: 0,
+                            fontSize: 12,
+                          }}
+                        >
+                          {e.creation_date}
+                          <button
+                            type="button"
+                            className="btn"
+                            onClick={() => {
+                              deleteNotes(e.comment_id);
+                            }}
+                          >
+                            <Icon.Trash2 style={{ width: 20 }} />{' '}
+                          </button>
+                        </p>
+                      </div>
                     </Media>
+                    {e.comments}
+                  </Media>
+                </Media>
+              </Media>
+            )}
+          </>
+        );
+      } 
+        return null;
+  
+    })}
+</Row>
 
-                    <Media body className="ms-3" style={body}>
-                      <Media heading>
-                        <div style={{ position: 'relative' }}>
-                          Hello {e.name}
-                          <p style={{ position: 'absolute', top: 0, right: 0, fontSize: 12 }}>
-                            {e.creation_date}
-                            <button
-                              type="button"
-                              className="btn"
-                              onClick={() => {
-                                deleteNotes(e.comment_id);
-                              }}
-                            >
-                              <Icon.Trash2 style={{ width: 20 }} />{' '}
-                            </button>
-                          </p>
-                        </div>
-                      </Media>
-                      {e.comments}
-                    </Media>
-                  </Media>
-                ) : (
-                  <Media className="ms-3" key={e.comment_id.toString()}>
-                    <Media className="d-flex my-4">
-                      <Media left href="#">
-                        <Media
-                          object
-                          src={img2}
-                          alt="Generic placeholder image"
-                          width="40"
-                          style={{ borderRadius: 50 }}
-                        />
-                      </Media>
-                      <Media body className="ms-3" style={{ width: '100%' }}>
-                        <Media heading>
-                          <div style={{ position: 'relative' }}>
-                            Hello {e.name}
-                            <p
-                              style={{
-                                position: 'absolute',
-                                top: 0,
-                                right: 0,
-                                fontSize: 12,
-                              }}
-                            >
-                              {e.creation_date}
-                              <button
-                                type="button"
-                                className="btn"
-                                onClick={() => {
-                                  deleteNotes(e.comment_id);
-                                }}
-                              >
-                                <Icon.Trash2 style={{ width: 20 }} />{' '}
-                              </button>
-                            </p>
-                          </div>
-                        </Media>
-                        {e.comments}
-                      </Media>
-                    </Media>
-                  </Media>
-                )}
-              </>
-            );
-          })}
-      </Row>
     </>
   );
 }

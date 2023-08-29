@@ -23,7 +23,7 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
-
+import ViewNote from '../../components/Tender/ViewNote';
 
 export default function ProjectTask({
   addContactToggle,
@@ -33,7 +33,6 @@ export default function ProjectTask({
   taskById,
   setContactData,
   getTaskById,
-
 }) {
   ProjectTask.propTypes = {
     addContactToggle: PropTypes.func,
@@ -43,8 +42,10 @@ export default function ProjectTask({
     taskById: PropTypes.any,
     setContactData: PropTypes.func,
     getTaskById: PropTypes.func,
-
   };
+
+  console.log("check id's", taskById);
+
   const [insertTask, setInsertTask] = useState({
     task_title: '',
     employee_id: '',
@@ -54,8 +55,8 @@ export default function ProjectTask({
     status: '',
     task_type: '',
     actual_completed_date: '',
-    description:'',
-    project_milestone_id:'',
+    description: '',
+    project_milestone_id: '',
   });
   const [milestoneDetail, setMilestones] = useState([]);
 
@@ -99,23 +100,19 @@ export default function ProjectTask({
           const insertedDataId = res.data.data.insertId;
           console.log(insertedDataId);
           message('Task inserted successfully.', 'success');
-          getTaskById()
-          setTimeout(() => {addContactToggle(false)}, 300);
+          getTaskById();
+          setTimeout(() => {
+            addContactToggle(false);
+          }, 300);
           window.location.reload();
-
         })
         .catch(() => {
           message('Network connection error.', 'error');
         });
-      }
-  
-  else  {   setFormSubmitted(true);
-  }  else {
-    message('Please fill all required fields', 'warning');
-    
-  }
-}
-   
+    } else {
+      message('error');
+    }
+  };
 
   // Api call for getting milestone dropdown based on project ID
   const getMilestoneTitle = () => {
@@ -141,9 +138,6 @@ export default function ProjectTask({
     dataForAttachment();
     getMilestoneTitle();
   }, [id]);
-
-  
-
 
   //Structure of projectTask list view
   const Projecttaskcolumn = [
@@ -209,25 +203,25 @@ export default function ProjectTask({
                       <CardBody>
                         <Form>
                           <Row>
-                          
-                  <Col md="4">
-                    <FormGroup>
-                      <Label>Milestone</Label>
-                      <Input type="select" name="project_milestone_id" onChange={handleInputsTask}>
-                        <option>Select Milestone</option>
-                        {milestoneDetail &&
-                          milestoneDetail.map((e) => (
-                            <option
-                              key={e.project_id}
-                              value={e.project_milestone_id}
-                            >
-                              {e.milestone_title}
-                            </option>
-                          ))}
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                  <Col md="4">
+                            <Col md="4">
+                              <FormGroup>
+                                <Label>Milestone</Label>
+                                <Input
+                                  type="select"
+                                  name="project_milestone_id"
+                                  onChange={handleInputsTask}
+                                >
+                                  <option>Select Milestone</option>
+                                  {milestoneDetail &&
+                                    milestoneDetail.map((e) => (
+                                      <option key={e.project_id} value={e.project_milestone_id}>
+                                        {e.milestone_title}
+                                      </option>
+                                    ))}
+                                </Input>
+                              </FormGroup>
+                            </Col>
+                            <Col md="4">
                               <FormGroup>
                                 <Label>Title</Label>
                                 <Input
@@ -264,7 +258,7 @@ export default function ProjectTask({
                                 </Input>
                               </FormGroup>
                             </Col>
-                            <Col md="3">
+                            <Col md="4">
                               <FormGroup>
                                 <Label>Start date</Label>
                                 <Input
@@ -277,7 +271,7 @@ export default function ProjectTask({
                                 />
                               </FormGroup>
                             </Col>
-                            <Col md="3">
+                            <Col md="4">
                               <FormGroup>
                                 <Label>End date</Label>
                                 <Input
@@ -290,7 +284,7 @@ export default function ProjectTask({
                                 />
                               </FormGroup>
                             </Col>
-                            
+
                             <Col md="4">
                               <FormGroup>
                                 <Label>Est Hours</Label>
@@ -314,65 +308,64 @@ export default function ProjectTask({
                               </FormGroup>
                             </Col>
                             <Col md="4">
-                            <FormGroup>
-                          <Label>Status</Label>
-                          <Input
-                            type="select"
-                            name="status"
-                            onChange={handleInputsTask}
-                            value={insertTask && insertTask.status}
-                            >
-                            {' '}
-                            <option value="" selected="selected">
-                              Please Select
-                            </option>
-                            <option value="Pending">Pending</option>
-                            <option value="InProgress">InProgress</option>
-                            <option value="Completed">Completed</option>
-                            <option value="OnHold">OnHold</option>
-                          </Input>
-                        </FormGroup>
+                              <FormGroup>
+                                <Label>Status</Label>
+                                <Input
+                                  type="select"
+                                  name="status"
+                                  onChange={handleInputsTask}
+                                  value={insertTask && insertTask.status}
+                                >
+                                  {' '}
+                                  <option value="" selected="selected">
+                                    Please Select
+                                  </option>
+                                  <option value="Pending">Pending</option>
+                                  <option value="InProgress">InProgress</option>
+                                  <option value="Completed">Completed</option>
+                                  <option value="OnHold">OnHold</option>
+                                </Input>
+                              </FormGroup>
                             </Col>
                             <Col md="4">
-                            <FormGroup>
-                          <Label>Task Type</Label>
-                          <Input
-                            type="select"
-                            name="task_type"
-                            onChange={handleInputsTask}
-                            value={insertTask && insertTask.task_type}
-                            >
-                            {' '}
-                            <option value="" selected="selected">
-                              Please Select
-                            </option>
-                            <option value="Development">Development</option>
-                            <option value="ChangeRequest">ChangeRequest</option>
-                            <option value="Issues">Issues</option>      
-                          </Input>
-                        </FormGroup>
+                              <FormGroup>
+                                <Label>Task Type</Label>
+                                <Input
+                                  type="select"
+                                  name="task_type"
+                                  onChange={handleInputsTask}
+                                  value={insertTask && insertTask.task_type}
+                                >
+                                  {' '}
+                                  <option value="" selected="selected">
+                                    Please Select
+                                  </option>
+                                  <option value="Development">Development</option>
+                                  <option value="ChangeRequest">ChangeRequest</option>
+                                  <option value="Issues">Issues</option>
+                                </Input>
+                              </FormGroup>
                             </Col>
                             <Col md="4">
-                            <FormGroup>
-                          <Label>Priority</Label>
-                          <Input
-                            type="select"
-                            name="priority"
-                            onChange={handleInputsTask}
-                            value={insertTask && insertTask.priority}
-                            >
-                            {' '}
-                            <option value="" selected="selected">
-                              Please Select
-                            </option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>    
-                            <option value="4">4</option>      
-                            <option value="5">5</option>      
-  
-                          </Input>
-                        </FormGroup>
+                              <FormGroup>
+                                <Label>Priority</Label>
+                                <Input
+                                  type="select"
+                                  name="priority"
+                                  onChange={handleInputsTask}
+                                  value={insertTask && insertTask.priority}
+                                >
+                                  {' '}
+                                  <option value="" selected="selected">
+                                    Please Select
+                                  </option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                                </Input>
+                              </FormGroup>
                             </Col>
                             <Col md="4">
                               <FormGroup>
@@ -398,7 +391,6 @@ export default function ProjectTask({
                   color="primary"
                   onClick={() => {
                     insertTaskData();
-                 
                   }}
                 >
                   Submit
@@ -431,9 +423,10 @@ export default function ProjectTask({
           {taskById &&
             taskById.map((element, index) => {
               return (
-                <tr key={element.project_task_id}>
-                  <td>{index + 1}</td>
-                  <td>
+                <>
+                  <tr key={element.project_task_id}>
+                    <td rowSpan="2">{index + 1}</td>
+                    <td rowSpan="2">
                       <span
                         onClick={() => {
                           setContactData(element);
@@ -442,19 +435,23 @@ export default function ProjectTask({
                       >
                         <Icon.Edit2 />
                       </span>
-                  </td>
-                  <td>{element.task_title}</td>
-                  <td>{element.first_name}</td>
-                  <td>{moment(element.start_date).format('YYYY-MM-DD')}</td>
-                  <td>{moment(element.end_date).format('YYYY-MM-DD')}</td>
-                  <td>{(element.actual_completed_date)?moment(element.actual_completed_date).format('YYYY-MM-DD'):''}</td>
-                  <td>{element.actual_hours}</td>
-                  <td>{element.estimated_hours}</td>
-                  <td>{element.completion}</td>
-                  <td>{element.status}</td>
-                  <td>{element.task_type}</td>
-                  <td>{element.priority}</td>
-                  <td>
+                    </td>
+                    <td style={{ borderRight: 1, borderWidth: 1 }}>{element.task_title}</td>
+                    <td>{element.first_name}</td>
+                    <td>{moment(element.start_date).format('YYYY-MM-DD')}</td>
+                    <td>{moment(element.end_date).format('YYYY-MM-DD')}</td>
+                    <td>
+                      {element.actual_completed_date
+                        ? moment(element.actual_completed_date).format('YYYY-MM-DD')
+                        : ''}
+                    </td>
+                    <td>{element.actual_hours}</td>
+                    <td>{element.estimated_hours}</td>
+                    <td>{element.completion}</td>
+                    <td>{element.status}</td>
+                    <td>{element.task_type}</td>
+                    <td>{element.priority}</td>
+                    <td>
                       <span
                         onClick={() => {
                           setRoomName('Task');
@@ -479,15 +476,25 @@ export default function ProjectTask({
                         updateFile={updateFile}
                         setUpdateFile={setUpdateFile}
                       />
-                    <ViewFileComponentV2
-                      moduleId={element.project_task_id}
-                      roomName="Task"
-                      recordType="RelatedPicture"
-                      updateFile={updateFile}
-                      setUpdateFile={setUpdateFile}
-                    />
-                   </td>
-                </tr>
+                      <ViewFileComponentV2
+                        moduleId={element.project_task_id}
+                        roomName="Task"
+                        recordType="RelatedPicture"
+                        updateFile={updateFile}
+                        setUpdateFile={setUpdateFile}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colSpan="14" style={{ borderRight: 1, borderWidth: 1 }}>
+                      <ViewNote
+                        recordId={id}
+                        roomName={element?.title}
+                        projectTaskId={element?.project_task_id}
+                      />
+                    </td>
+                  </tr>
+                </>
               );
             })}
         </tbody>

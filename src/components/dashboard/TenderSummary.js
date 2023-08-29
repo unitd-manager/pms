@@ -1,93 +1,73 @@
 import React, { useEffect, useState } from 'react';
 import CommonTable from "../CommonTable";
 import api from "../../constants/api";
-import TenderSummaryBarChart from './TenderSummaryBarChart';
 
 const TenderSummary = () => {
 
-  const [tenders, setTenders] = useState();
+  const [projectTask, setProjectTask] = useState();
 
   useEffect(() => {
-    api.get('/tender/getTenders').then((res) => {
-      setTenders(res.data.data);
+    api.get('/projecttask/getAllCurrentTask').then((res) => {
+      console.log("projecttask",res.data.data)
+      setProjectTask(res.data.data);
     });
   }, []);
 
   const columns = [
     {
-      name: "Quot Ref No",
-      selector: "opportunity_id",
+      name: "Name",
+      selector: "first_name",
       grow: 0,
       wrap: true,
     },
     {
-      name: "Desc",
-      selector: "company_name",
+      name: "Project",
+      selector: "project_title",
       grow: 0,
       width: "auto",
       button: true,
       sortable: false,
     },
     {
-      name: "Main Con",
-      selector: "delete",
+      name: "Task",
+      selector: "task_title",
       grow: 0,
       width: "auto",
       wrap: true,
     },
     {
-      name: "Contact",
-      selector: "opportunity_code",
+      name: "Date",
+      selector: "date",
       sortable: true,
       grow: 0,
       wrap: true,
     },
     {
-      name: "Submission Date",
-      selector: "title",
-      sortable: true,
-      grow: 2,
-      wrap: true,
-    },
-    {
-      name: "Bid Amount",
-      selector: "company_name",
+      name: "Hrs",
+      selector: "estimated_hours",
       sortable: true,
       grow: 0,
+      wrap: true,
     },
     {
-      name: "Submitted",
-      selector: "status",
+      name: "Description",
+      selector: "description",
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: "Awarded",
-      selector: "status",
+      name: "Total Hrs",
+      selector: "",
       sortable: true,
-      grow: 2,
-      wrap: true,
-    },
-    {
-      name: "Price Submitted",
-      selector: "status",
-      sortable: true,
-      grow: 2,
-      wrap: true,
-    },
-    {
-      name: "Remarks",
-      selector: "status",
-      sortable: true,
-      grow: 2,
+      grow: 0,
       wrap: true,
     },
   ];
 
   return (
     <>
-      <CommonTable title="Tender Detail Summary">
+      <CommonTable title="Employee Task List">
           <thead>
             <tr>
               {columns.map((cell) => {
@@ -96,26 +76,22 @@ const TenderSummary = () => {
             </tr>
           </thead>
           <tbody>
-          {tenders &&
-                tenders.map((element) => {
+          {projectTask &&
+                projectTask.map((element) => {
                   return (
-                    <tr key={element.opportunity_id}>
-                      <td>{element.quote_ref}</td>
+                    <tr key={element.employee_id}>
+                      <td>{element.first_name}</td>
                       <td>{element.title}</td>
-                      <td>{element.company_name}</td>
-                      <td>{element.contact_name}</td>
-                      <td>{element.actual_submission_date}</td>
-                      <td>{element.price}</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      <td>{element.task_title}</td>
+                      <td>{element.date}</td>
+                      <td>{element.hours}</td>
+                      <td>{element.description}</td>
+                      <td>{element.actual_hours}</td>
                     </tr>
                   );
                 })}
           </tbody>
       </CommonTable>
-      <TenderSummaryBarChart/>
     </>
   );
 }

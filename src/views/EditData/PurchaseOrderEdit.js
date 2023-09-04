@@ -15,12 +15,13 @@ import api from '../../constants/api';
 import AddPoModal from '../../components/purchaseOrder/AddPoModal';
 import AttachmentTab from '../../components/purchaseOrder/AttachmentTab';
 import PurchaseOrderlineItemEdit from '../../components/purchaseOrder/PurchaseOrderLineItem';
-import PurchaseOrderButtons from '../../components/purchaseOrder/PurchaseOrderButtons';
+//import PurchaseOrderButtons from '../../components/purchaseOrder/PurchaseOrderButtons';
 import ViewHistoryModal from '../../components/purchaseOrder/ViewHistoryModal';
 import DeliveryOrderEditModal from '../../components/purchaseOrder/DeliveryOrderEditModal';
 import PurchaseOrderDetailsPart from '../../components/purchaseOrder/PurchaseOrderDetailsPart';
 import ProductLinkedTable from '../../components/purchaseOrder/ProductLinkedTable';
 import PdfDeliveryOrderPO from '../../components/PDF/PdfDeliveryOrderPO';
+import ApiButton from '../../components/ApiButton';
 
 const PurchaseOrderEdit = () => {
   //All state variable
@@ -53,7 +54,7 @@ const PurchaseOrderEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/PurchaseOrder');
   };
@@ -276,7 +277,7 @@ const PurchaseOrderEdit = () => {
       <BreadCrumbs />
       <ToastContainer></ToastContainer>
       {/* PurchaseorderButtons */}
-      <PurchaseOrderButtons
+      {/* <PurchaseOrderButtons
         applyChanges={applyChanges}
         backToList={backToList}
         editPurchaseData={editPurchaseData}
@@ -284,7 +285,15 @@ const PurchaseOrderEdit = () => {
         products={products}
         product={product}
         navigate={navigate}
-      />
+      /> */}
+      <ApiButton
+              editData={editPurchaseData}
+              navigate={navigate}
+              applyChanges={editPurchaseData}
+              backToList={backToList}
+              //deleteData={DeleteSection}
+              module="PurchaseOrder"
+            ></ApiButton>
       {/* PurchaseOrder Details */}
       <PurchaseOrderDetailsPart
         supplier={supplier}

@@ -101,6 +101,7 @@ export default function ProjectTask({
           console.log(insertedDataId);
           message('Task inserted successfully.', 'success');
           getTaskById();
+          setFormSubmitted(true)
           setTimeout(() => {
             addContactToggle(false);
           }, 300);

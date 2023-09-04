@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Collapse, NavItem, NavLink } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
-// import { HasAccess } from '@permify/react-role';
+import { HasAccess } from '@permify/react-role';
 
 const NavSubMenu = ({ icon, title, items, isUrl, suffixColor, suffix }) => {
   const location = useLocation();
@@ -37,11 +37,11 @@ const NavSubMenu = ({ icon, title, items, isUrl, suffixColor, suffix }) => {
 
       <Collapse isOpen={collapsed} navbar tag="ul" className="subMenu">
         {items.map((item) => (
-        //    <HasAccess
-        //    roles={null}
-        //    permissions={`${item.section_title}-list`}
-        //    renderAuthFailed={<p></p>}
-        //  >
+           <HasAccess
+           roles={null}
+           permissions={`${item.section_title}-list`}
+           renderAuthFailed={<p></p>}
+         >
            <NavItem
             key={item.section_title}
             className={`hide-mini  ${location.pathname === item.internal_link ? 'activeLink' : ''}`}
@@ -53,7 +53,7 @@ const NavSubMenu = ({ icon, title, items, isUrl, suffixColor, suffix }) => {
               </span>
             </NavLink>
           </NavItem>
-        //  </HasAccess>
+          </HasAccess>
          
         ))}
       </Collapse>

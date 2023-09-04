@@ -15,9 +15,10 @@ import ComponentCard from '../../components/ComponentCard';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import message from '../../components/Message';
 import api from '../../constants/api';
-import DeleteButton from '../../components/DeleteButton';
+//import DeleteButton from '../../components/DeleteButton';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
+import ApiButton from '../../components/ApiButton';
 
 const ProjectTimesheetEdit = () => {
   //All state variable
@@ -36,7 +37,7 @@ const ProjectTimesheetEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/TimesheetList');
   };
@@ -116,7 +117,15 @@ const handleDataEditor = (e, type) => {
         <FormGroup>
           <ToastContainer></ToastContainer>
           <ComponentCardV2>
-            <Row>
+          <ApiButton
+              editData={editTimesheet}
+              navigate={navigate}
+              applyChanges={editTimesheet}
+              backToList={backToList}
+              //deleteData={DeleteSection}
+              module="ProjectTimesheet"
+            ></ApiButton>
+            {/* <Row>
               <Col>
                 <Button
                   className="shadow-none"
@@ -174,7 +183,7 @@ const handleDataEditor = (e, type) => {
                   Back to List
                 </Button>
               </Col>
-            </Row>
+            </Row> */}
           </ComponentCardV2>
         </FormGroup>
       </Form>

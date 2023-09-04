@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane, Button } from 'reactstrap';
+import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -22,11 +22,12 @@ import CalendarApp from '../apps/calendar/CalendarApp';
 import ActualHour from '../../components/dashboard/ActualHour';
 import AverageIssues from '../../components/dashboard/AverageIssues';
 import StatsPmsProjectId from '../../components/dashboard/ProjectStats/StatsPmsProjectId';
+import ApiButton from '../../components/ApiButton';
 
 const ProjectEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/Project');
   };
@@ -349,7 +350,15 @@ const ProjectEdit = () => {
       <Form>
     <FormGroup>
       <ComponentCardV2>
-        <Row>
+      <ApiButton
+              editData={UpdateData}
+              navigate={navigate}
+              applyChanges={UpdateData}
+              backToList={backToList}
+              //deleteData={DeleteSection}
+              module="Project"
+            ></ApiButton>
+        {/* <Row>
           <Col>
             <Button className='shadow-none'
               color="primary"
@@ -384,7 +393,7 @@ const ProjectEdit = () => {
               Back to List
             </Button>
           </Col>
-        </Row>
+        </Row> */}
       </ComponentCardV2>
     </FormGroup>
   </Form>

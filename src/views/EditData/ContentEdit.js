@@ -17,6 +17,7 @@ import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponent
 import PictureAttachmentModalV2 from '../../components/Tender/PictureAttachmentModalV2';
 import message from '../../components/Message';
 import api from '../../constants/api';
+import ApiButton from '../../components/ApiButton';
 
 const ContentUpdate = () => {
   // All state variables
@@ -37,7 +38,9 @@ const ContentUpdate = () => {
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
-
+const backToList=()=>{
+  navigate('/Content')
+}
   //Setting data in contentDetails
   const handleInputs = (e) => {
     setContentDetails({ ...contentDetails, [e.target.name]: e.target.value });
@@ -138,7 +141,15 @@ const ContentUpdate = () => {
       <Form>
         <FormGroup>
           <ComponentCardV2>
-            <Row>
+          <ApiButton
+              editData={editContentData}
+              navigate={navigate}
+              applyChanges={editContentData}
+              backToList={backToList}
+             // deleteData={deleteLoanData}
+              module="Content"
+            ></ApiButton>
+            {/* <Row>
               <Col>
                 <Button
                   color="primary"
@@ -172,7 +183,7 @@ const ContentUpdate = () => {
                   Back to List
                 </Button>
               </Col>
-            </Row>
+            </Row> */}
           </ComponentCardV2>
           {/* Content Details Form */}
           <ComponentCard title="Content details">

@@ -31,9 +31,10 @@ import ComponentCard from '../../components/ComponentCard';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import message from '../../components/Message';
 import api from '../../constants/api';
-import DeleteButton from '../../components/DeleteButton';
+//import DeleteButton from '../../components/DeleteButton';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
+import ApiButton from '../../components/ApiButton';
 
 const TaskJobEdit = () => {
   //All state variable
@@ -57,7 +58,7 @@ const [project, setProject] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/TaskJob');
   };
@@ -312,7 +313,14 @@ const getMilestoneName = () => {
         <FormGroup>
           <ToastContainer></ToastContainer>
           <ComponentCardV2>
-            <Row>
+          <ApiButton
+              editData={editTaskJob}
+              navigate={navigate}
+              applyChanges={editTaskJob}
+              backToList={backToList}
+              module="TaskJob"
+            ></ApiButton>
+            {/* <Row>
               <Col>
                 <Button
                   className="shadow-none"
@@ -370,7 +378,7 @@ const getMilestoneName = () => {
                   Back to List
                 </Button>
               </Col>
-            </Row>
+            </Row> */}
           </ComponentCardV2>
         </FormGroup>
       </Form>

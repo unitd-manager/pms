@@ -14,9 +14,10 @@ import ComponentCard from '../../components/ComponentCard';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import CreationAndModification from '../../components/ProductTable/CreationAndModification';
-import ProductEditButtons from '../../components/ProductTable/ProductEditButtons';
+//import ProductEditButtons from '../../components/ProductTable/ProductEditButtons';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
+import ApiButton from '../../components/ApiButton';
 
 const ProductUpdate = () => {
   // All state variables
@@ -37,7 +38,9 @@ const ProductUpdate = () => {
   // Navigation and Parameter Constants
   const { id } = useParams();
   const navigate = useNavigate();
-
+const backToList=()=>{
+  navigate('/product')
+}
   //Setting data in productDetails
   const handleInputs = (e) => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
@@ -124,7 +127,15 @@ const ProductUpdate = () => {
       <BreadCrumbs heading={productDetails && productDetails.title} />
       <Form>
         <FormGroup>
-          <ProductEditButtons id={id} editProductData={editProductData} navigate={navigate} />
+          {/* <ProductEditButtons id={id} editProductData={editProductData} navigate={navigate} /> */}
+          <ApiButton
+              editData={editProductData}
+              navigate={navigate}
+              applyChanges={editProductData}
+              backToList={backToList}
+              //deleteData={DeleteSection}
+              module="Product"
+            ></ApiButton>
           {/* Content Details Form */}
           <ComponentCard title="Product Details" creationModificationDate={productDetails}>
             <ToastContainer></ToastContainer>

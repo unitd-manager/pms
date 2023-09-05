@@ -26,12 +26,12 @@ import StatsPmsProjectId from '../../components/dashboard/ProjectStats/StatsPmsP
 const ProjectEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  const applyChanges = () => { };
   const backToList = () => {
     navigate('/Project');
   };
 
-  console.log("project_id",id)
+  console.log("project_id", id)
 
   const [projectDetail, setProjectDetail] = useState();
   const [company, setCompany] = useState();
@@ -94,7 +94,7 @@ const ProjectEdit = () => {
     setAddContactModalTeam(!addContactModalTeam);
   };
 
- 
+
 
 
   // Fetch Costing Summary
@@ -104,7 +104,7 @@ const ProjectEdit = () => {
       .then((res) => {
         setGetCostingSummary(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   //Api call for getting Vehicle Fuel Data By ID
@@ -232,9 +232,9 @@ const ProjectEdit = () => {
       });
   };
 
-   // Get Project By Id
+  // Get Project By Id
 
-   const getProjectById = () => {
+  const getProjectById = () => {
     api
       .post('/project/getProjectsByIDs', { project_id: id })
       .then((res) => {
@@ -257,7 +257,7 @@ const ProjectEdit = () => {
         message('Record editted successfully', 'success');
         getProjectById();
       })
-      .catch(() => {});
+      .catch(() => { });
   };
   //Getting data from milestone
   const getMilestoneById = () => {
@@ -266,7 +266,7 @@ const ProjectEdit = () => {
       .then((res) => {
         setMilestone(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
   //Getting data from milestone
   const getTaskById = () => {
@@ -275,16 +275,17 @@ const ProjectEdit = () => {
       .then((res) => {
         setTaskById(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
   //Getting data from milestone
   const getTimeSheetById = () => {
     api
       .post('/projecttimesheet/getTimeSheetProjectById', { project_id: id })
       .then((res) => {
+        console.log("checking gobi record",res.data.data)
         setTimeSheetById(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   //Getting data from milestone
@@ -294,7 +295,7 @@ const ProjectEdit = () => {
       .then((res) => {
         setTeamById(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   //Getting data from Company
@@ -304,17 +305,17 @@ const ProjectEdit = () => {
       .then((res) => {
         setCompany(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => { });
 
 
   };//Getting data from contact
   const getContact = (companyId) => {
     api
-      .post('/project/getcontactById',{ company_id: companyId })
+      .post('/project/getcontactById', { company_id: companyId })
       .then((res) => {
         setContact(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
 
@@ -332,62 +333,62 @@ const ProjectEdit = () => {
     getTimeSheetById();
     getTeamById();
     getCompany();
-   }, [id]);
+  }, [id]);
 
-   useEffect(() => {
+  useEffect(() => {
     if (projectDetail && projectDetail.company_id) {
       // Use company.company_id directly to get the selected project ID
       const selectedProjectId = projectDetail.company_id;
       getContact(selectedProjectId); // Fetch contact data based on selected company
     }
   }, [projectDetail && projectDetail.company_id]);
-  
+
 
   return (
     <>
       <BreadCrumbs />
       <Form>
-    <FormGroup>
-      <ComponentCardV2>
-        <Row>
-          <Col>
-            <Button className='shadow-none'
-              color="primary"
-              onClick={() => {
-                UpdateData();
-                navigate('/Project');
-              }}
-            >
-              Save
-            </Button>
-          </Col>
-          <Col>
-            <Button className='shadow-none'
-              color="primary"
-              onClick={() => {
-                UpdateData();
-                applyChanges();
-              }}
-            >
-              Apply
-            </Button>
-          </Col>
+        <FormGroup>
+          <ComponentCardV2>
+            <Row>
+              <Col>
+                <Button className='shadow-none'
+                  color="primary"
+                  onClick={() => {
+                    UpdateData();
+                    navigate('/Project');
+                  }}
+                >
+                  Save
+                </Button>
+              </Col>
+              <Col>
+                <Button className='shadow-none'
+                  color="primary"
+                  onClick={() => {
+                    UpdateData();
+                    applyChanges();
+                  }}
+                >
+                  Apply
+                </Button>
+              </Col>
 
-         
-          <Col>
-            <Button className='shadow-none'
-              color="dark"
-              onClick={() => {
-                backToList();
-              }}
-            >
-              Back to List
-            </Button>
-          </Col>
-        </Row>
-      </ComponentCardV2>
-    </FormGroup>
-  </Form>
+
+              <Col>
+                <Button className='shadow-none'
+                  color="dark"
+                  onClick={() => {
+                    backToList();
+                  }}
+                >
+                  Back to List
+                </Button>
+              </Col>
+            </Row>
+          </ComponentCardV2>
+        </FormGroup>
+      </Form>
       <Form>
         <FormGroup>
           <ComponentCard
@@ -397,7 +398,7 @@ const ProjectEdit = () => {
             Status : ${projectDetail && projectDetail.status} `}
           >
             <Row>
-            <Col md="3">
+              <Col md="3">
                 <FormGroup>
                   <Label>
                     Title<span className="required">*</span>
@@ -408,8 +409,8 @@ const ProjectEdit = () => {
                     value={projectDetail && projectDetail.title}
                     onChange={handleInputs}
                   />
-                  </FormGroup>
-                  </Col>
+                </FormGroup>
+              </Col>
 
               <Col md="3">
                 <FormGroup>
@@ -422,9 +423,9 @@ const ProjectEdit = () => {
                     value={projectDetail && projectDetail.category}
                     onChange={handleInputs}
                   >
-                     <option defaultValue="selected">Please Select</option>
+                    <option defaultValue="selected">Please Select</option>
                     <option value="Project">Project</option>
-                    <option  value="Maintenance">Maintenance</option>
+                    <option value="Maintenance">Maintenance</option>
                     <option value="Tenancy Project">Tenancy Project</option>
                     <option value="Tenancy Work">Tenancy Work</option>
                   </Input>
@@ -440,8 +441,8 @@ const ProjectEdit = () => {
                     value={projectDetail && projectDetail.status}
                     onChange={handleInputs}
                   >
-                     <option defaultValue="selected">Please Select</option>
-                     <option value="WIP">WIP</option>
+                    <option defaultValue="selected">Please Select</option>
+                    <option value="WIP">WIP</option>
                     <option value="Billable">Billable</option>
                     <option value="Billed">Billed</option>
                     <option value="Complete">Complete</option>
@@ -460,18 +461,18 @@ const ProjectEdit = () => {
                     value={projectDetail && projectDetail.company_id}
                     onChange={(e) => {
                       handleInputs(e)
-                const selectedProject = e.target.value;
-                getContact(selectedProject);
-              }}>
-                     <option defaultValue="selected">Please Select</option>
-                        {company &&
-                          company.map((e) => (
-                            <option key={e.company_id} value={e.company_id}>
-                              {e.company_name}
-                            </option>
-                          ))}
-                          </Input>
-                  </FormGroup>
+                      const selectedProject = e.target.value;
+                      getContact(selectedProject);
+                    }}>
+                    <option defaultValue="selected">Please Select</option>
+                    {company &&
+                      company.map((e) => (
+                        <option key={e.company_id} value={e.company_id}>
+                          {e.company_name}
+                        </option>
+                      ))}
+                  </Input>
+                </FormGroup>
               </Col>
             </Row>
 
@@ -484,8 +485,8 @@ const ProjectEdit = () => {
                     name="contact_id"
                     value={projectDetail && projectDetail.contact_id}
                     onChange={handleInputs}
-                    >
-                     <option defaultValue="selected">Please Select</option>
+                  >
+                    <option defaultValue="selected">Please Select</option>
                     {contact &&
                       contact.map((ele) => {
                         return (
@@ -561,9 +562,9 @@ const ProjectEdit = () => {
         {/* Tab 1 */}
         <TabContent className="p-4" activeTab={activeTab}>
           <TabPane tabId="1">
-<StatsPmsProjectId
-id={id}></StatsPmsProjectId>             <ActualHour/>
-             <AverageIssues/>
+            <StatsPmsProjectId
+              id={id}></StatsPmsProjectId>             <ActualHour />
+            <AverageIssues />
           </TabPane>
           {/* Tab 2 */}
           <TabPane tabId="2">
@@ -590,7 +591,7 @@ id={id}></StatsPmsProjectId>             <ActualHour/>
               getMilestoneById={getMilestoneById}
             ></ProjectMilestones>
             <ProjectMilestoneEdit
-            getMilestoneById={getMilestoneById}
+              getMilestoneById={getMilestoneById}
               contactData={contactData}
               editTaskEditModals={editTaskEditModals}
               setEditTaskEditModals={setEditTaskEditModals}
@@ -608,8 +609,8 @@ id={id}></StatsPmsProjectId>             <ActualHour/>
               getTeamById={getTeamById}
             />
             <ProjectTeamEdit
-            getTeamById={getTeamById}
-            id={id}
+              getTeamById={getTeamById}
+              id={id}
               contactDataTeam={contactDataTeam}
               editTeamModal={editTeamModal}
               setEditTeamEditModal={setEditTeamEditModal}
@@ -655,8 +656,8 @@ id={id}></StatsPmsProjectId>             <ActualHour/>
           </TabPane>
           <TabPane tabId="7">
             <CalendarApp
-             projectDetail={projectDetail}
-             id={id}></CalendarApp>
+              projectDetail={projectDetail}
+              id={id}></CalendarApp>
           </TabPane>
         </TabContent>
       </ComponentCard>

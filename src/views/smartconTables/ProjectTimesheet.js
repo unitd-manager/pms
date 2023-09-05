@@ -73,15 +73,19 @@ export default function ProjectTimeSheet({
   const inserttimeSheets = () => {
     const newContactWithCompany = insertTimeSheet;
     newContactWithCompany.project_id = id;
+
+    console.log("newContactWithCompany",newContactWithCompany)
+
     api.post('/projecttimesheet/insertTimeSheet', newContactWithCompany)
       .then((res) => {
+
         const insertedDataId = res.data.data.insertId;
         console.log(insertedDataId);
+        console.log("Employee Data",res.data.data)
         message('TimeSheet inserted successfully.', 'success');
         getTimeSheetById();
         setTimeout(() => {addContactToggless(false) }, 300);
-        window.location.reload();
-        
+        // window.location.reload();
       })
       .catch(() => {
         message('Network connection error.', 'error');

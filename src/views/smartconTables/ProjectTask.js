@@ -152,6 +152,11 @@ export default function ProjectTask({
           // setTimeout(() => {
           //   addContactToggle(false);
           // }, 300);
+          //setFormSubmitted(true)
+          setTimeout(() => {
+            addContactToggle(false);
+          }, 300);
+          window.location.reload();
         })
         .catch(() => {
           message('Network connection error.', 'error');

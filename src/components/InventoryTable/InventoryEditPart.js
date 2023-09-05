@@ -1,11 +1,12 @@
 import React from 'react';
-import { Row, Col, Button, FormGroup, Label, Input, Form } from 'reactstrap';
+import { Row, Col,FormGroup, Label, Input, Form } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { ToastContainer } from 'react-toastify';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../ComponentCard';
 import ComponentCardV2 from '../ComponentCardV2';
+import ApiButton from '../ApiButton';
 
 function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData }) {
   InventoryEditPart.propTypes = {
@@ -28,7 +29,15 @@ function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData }
         <Form>
           <FormGroup>
             <ComponentCardV2>
-              <Row>
+            <ApiButton
+              editData={editinventoryData}
+              navigate={navigate}
+              applyChanges={applyChanges}
+              backToList={backToList}
+             // deleteData={deleteLoanData}
+              module="Inventory"
+            ></ApiButton>
+              {/* <Row>
                 <Col>
                   <Button
                     className="shadow-none"
@@ -67,7 +76,7 @@ function InventoryEditPart({ inventoryDetails, handleInputs, editinventoryData }
                     Back to List{' '}
                   </Button>
                 </Col>
-              </Row>
+              </Row> */}
             </ComponentCardV2>
            
             <ComponentCard title="Product Details" righttitle={<Row>

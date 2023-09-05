@@ -10,6 +10,7 @@ import api from '../../constants/api';
 import LoanMoreDetails from '../../components/LoanTable/LoanMoreDetails';
 import LoanDetailComp from '../../components/LoanTable/LoanDetailComp';
 import LoanButtons from '../../components/LoanTable/LoanButton';
+import ApiButton from '../../components/ApiButton';
 
 const LoanEdit = () => {
   //All state variables
@@ -231,7 +232,14 @@ const LoanEdit = () => {
         deleteLoanData={deleteLoanData}
         id={id}
       ></LoanButtons>
-
+<ApiButton
+              editData={editLoanData}
+              navigate={navigate}
+              applyChanges={editLoanData}
+              backToList={backToList}
+              deleteData={deleteLoanData}
+              module="Loan"
+            ></ApiButton>
       {/*Main Details*/}
       <LoanDetailComp
         handleInputs={handleInputs}

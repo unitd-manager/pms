@@ -11,10 +11,10 @@ import ComponentCard from '../../components/ComponentCard';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import message from '../../components/Message';
 import api from '../../constants/api';
-import DeleteButton from '../../components/DeleteButton';
+//import DeleteButton from '../../components/DeleteButton';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
-
+import ApiButton from '../../components/ApiButton';
 
 const LeadEdit = () => {
   //All state variable
@@ -108,7 +108,14 @@ const LeadEdit = () => {
         <FormGroup>
           <ToastContainer></ToastContainer>
           <ComponentCardV2>
-            <Row>
+          <ApiButton
+        editData={editLead}
+        navigate={navigate}
+        applyChanges={applyChanges}
+        backToList={backToList}
+        module="Lead"
+      ></ApiButton>
+            {/* <Row>
               <Col>
                 <Button
                   className="shadow-none"
@@ -166,7 +173,7 @@ const LeadEdit = () => {
                   Back to List
                 </Button>
               </Col>
-            </Row>
+            </Row> */}
           </ComponentCardV2>
         </FormGroup>
       </Form>

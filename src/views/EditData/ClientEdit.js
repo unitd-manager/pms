@@ -3,7 +3,7 @@ import { TabPane, TabContent } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2'
-import ClientButton from '../../components/ClientTable/ClientButton';
+//import ClientButton from '../../components/ClientTable/ClientButton';
 import ClientMainDetails from '../../components/ClientTable/ClientMainDetails';
 import ContactEditModal from '../../components/Tender/ContactEditModal';
 import ClientContactGetAndInsert from '../../components/ClientTable/ClientContactGetAndInsert';
@@ -20,6 +20,7 @@ import NavTabs from '../../components/ClientTable/NavTabs';
 import AddNote from '../../components/Tender/AddNote';
 import ViewNote from '../../components/Tender/ViewNote';
 import creationdatetime from '../../constants/creationdatetime';
+import ApiButton from '../../components/ApiButton';
 
 const ClientsEdit = () => {
   //Const Variables
@@ -97,28 +98,28 @@ const ClientsEdit = () => {
       });
   };
   //Email
-  const sendMail = () => {
-    if (
-      window.confirm(
-        ' Are you sure do you want to send Mail to this Client \n',
-      )
-    ) {
-    const to ="fatema@unitdtechnologies.com";
-    const text = "Hello";
-    const subject ="Test Mail";
-    api
-      .post('/email/sendemail',{to,text,subject})
-      .then(() => {
-        message('Email sent successfully.', 'success');
-      })
-      .catch(() => {
-        message('Email Data Not Found', 'info');
-      });
-    }
-   else {
-    applyChanges();
-  }
-  };
+  // const sendMail = () => {
+  //   if (
+  //     window.confirm(
+  //       ' Are you sure do you want to send Mail to this Client \n',
+  //     )
+  //   ) {
+  //   const to ="fatema@unitdtechnologies.com";
+  //   const text = "Hello";
+  //   const subject ="Test Mail";
+  //   api
+  //     .post('/email/sendemail',{to,text,subject})
+  //     .then(() => {
+  //       message('Email sent successfully.', 'success');
+  //     })
+  //     .catch(() => {
+  //       message('Email Data Not Found', 'info');
+  //     });
+  //   }
+  //  else {
+  //   applyChanges();
+  // }
+  // };
 
   // insert Contact
   const [newContactData, setNewContactData] = useState({
@@ -256,15 +257,22 @@ const ClientsEdit = () => {
      {/* BreadCrumbs */}
      <BreadCrumbs heading={clientsDetails && clientsDetails.company_name} />
       {/* Button List */}
-      <ClientButton
+      {/* <ClientButton
         editClientsData={editClientsData}
         navigate={navigate}
         applyChanges={applyChanges}
         DeleteClient={DeleteClient}
         backToList={backToList}
         sendMail={sendMail}
-      ></ClientButton>
-     
+      ></ClientButton> */}
+     <ApiButton
+              editData={editClientsData}
+              navigate={navigate}
+              applyChanges={applyChanges}
+              backToList={backToList}
+             deleteData={DeleteClient}
+              module="Client"
+            ></ApiButton>
       {/* Client Main details */}
        <ComponentCard
             title="Client Details"

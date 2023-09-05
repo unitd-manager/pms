@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane, Button } from 'reactstrap';
+import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane, Button} from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -22,11 +22,12 @@ import CalendarApp from '../apps/calendar/CalendarApp';
 import ActualHour from '../../components/dashboard/ActualHour';
 import AverageIssues from '../../components/dashboard/AverageIssues';
 import StatsPmsProjectId from '../../components/dashboard/ProjectStats/StatsPmsProjectId';
+// import ApiButton from '../../components/ApiButton';
 
 const ProjectEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => { };
+  const applyChanges = () => {};
   const backToList = () => {
     navigate('/Project');
   };
@@ -348,47 +349,47 @@ const ProjectEdit = () => {
     <>
       <BreadCrumbs />
       <Form>
-        <FormGroup>
-          <ComponentCardV2>
-            <Row>
-              <Col>
-                <Button className='shadow-none'
-                  color="primary"
-                  onClick={() => {
-                    UpdateData();
-                    navigate('/Project');
-                  }}
-                >
-                  Save
-                </Button>
-              </Col>
-              <Col>
-                <Button className='shadow-none'
-                  color="primary"
-                  onClick={() => {
-                    UpdateData();
-                    applyChanges();
-                  }}
-                >
-                  Apply
-                </Button>
-              </Col>
+    <FormGroup>
+      <ComponentCardV2>
+        <Row>
+          <Col>
+            <Button className='shadow-none'
+              color="primary"
+              onClick={() => {
+                UpdateData();
+                navigate('/Project');
+              }}
+            >
+              Save
+            </Button>
+          </Col>
+          <Col>
+            <Button className='shadow-none'
+              color="primary"
+              onClick={() => {
+                UpdateData();
+                applyChanges();
+              }}
+            >
+              Apply
+            </Button>
+          </Col>
 
-
-              <Col>
-                <Button className='shadow-none'
-                  color="dark"
-                  onClick={() => {
-                    backToList();
-                  }}
-                >
-                  Back to List
-                </Button>
-              </Col>
-            </Row>
-          </ComponentCardV2>
-        </FormGroup>
-      </Form>
+         
+          <Col>
+            <Button className='shadow-none'
+              color="dark"
+              onClick={() => {
+                backToList();
+              }}
+            >
+              Back to List
+            </Button>
+          </Col>
+        </Row>
+      </ComponentCardV2>
+    </FormGroup>
+  </Form>
       <Form>
         <FormGroup>
           <ComponentCard

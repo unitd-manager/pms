@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
-import { Button } from 'reactstrap';
+import { Button,Label,Card,CardBody,Col,Row,Input,FormGroup } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -11,6 +11,7 @@ import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import ReactPaginate from 'react-paginate';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
@@ -19,8 +20,13 @@ import CommonTable from '../../components/CommonTable';
 
 const ProjectTask = () => {
   //All state variable
-  const [projectTask, setProjectTask] = useState(null);
+  const [projectTask, setProjectTask] = useState([]);
   const [loading, setLoading] = useState(false)
+  const [companyName, setCompanyName] = useState('');
+  const [employee, setEmployee] = useState();
+
+
+
 
   //getting data from projectTask
   const getProjectTask = () => {
@@ -28,6 +34,7 @@ const ProjectTask = () => {
     api.get('/projecttask/getProjectTask')
       .then((res) => {
         setProjectTask(res.data.data);
+        setCompanyName(res.data.data);
         $('#example').DataTable({
           pagingType: 'full_numbers',
           pageLength: 20,
@@ -41,15 +48,58 @@ const ProjectTask = () => {
         }],
         });
         setLoading(false)
-      }).catch(()=>{
+      }).catch((error)=>{
         setLoading(false)
-      });
+      console.error('API Error:', error);
+      setProjectTask([]);
+    });
     };
+     // Gettind data from Job By Id
+  const editJobById = () => {
+    api
+      .get('/jobinformation/getEmployee')
+      .then((res) => {
+        console.log(res.data.data);
+        setEmployee(res.data.data);
+      })
+      .catch(() => {});
+  };
+ 
 
   useEffect(() => {
 
     getProjectTask();
+    editJobById();
   }, []);
+
+
+  const handleSearch = () => {
+    // console.log('Selected Employee ID:', companyName);
+    // const employeeIdNumber = parseInt(companyName, 10);
+    // // console.log('Parsed Employee ID:', employeeIdNumber);
+    
+    const filteredData = projectTask
+      .filter((y) => y.employee_id === (companyName === '' ? y.employee_id : companyName))
+    console.log('Filtered Data:', filteredData);
+    
+    setProjectTask(filteredData);
+  };
+  const [page, setPage] = useState(0);
+
+  const employeesPerPage = 20;
+  const numberOfEmployeesVistited = page * employeesPerPage;
+  const displayEmployees = projectTask.slice(
+    numberOfEmployeesVistited,
+    numberOfEmployeesVistited + employeesPerPage,
+  );
+  console.log("displayEmployees",displayEmployees)
+  const totalPages = Math.ceil(projectTask.length / employeesPerPage);
+  const changePage = ({ selected }) => {
+    setPage(selected);
+  };
+
+  
+
   //structure of projectTask list view
   const columns = [
     {
@@ -151,7 +201,44 @@ const ProjectTask = () => {
     <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs/>
+        <Card>
+          <CardBody>
+            <Row>
+              
+            <Col md="2">
+              <FormGroup>
+                <Label>Select Staff</Label>
+                <Input
+  type="select"
+  name="employee_id"
+  onChange={(e) => setCompanyName(e.target.value)}// Update companyName state
 
+>
+                                  <option value="" selected>
+                                    Please Select
+                                  </option>
+                                  {employee &&
+                                    employee.map((ele) => {
+                                      return (
+                                        ele.e_count === 0 && (
+                                          <option key={ele.employee_id} value={ele.employee_id}>
+                                            {ele.first_name}
+                                          </option>
+                                        )
+                                      );
+                                    })}
+                                </Input>
+              </FormGroup>
+            </Col>
+            <Col md="1" className='mt-3'>
+              <Button color="primary" className="shadow-none" onClick={() => handleSearch()}>Go</Button>
+            </Col>
+            </Row>
+          </CardBody>
+        </Card>
+        <Card>
+        <CardBody>
+        
         <CommonTable
                 loading={loading}
           title="Task List"
@@ -171,8 +258,8 @@ const ProjectTask = () => {
             </tr>
           </thead>
           <tbody>
-            {projectTask &&
-              projectTask.map((element, index) => {
+            {displayEmployees &&
+              displayEmployees.map((element, index) => {
                 return (
                   <tr key={element.project_task_id}>
                     <td>{index + 1}</td>
@@ -197,6 +284,20 @@ const ProjectTask = () => {
               })}
           </tbody>
           </CommonTable>
+          <ReactPaginate
+        previousLabel="Previous"
+        nextLabel="Next"
+        pageCount={totalPages}
+        onPageChange={changePage}
+        containerClassName="navigationButtons"
+        previousLinkClassName="previousButton"
+        nextLinkClassName="nextButton"
+        disabledClassName="navigationDisabled"
+        activeClassName="navigationActive"
+      />
+          </CardBody>
+          </Card>
+
       </div>
     </div>
   );

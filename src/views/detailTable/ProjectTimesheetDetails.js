@@ -25,9 +25,16 @@ const { id } = useParams();
   const [milestones, setMilestones] = useState([]);
   const [taskdetail, setTaskDetail] = useState([]);
   const [projectTime, setProjectTime] = useState([]);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
 
 //Insert Timesheet
-  const insertTimesheet = () => {
+  const insertTimesheet = () =>
+   {
+    if (!formSubmitted)
+    if (taskdetail.project_id !== '' &&
+    taskdetail.project_milestone_id !== '' &&
+    taskdetail.project_task_id !=='')  {
     api.post('/projecttimesheet/insertTimeSheet', projectTimesheet)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
@@ -40,6 +47,12 @@ const { id } = useParams();
       .catch(() => {
         message('Network connection error.', 'error');
       });
+    }
+    else  {   setFormSubmitted(true);
+    }  else {
+      message('Please fill all required fields', 'warning');
+      
+    }
       
   };
 

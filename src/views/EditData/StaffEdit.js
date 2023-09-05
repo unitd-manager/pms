@@ -13,8 +13,9 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import KeyStaffDetails from '../../components/StaffTable/KeyStaffDetails';
 import KeyStaffAddress from '../../components/StaffTable/KeyStaffAddress';
-import StaffButton from '../../components/StaffTable/StaffButton';
+//import StaffButton from '../../components/StaffTable/StaffButton';
 import creationdatetime from '../../constants/creationdatetime';
+import ApiButton from '../../components/ApiButton';
 
 const StaffEdit = () => {
   // All state variables
@@ -47,17 +48,17 @@ const StaffEdit = () => {
   };
 
   // Route Change
-  const applyChanges = () => {};
-  const saveChanges = () => {
-    if (!staffeditdetails.email) {
-      message('Email is required', 'warning');
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(staffeditdetails.email)) {
-      message('Enter valid email', 'warning');
-    } else if (staffeditdetails.email !== '' && staffeditdetails.first_name !== '') {
-      navigate('/Staff');
-    }
-    window.location.reload();
-  };
+  // const applyChanges = () => {};
+  // const saveChanges = () => {
+  //   if (!staffeditdetails.email) {
+  //     message('Email is required', 'warning');
+  //   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(staffeditdetails.email)) {
+  //     message('Enter valid email', 'warning');
+  //   } else if (staffeditdetails.email !== '' && staffeditdetails.first_name !== '') {
+  //     navigate('/Staff');
+  //   }
+  //   window.location.reload();
+  // };
   const backToList = () => {
     navigate('/Staff');
   };
@@ -177,7 +178,7 @@ const StaffEdit = () => {
       <ToastContainer />
 
       {/* Staff Edit Buttons */}
-      <StaffButton
+      {/* <StaffButton
         navigate={navigate}
         saveChanges={saveChanges}
         applyChanges={applyChanges}
@@ -185,8 +186,15 @@ const StaffEdit = () => {
         editStaffData={editStaffData}
         deleteStaffData={deleteStaffData}
         id={id}
-      ></StaffButton>
-
+      ></StaffButton> */}
+<ApiButton
+              editData={editStaffData}
+              navigate={navigate}
+              applyChanges={editStaffData}
+              backToList={backToList}
+              deleteData={deleteStaffData}
+              module="Staff"
+            ></ApiButton>
       {/* KeyStaffDetails */}
       <BreadCrumbs heading={staffeditdetails && staffeditdetails.staff_id} />
       <KeyStaffDetails

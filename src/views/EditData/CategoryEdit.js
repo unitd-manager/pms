@@ -6,9 +6,10 @@ import { ToastContainer } from 'react-toastify';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import message from '../../components/Message';
 import api from '../../constants/api';
-import CategoryButton from '../../components/CategoryTable/CategoryButton';
+//import CategoryButton from '../../components/CategoryTable/CategoryButton';
 import CategoryDetailComp from '../../components/CategoryTable/CategoryDetailComp';
 import creationdatetime from '../../constants/creationdatetime';
+import ApiButton from '../../components/ApiButton';
 
 const CategoryEdit = () => {
   //All state variables
@@ -22,11 +23,11 @@ const CategoryEdit = () => {
 
   // Button Save Apply Back List
   const applyChanges = () => {};
-  const saveChanges = () => {
-    if (categoryDetails.category_title !== '') {
-      navigate('/Category');
-    }
-  };
+  // const saveChanges = () => {
+  //   if (categoryDetails.category_title !== '') {
+  //     navigate('/Category');
+  //   }
+  // };
   const backToList = () => {
     navigate('/Category');
   };
@@ -112,7 +113,7 @@ const CategoryEdit = () => {
       <ToastContainer></ToastContainer>
 
       {/* Button */}
-      <CategoryButton
+      {/* <CategoryButton
         editCategoryData={editCategoryData}
         navigate={navigate}
         applyChanges={applyChanges}
@@ -120,8 +121,15 @@ const CategoryEdit = () => {
         deleteCategoryData={deleteCategoryData}
         backToList={backToList}
         id={id}
-      ></CategoryButton>
-
+      ></CategoryButton> */}
+<ApiButton
+              editData={editCategoryData}
+              navigate={navigate}
+              applyChanges={applyChanges}
+              backToList={backToList}
+             deleteData={deleteCategoryData}
+              module="Category"
+            ></ApiButton>
       {/* More details*/}
       <CategoryDetailComp
         categoryDetails={categoryDetails}

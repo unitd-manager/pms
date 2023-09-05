@@ -16,6 +16,8 @@ const ProjectTaskDetails = () => {
     project_id: '',
     project_milestone_id: ''
   });
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
 
   // Navigation and Parameters
   const navigate = useNavigate();
@@ -51,7 +53,10 @@ const ProjectTaskDetails = () => {
 
   // Insert Milestone
   const insertTaskDetails = () => {
-    if (taskdetails.task_title !== '') {
+    if (!formSubmitted)
+    if (taskdetails.project_id !== '' &&
+    taskdetails.project_milestone_id !== '' &&
+    taskdetails.task_title !=='')  {
       api
         .post('/projecttask/insertTask', taskdetails)
         .then((res) => {
@@ -64,9 +69,12 @@ const ProjectTaskDetails = () => {
         .catch(() => {
           message('Network connection error.', 'error');
         });
-    } else {
-      message('Please fill all required fields.', 'warning');
-    }
+      }
+        else  {   setFormSubmitted(true);
+        }  else {
+          message('Please fill all required fields', 'warning');
+          
+        }
   };
 
   useEffect(() => {

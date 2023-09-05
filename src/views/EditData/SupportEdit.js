@@ -28,7 +28,7 @@ import { ToastContainer } from 'react-toastify';
 import moment from 'moment';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
-import SupportButton from '../../components/SupportTable/SupportButton';
+//import SupportButton from '../../components/SupportTable/SupportButton';
 import ComponentCard from '../../components/ComponentCard';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import message from '../../components/Message';
@@ -37,6 +37,7 @@ import AddNote from '../../components/Tender/AddNote';
 import ViewNote from '../../components/Tender/ViewNote';
 import creationdatetime from '../../constants/creationdatetime';
 import SupportState from '../../components/SupportTable/SupportState';
+import ApiButton from '../../components/ApiButton';
 
 const SupportEdit = () => {
   // All state variables
@@ -78,12 +79,12 @@ const SupportEdit = () => {
   };
 
   // Route Change
-  const applyChanges = () => {};
-  const saveChanges = () => {
-    if (supportDetails.name !== '') {
-      navigate('/Support');
-    }
-  };
+  //const applyChanges = () => {};
+  // const saveChanges = () => {
+  //   if (supportDetails.name !== '') {
+  //     navigate('/Support');
+  //   }
+  // };
   const backToList = () => {
     navigate('/Support');
   };
@@ -177,7 +178,7 @@ const SupportEdit = () => {
       <ToastContainer></ToastContainer>
 
       {/* Support Button Details */}
-
+{/* 
       <SupportButton
         saveChanges={saveChanges}
         applyChanges={applyChanges}
@@ -185,8 +186,14 @@ const SupportEdit = () => {
         editSupportData={editSupportData}
         navigate={navigate}
         // sendMail={sendMail}
-      ></SupportButton>
-
+      ></SupportButton> */}
+  <ApiButton
+              editData={editSupportData}
+              navigate={navigate}
+              applyChanges={editSupportData}
+              backToList={backToList}
+              module="Support"
+            ></ApiButton>
       <Form>
         <FormGroup>
           <ComponentCard title="Support Details" creationModificationDate={supportDetails}>

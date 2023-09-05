@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -10,7 +10,8 @@ import ComponentCardV2 from '../../components/ComponentCardV2';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
-import DeleteButton from '../../components/DeleteButton';
+//import DeleteButton from '../../components/DeleteButton';
+import ApiButton from '../../components/ApiButton';
 
 const SettingEdit = () => {
   //All state variable
@@ -20,7 +21,7 @@ const SettingEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/Setting');
   };
@@ -68,7 +69,15 @@ const SettingEdit = () => {
         <FormGroup>
           <ToastContainer></ToastContainer>
           <ComponentCardV2>
-            <Row>
+          <ApiButton
+              editData={editSettingData}
+              navigate={navigate}
+              applyChanges={editSettingData}
+              backToList={backToList}
+              // deleteData={deleteStaffData}
+              module="Setting"
+            ></ApiButton>
+            {/* <Row>
               <Col>
                 <Button
                   className="shadow-none"
@@ -123,7 +132,7 @@ const SettingEdit = () => {
                   Back to List
                 </Button>
               </Col>
-            </Row>
+            </Row> */}
           </ComponentCardV2>
         </FormGroup>
       </Form>

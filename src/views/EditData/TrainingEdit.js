@@ -17,6 +17,7 @@ import TrainingMainDetails from '../../components/Training/TrainingMainDetails';
 import TrainingButton from '../../components/Training/TrainingButton';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
+import ApiButton from '../../components/ApiButton';
 
 const TrainingEdit = () => {
   //All state variables
@@ -212,6 +213,14 @@ const TrainingEdit = () => {
       <BreadCrumbs heading={trainingDetails && trainingDetails.title} />
         {/* Save,Apply Buttons */}
         <TrainingButton navigate={navigate} insertTrainingData={insertTrainingData} applyChanges={applyChanges} backToList={backToList}></TrainingButton>
+        <ApiButton
+              editData={insertTrainingData}
+              navigate={navigate}
+              applyChanges={insertTrainingData}
+              backToList={backToList}
+              // deleteData={deleteUserGroupData}
+              module="Training"
+            ></ApiButton>
         <ToastContainer></ToastContainer>
 
     

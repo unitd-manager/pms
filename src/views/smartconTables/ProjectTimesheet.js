@@ -40,8 +40,6 @@ export default function ProjectTimeSheet({
     getTimeSheetById:PropTypes.func,
   };
 
-  console.log("timeSheetById",timeSheetById)
-  
   const [insertTimeSheet, setInsertTimesheet] = useState({
     task_title: "",
     first_name:"",

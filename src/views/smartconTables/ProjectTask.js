@@ -48,7 +48,7 @@ export default function ProjectTask({
 
   const [insertTask, setInsertTask] = useState({
     task_title: '',
-    first_name: '',
+    employee_id: '',
     start_date: '',
     end_date: '',
     completion: '',
@@ -69,6 +69,7 @@ export default function ProjectTask({
   const [roomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState();
   const [moduleId, setModuleId] = useState('');
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const [updateFile, setUpdateFile] = useState(true);
   // Gettind data from Job By Id
@@ -87,7 +88,10 @@ export default function ProjectTask({
   };
   //Insert Milestone
   const insertTaskData = () => {
-    if (insertTask.task_title !== '') {
+    if (!formSubmitted)
+    if (insertTask.project_milestone_id !== '' &&
+    insertTask.task_title !== '' &&
+    insertTask.employee_id !=='') {
       const newContactWithCompanyId = insertTask;
       newContactWithCompanyId.project_id = id;
       api
@@ -97,6 +101,7 @@ export default function ProjectTask({
           console.log(insertedDataId);
           message('Task inserted successfully.', 'success');
           getTaskById();
+          setFormSubmitted(true)
           setTimeout(() => {
             addContactToggle(false);
           }, 300);

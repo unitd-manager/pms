@@ -18,10 +18,11 @@ import FinanceInvoiceModal from '../../components/FinanceTable/FinanceInvoiceMod
 import CustomerFinanceReceipt from '../../components/FinanceTable/CustomerFinanceReceipt';
 import CustomerFinanceCreditNote from '../../components/FinanceTable/CustomerFinanceCreditNote';
 import FinanceSummary from '../../components/FinanceTable/FinanceSummary';
-import FinanceButton from '../../components/FinanceTable/FinanceButton';
+//import FinanceButton from '../../components/FinanceTable/FinanceButton';
 import FinanceDeliveryAddress from '../../components/FinanceTable/FinanceDeliveryAddress';
 import FinanceMainDetails from '../../components/FinanceTable/FinanceMainDetails';
 import creationdatetime from '../../constants/creationdatetime';
+import ApiButton from '../../components/ApiButton';
 
 const FinanceEdit = () => {
   // All state variables
@@ -216,13 +217,20 @@ const FinanceEdit = () => {
       <BreadCrumbs heading={financeDetails && financeDetails.order_id} />
       <TabContent className="p-4" activeTab={activeTab}>
         {/* Save,Apply Buttons */}
-        <FinanceButton
+        {/* <FinanceButton
           navigate={navigate}
           editFinanceData={editFinanceData}
           applyChanges={applyChanges}
           backToList={backToList}
-        ></FinanceButton>
-
+        ></FinanceButton> */}
+<ApiButton
+              editData={editFinanceData}
+              navigate={navigate}
+              applyChanges={applyChanges}
+              backToList={backToList}
+             // deleteData={deleteLoanData}
+              module="Finance"
+            ></ApiButton>
         {/* Main Details */}
         <FinanceMainDetails
           financeDetails={financeDetails}

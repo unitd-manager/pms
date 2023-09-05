@@ -17,6 +17,7 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import WorkOrderLinked from '../../components/SubConModal/WorkOrderlinked';
 import SubConTable from '../../components/SubConModal/SubConTable';
+import ApiButton from '../../components/ApiButton';
 
 const SubConEdit = () => {
   //all state variables
@@ -29,6 +30,9 @@ const SubConEdit = () => {
   //navigation and params
   const { id } = useParams();
   const navigate = useNavigate();
+  const backToList=()=>{
+    navigate('/SubCon')
+  }
   // Get SubCon By Id
   const getsubCon = () => {
     api
@@ -122,7 +126,14 @@ const SubConEdit = () => {
       <Form>
         <FormGroup>
           <ComponentCardV2>
-            <Row>
+          <ApiButton
+              editData={editSubConData}
+              navigate={navigate}
+              applyChanges={editSubConData}
+              backToList={backToList}
+              module="SubCon"
+            ></ApiButton>
+            {/* <Row>
               <Col>
                 <Button
                   color="primary"
@@ -157,7 +168,7 @@ const SubConEdit = () => {
                   Back to List
                 </Button>
               </Col>
-            </Row>
+            </Row> */}
           </ComponentCardV2>
           <ComponentCard title="SubCon Details" creationModificationDate={subCon}>
             <Row>

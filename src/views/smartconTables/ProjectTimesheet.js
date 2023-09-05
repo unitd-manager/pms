@@ -268,25 +268,8 @@ export default function ProjectTimeSheet({
                                       {insertTimeSheet.employee_id}
                                     </option>
                                   ) : (
-                                    <option  disabled>
-                                      Select Staff Name
-                                    </option>
+                                    <option disabled>Select Staff Name</option>
                                   )}
-                                  {StaffDetail &&
-                                    StaffDetail.map((e) => (
-                                      <option key={e.project_task_id} value={e.employee_id}>
-                                        {e.first_name}
-                                      </option>
-                                    ))}
-                                </Input>
-                              </FormGroup>
-                            </Col>
-                        
-                            <Col md="4">
-                              <FormGroup>
-                                <Label>Staff Name</Label>
-                                <Input type="select" name="employee_id" onChange={handleInputsTime}>
-                                  <option>Select Staff Name</option>
                                   {StaffDetail &&
                                     StaffDetail.map((e) => (
                                       <option key={e.project_task_id} value={e.employee_id}>
@@ -411,8 +394,12 @@ export default function ProjectTimeSheet({
                   <td>{element.hours}</td>
                   <td>{element.status}</td>
                   <td>{element.description}</td>
-                  <td>{element.created_by} {element.creation_date}</td>
-                  <td>{element.modified_by} {element.modification_date}</td>
+                  <td>
+                    {element.created_by} {element.creation_date}
+                  </td>
+                  <td>
+                    {element.modified_by} {element.modification_date}
+                  </td>
                 </tr>
               );
             })}

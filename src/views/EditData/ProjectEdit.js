@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -8,7 +8,6 @@ import DuctingCostModal from '../../components/ProjectModal/DuctingCostModal';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import ProjectTask from '../smartconTables/ProjectTask';
-import CostingSummary from '../../components/projectTabContent/CostingSummary';
 import ProjectTimeSheet from '../smartconTables/ProjectTimesheet';
 import ProjectTeam from '../smartconTables/ProjectTeam';
 import ProjectMilestones from '../../components/ProjectMilestones';
@@ -19,9 +18,16 @@ import ProjectTeamEdit from '../../components/ProjectTeamEdit';
 import Tab from '../../components/ProjectTabs/Tab';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import CalendarApp from '../apps/calendar/CalendarApp';
-import ActualHour from '../../components/dashboard/ActualHour';
-import AverageIssues from '../../components/dashboard/AverageIssues';
+// import ActualHour from '../../components/dashboard/ActualHour';
+// import AverageIssues from '../../components/dashboard/AverageIssues';
 import StatsPmsProjectId from '../../components/dashboard/ProjectStats/StatsPmsProjectId';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
+import DueStatsProject from '../../components/dashboard/ProjectStats/DueStatsProject';
+import MilestoneStatsProject from '../../components/dashboard/ProjectStats/MilestoneStatsProject';
+import ActualHourStatsProject from '../../components/dashboard/ProjectStats/ActualHourStatsProject';
+import PriorityStatsProject from '../../components/dashboard/ProjectStats/PriorityStatsProject';
+import AverageStatsProject from '../../components/dashboard/ProjectStats/AverageStatsProject';
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -31,26 +37,19 @@ const ProjectEdit = () => {
     navigate('/Project');
   };
 
-  console.log("project_id",id)
+  console.log('project_id', id);
 
   const [projectDetail, setProjectDetail] = useState();
   const [company, setCompany] = useState();
   const [contact, setContact] = useState();
   const [contactData, setContactDatas] = useState();
-  const [getCostingSummary, setGetCostingSummary] = useState();
   const [editTaskEditModals, setEditTaskEditModals] = useState(false);
   const [activeTab, setActiveTab] = useState('1');
   const [addDuctingCostModal, setAddDuctingCostModal] = useState(false);
   const [addContactModals, setAddContactModals] = useState(false);
-  const [gTotal, setGtotal] = useState(0);
-  const [gTotal1, setGtotal1] = useState(0);
-  const [gTotal2, setGtotal2] = useState(0);
-  const [gTotal3, setGtotal3] = useState(0);
-  const [gTotal4, setGtotal4] = useState(0);
-  const [gTotal5, setGtotal5] = useState(0);
-  const [types, setTypes] = useState(0);
   const [milestoneById, setMilestone] = useState();
   const [taskById, setTaskById] = useState();
+  const [userSearchData, setUserSearchData] = useState('');
   const [contactDatas, setContactData] = useState();
   const [editTaskEditModal, setEditTaskEditModal] = useState(false);
   const [addContactModal, setAddContactModal] = useState(false);
@@ -62,7 +61,8 @@ const ProjectEdit = () => {
   const [contactDataTeam, setContactDataTeam] = useState();
   const [editTeamModal, setEditTeamEditModal] = useState(false);
   const [addContactModalTeam, setAddContactModalTeam] = useState(false);
-
+  //get staff details
+  const { loggedInuser } = useContext(AppContext);
 
   // Start for tab refresh navigation
   const tabs = [
@@ -73,13 +73,11 @@ const ProjectEdit = () => {
     { id: '5', name: 'Task' },
     { id: '6', name: 'Timesheet' },
     { id: '7', name: 'Calender' },
-
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
   };
   // End for tab refresh navigation
-  const [chargesdetails, setChargesDetails] = useState();
 
   const addContactToggles = () => {
     setAddContactModals(!addContactModals);
@@ -94,147 +92,11 @@ const ProjectEdit = () => {
     setAddContactModalTeam(!addContactModalTeam);
   };
 
- 
-
-
   // Fetch Costing Summary
-  const getCostingbySummary = () => {
-    api
-      .post('/projecttabcostingsummary/getTabCostingSummaryById', { project_id: id })
-      .then((res) => {
-        setGetCostingSummary(res.data.data);
-      })
-      .catch(() => {});
-  };
 
-  //Api call for getting Vehicle Fuel Data By ID
-  const getTransportChargesById = () => {
-    api
-      .post('/projecttabcostingsummary/getCostingSummaryChargesById', {
-        project_id: id,
-        title: 'Transport Charges',
-      })
-      .then((res) => {
-        setChargesDetails(res.data.data);
+  // Get Project By Id
 
-        let grandTotal = 0;
-
-        res.data.data.forEach((elem) => {
-          grandTotal += elem.amount;
-        });
-        setGtotal(grandTotal);
-      })
-      .catch(() => {
-        message('Costing Summary Data Not Found', 'info');
-      });
-  };
-
-  const getLabourChargesById = () => {
-    api
-      .post('/projecttabcostingsummary/getCostingSummaryChargesById', {
-        project_id: id,
-        title: 'Total Labour Charges',
-      })
-      .then((res) => {
-        setChargesDetails(res.data.data);
-        console.log(chargesdetails);
-        let grandTotal1 = 0;
-        res.data.data.forEach((elem) => {
-          grandTotal1 += elem.amount;
-        });
-
-        setGtotal1(grandTotal1);
-      })
-      .catch(() => {
-        message('Costing Summary Data Not Found', 'info');
-      });
-  };
-  const getSalesmanCommissionById = () => {
-    api
-      .post('/projecttabcostingsummary/getCostingSummaryChargesById', {
-        project_id: id,
-        title: 'Salesman Commission',
-      })
-      .then((res) => {
-        console.log('getCostingSummaryChargesById', res);
-        setChargesDetails(res.data.data);
-        let grandTotal2 = 0;
-        res.data.data.forEach((elem) => {
-          grandTotal2 += elem.amount;
-        });
-
-        setGtotal2(grandTotal2);
-      })
-      .catch(() => {
-        message('Costing Summary Data Not Found', 'info');
-      });
-  };
-
-  const getFinancesChargesById = () => {
-    api
-      .post('/projecttabcostingsummary/getCostingSummaryChargesById', {
-        project_id: id,
-        title: 'Finance Charges',
-      })
-      .then((res) => {
-        setChargesDetails(res.data.data);
-        let grandTotal3 = 0;
-
-        res.data.data.forEach((elem) => {
-          grandTotal3 += elem.amount;
-        });
-
-        setGtotal3(grandTotal3);
-      })
-      .catch(() => {
-        message('Costing Summary Data Not Found', 'info');
-      });
-  };
-
-  const getOfficeOverheadsById = () => {
-    api
-      .post('/projecttabcostingsummary/getCostingSummaryChargesById', {
-        project_id: id,
-        title: 'Office Overheads',
-      })
-      .then((res) => {
-        setChargesDetails(res.data.data);
-        setTypes(types);
-        let grandTotal4 = 0;
-        res.data.data.forEach((elem) => {
-          grandTotal4 += elem.amount;
-        });
-
-        setGtotal4(grandTotal4);
-      })
-      .catch(() => {
-        message('Costing Summary Data Not Found', 'info');
-      });
-  };
-  const getOtherChargesById = () => {
-    api
-      .post('/projecttabcostingsummary/getCostingSummaryChargesById', {
-        project_id: id,
-        title: 'Other Charges',
-      })
-      .then((res) => {
-        setChargesDetails(res.data.data);
-        let grandTotal5 = 0;
-
-        res.data.data.forEach((elem) => {
-          grandTotal5 += elem.amount;
-        });
-
-        setGtotal5(grandTotal5);
-      })
-      .catch(() => {
-        message('Costing Summary Data Not Found', 'info');
-      });
-  };
-
-   // Get Project By Id
-
-   const getProjectById = () => {
+  const getProjectById = () => {
     api
       .post('/project/getProjectsByIDs', { project_id: id })
       .then((res) => {
@@ -251,6 +113,8 @@ const ProjectEdit = () => {
   };
 
   const UpdateData = () => {
+    projectDetail.modification_date = creationdatetime;
+    projectDetail.modified_by = loggedInuser.first_name;
     api
       .post('/project/edit-Project', projectDetail)
       .then(() => {
@@ -274,6 +138,7 @@ const ProjectEdit = () => {
       .post('/projecttask/getProjectTaskById', { project_id: id })
       .then((res) => {
         setTaskById(res.data.data);
+        setUserSearchData(res.data.data);
       })
       .catch(() => {});
   };
@@ -305,99 +170,85 @@ const ProjectEdit = () => {
         setCompany(res.data.data);
       })
       .catch(() => {});
-
-
-  };//Getting data from contact
+  }; //Getting data from contact
   const getContact = (companyId) => {
     api
-      .post('/project/getcontactById',{ company_id: companyId })
+      .post('/project/getcontactById', { company_id: companyId })
       .then((res) => {
         setContact(res.data.data);
       })
       .catch(() => {});
   };
 
-
   useEffect(() => {
-    getCostingbySummary();
-    getOtherChargesById();
     getProjectById();
-    getTransportChargesById();
-    getSalesmanCommissionById();
-    getFinancesChargesById();
-    getOfficeOverheadsById();
-    getLabourChargesById();
     getMilestoneById();
     getTaskById();
     getTimeSheetById();
     getTeamById();
     getCompany();
-   }, [id]);
+  }, [id]);
 
-   useEffect(() => {
+  useEffect(() => {
     if (projectDetail && projectDetail.company_id) {
       // Use company.company_id directly to get the selected project ID
       const selectedProjectId = projectDetail.company_id;
       getContact(selectedProjectId); // Fetch contact data based on selected company
     }
   }, [projectDetail && projectDetail.company_id]);
-  
 
   return (
     <>
       <BreadCrumbs />
       <Form>
-    <FormGroup>
-      <ComponentCardV2>
-        <Row>
-          <Col>
-            <Button className='shadow-none'
-              color="primary"
-              onClick={() => {
-                UpdateData();
-                navigate('/Project');
-              }}
-            >
-              Save
-            </Button>
-          </Col>
-          <Col>
-            <Button className='shadow-none'
-              color="primary"
-              onClick={() => {
-                UpdateData();
-                applyChanges();
-              }}
-            >
-              Apply
-            </Button>
-          </Col>
+        <FormGroup>
+          <ComponentCardV2>
+            <Row>
+              <Col>
+                <Button
+                  className="shadow-none"
+                  color="primary"
+                  onClick={() => {
+                    UpdateData();
+                    navigate('/Project');
+                  }}
+                >
+                  Save
+                </Button>
+              </Col>
+              <Col>
+                <Button
+                  className="shadow-none"
+                  color="primary"
+                  onClick={() => {
+                    UpdateData();
+                    applyChanges();
+                  }}
+                >
+                  Apply
+                </Button>
+              </Col>
 
-         
-          <Col>
-            <Button className='shadow-none'
-              color="dark"
-              onClick={() => {
-                backToList();
-              }}
-            >
-              Back to List
-            </Button>
-          </Col>
-        </Row>
-      </ComponentCardV2>
-    </FormGroup>
-  </Form>
+              <Col>
+                <Button
+                  className="shadow-none"
+                  color="dark"
+                  onClick={() => {
+                    backToList();
+                  }}
+                >
+                  Back to List
+                </Button>
+              </Col>
+            </Row>
+          </ComponentCardV2>
+        </FormGroup>
+      </Form>
       <Form>
         <FormGroup>
-          <ComponentCard
-            title={`Project Details | Code: ${projectDetail && projectDetail.project_code} | 
-            Category : ${projectDetail && projectDetail.category} | 
-            Company :  ${projectDetail && projectDetail.company_name}  | 
-            Status : ${projectDetail && projectDetail.status} `}
-          >
+          <ComponentCard title="Project Details" creationModificationDate={projectDetail}>
             <Row>
-            <Col md="3">
+              <Col md="3">
                 <FormGroup>
                   <Label>
                     Title<span className="required">*</span>
@@ -408,8 +259,8 @@ const ProjectEdit = () => {
                     value={projectDetail && projectDetail.title}
                     onChange={handleInputs}
                   />
-                  </FormGroup>
-                  </Col>
+                </FormGroup>
+              </Col>
 
               <Col md="3">
                 <FormGroup>
@@ -422,9 +273,9 @@ const ProjectEdit = () => {
                     value={projectDetail && projectDetail.category}
                     onChange={handleInputs}
                   >
-                     <option defaultValue="selected">Please Select</option>
+                    <option defaultValue="selected">Please Select</option>
                     <option value="Project">Project</option>
-                    <option  value="Maintenance">Maintenance</option>
+                    <option value="Maintenance">Maintenance</option>
                     <option value="Tenancy Project">Tenancy Project</option>
                     <option value="Tenancy Work">Tenancy Work</option>
                   </Input>
@@ -440,8 +291,8 @@ const ProjectEdit = () => {
                     value={projectDetail && projectDetail.status}
                     onChange={handleInputs}
                   >
-                     <option defaultValue="selected">Please Select</option>
-                     <option value="WIP">WIP</option>
+                    <option defaultValue="selected">Please Select</option>
+                    <option value="WIP">WIP</option>
                     <option value="Billable">Billable</option>
                     <option value="Billed">Billed</option>
                     <option value="Complete">Complete</option>
@@ -459,19 +310,20 @@ const ProjectEdit = () => {
                     name="company_id"
                     value={projectDetail && projectDetail.company_id}
                     onChange={(e) => {
-                      handleInputs(e)
-                const selectedProject = e.target.value;
-                getContact(selectedProject);
-              }}>
-                     <option defaultValue="selected">Please Select</option>
-                        {company &&
-                          company.map((e) => (
-                            <option key={e.company_id} value={e.company_id}>
-                              {e.company_name}
-                            </option>
-                          ))}
-                          </Input>
-                  </FormGroup>
+                      handleInputs(e);
+                      const selectedProject = e.target.value;
+                      getContact(selectedProject);
+                    }}
+                  >
+                    <option defaultValue="selected">Please Select</option>
+                    {company &&
+                      company.map((e) => (
+                        <option key={e.company_id} value={e.company_id}>
+                          {e.company_name}
+                        </option>
+                      ))}
+                  </Input>
+                </FormGroup>
               </Col>
             </Row>
 
@@ -484,8 +336,8 @@ const ProjectEdit = () => {
                     name="contact_id"
                     value={projectDetail && projectDetail.contact_id}
                     onChange={handleInputs}
-                    >
-                     <option defaultValue="selected">Please Select</option>
+                  >
+                    <option defaultValue="selected">Please Select</option>
                     {contact &&
                       contact.map((ele) => {
                         return (
@@ -557,29 +409,38 @@ const ProjectEdit = () => {
           setAddDuctingCostModal={setAddDuctingCostModal}
         />
 
-        <Tab toggle={toggle} tabs={tabs} />
         {/* Tab 1 */}
         <TabContent className="p-4" activeTab={activeTab}>
+          <Tab toggle={toggle} tabs={tabs} />
           <TabPane tabId="1">
-<StatsPmsProjectId
-id={id}></StatsPmsProjectId>             <ActualHour/>
-             <AverageIssues/>
+            <br />
+            <Row>
+              <Col>
+                <StatsPmsProjectId id={id}></StatsPmsProjectId>
+              </Col>
+              <Col>
+                <DueStatsProject id={id}></DueStatsProject>
+              </Col>
+            </Row>
+            <br/>
+            <Row>
+              <Col>
+                <MilestoneStatsProject id={id}></MilestoneStatsProject>
+              </Col>
+              <Col>
+                <AverageStatsProject id={id}></AverageStatsProject>
+              </Col>
+            </Row>
+            <br/>
+            <ActualHourStatsProject id={id}></ActualHourStatsProject>
+            <br/>
+            <PriorityStatsProject id={id}></PriorityStatsProject>
           </TabPane>
           {/* Tab 2 */}
-          <TabPane tabId="2">
-            <CostingSummary
-              getCostingSummary={getCostingSummary}
-              gTotal={gTotal}
-              gTotal1={gTotal1}
-              gTotal2={gTotal2}
-              gTotal3={gTotal3}
-              gTotal4={gTotal4}
-              gTotal5={gTotal5}
-              getCostingbySummary={getCostingbySummary}
-            ></CostingSummary>
-          </TabPane>
-          {/* Tab 3 Materials Purchased */}
+          <TabPane tabId="2"></TabPane>
+          {/* Tab 3 Milestone */}
           <TabPane tabId="3">
+            <br />
             <ProjectMilestones
               setContactDatas={setContactDatas}
               id={id}
@@ -590,7 +451,7 @@ id={id}></StatsPmsProjectId>             <ActualHour/>
               getMilestoneById={getMilestoneById}
             ></ProjectMilestones>
             <ProjectMilestoneEdit
-            getMilestoneById={getMilestoneById}
+              getMilestoneById={getMilestoneById}
               contactData={contactData}
               editTaskEditModals={editTaskEditModals}
               setEditTaskEditModals={setEditTaskEditModals}
@@ -598,6 +459,7 @@ id={id}></StatsPmsProjectId>             <ActualHour/>
           </TabPane>
           {/* Tab 4 */}
           <TabPane tabId="4">
+            <br />
             <ProjectTeam
               setContactDataTeam={setContactDataTeam}
               id={id}
@@ -608,8 +470,8 @@ id={id}></StatsPmsProjectId>             <ActualHour/>
               getTeamById={getTeamById}
             />
             <ProjectTeamEdit
-            getTeamById={getTeamById}
-            id={id}
+              getTeamById={getTeamById}
+              id={id}
               contactDataTeam={contactDataTeam}
               editTeamModal={editTeamModal}
               setEditTeamEditModal={setEditTeamEditModal}
@@ -618,10 +480,13 @@ id={id}></StatsPmsProjectId>             <ActualHour/>
           {/* Tab 5 */}
           <TabPane tabId="5">
             <ProjectTask
+              userSearchData={userSearchData}
+              setUserSearchData={setUserSearchData}
               setContactData={setContactData}
               id={id}
               getTaskById={getTaskById}
               taskById={taskById}
+              setTaskById={setTaskById}
               addContactToggle={addContactToggle}
               addContactModal={addContactModal}
               setEditTaskEditModal={setEditTaskEditModal}
@@ -654,9 +519,8 @@ id={id}></StatsPmsProjectId>             <ActualHour/>
             ></ProjectTimeSheetEdit>
           </TabPane>
           <TabPane tabId="7">
-            <CalendarApp
-             projectDetail={projectDetail}
-             id={id}></CalendarApp>
+            <br />
+            <CalendarApp projectDetail={projectDetail} id={id}></CalendarApp>
           </TabPane>
         </TabContent>
       </ComponentCard>

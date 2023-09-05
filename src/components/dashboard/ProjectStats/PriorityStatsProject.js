@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
 import Chart from 'react-apexcharts';
-import api from '../../constants/api';
-import ComponentCard from '../ComponentCard';
+import PropTypes from 'prop-types';
+import api from '../../../constants/api';
+import ComponentCard from '../../ComponentCard';
 
-const PriorityStats = () => {
+export default function PriorityStatsProject({ id }) {
+    PriorityStatsProject.propTypes = {
+      id: PropTypes.any,
+    };
   const [employees, setEmployees] = useState([]);
   const [employeeStats, setEmployeeStats] = useState([]);
   const [datas, setDatas] = useState([]);
 
   // Get the employee statistics based on the selected employee
   const getStats = (employeeId) => {
-    api.post('/stats/getPriorityTasks', { employee_id: employeeId })
+    api.post('/stats/getPriorityTasksById', { employee_id: employeeId ,project_id:id})
       .then((res) => {
         const { data } = res.data;
         setDatas(data.task_titles);
@@ -20,15 +24,19 @@ const PriorityStats = () => {
       .catch(() => {});
   };
 
-  useEffect(() => {
-    api.get('jobinformation/getEmployee')
+  const getJobs = () => {
+    api
+      .post('projecttask/getEmployeeByID', { project_id: id })
       .then((res) => {
         setEmployees(res.data.data);
       })
-      .catch((error) => {
-        console.log('Error fetching employees:', error);
-      });
-  }, []);
+      .catch(() => {});
+  };
+
+  // Get the list of employees from the API
+  useEffect(() => {
+    getJobs();
+  }, [id]);
 
   const optionsbar = {
     chart: {
@@ -105,7 +113,7 @@ const PriorityStats = () => {
             </FormGroup>
           </Form>
           {employeeStats && (
-            <Chart options={optionsbar} series={seriesbar} type="bar" height="450" />
+            <Chart options={optionsbar} series={seriesbar} type="bar" height="400" />
           )}
         </ComponentCard>
       </Col>
@@ -113,4 +121,3 @@ const PriorityStats = () => {
   );
 };
 
-export default PriorityStats;

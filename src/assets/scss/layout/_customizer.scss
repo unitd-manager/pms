@@ -13,6 +13,9 @@ a {
 span.required {
   color: red;
 }
+span.addline {
+  color: blue;
+}
 .customizerSidebar {
   width: $sidebarWidth;
   background-color: $white;
@@ -181,6 +184,7 @@ hr {
   .addNew .form-label {
     padding-right: 20px;
 }
+
 }
 
 
@@ -271,6 +275,18 @@ button.btn.btn-default.btn-xs.btn-filter {
   .lineitem td:last-child {
     border-bottom: 0;
   }
+  .fixedTopbar.contentArea {
+    padding-top: 120px !important;
+  }
+  .xs-margin.visible-xs {
+    margin-bottom: 15px;
+  }
+  .xs-fullWidth.col {
+    flex: unset;
+}
+//nav.topbar.navbar.navbar-expand-lg.navbar-dark.bg-primary {
+  // background: transparent !important;
+//}
 }
 .card .card-title.profile_detail {
   margin-left: 10px;
@@ -333,4 +349,62 @@ div#example_filter {
 }
 .sunday{
   background-color: #90ee90;
+}
+.nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
+  cursor: pointer;
+}
+a.active.nav-link, a.nav-link:focus-visible  {
+  background: #2962ff !important;
+  color: #fff !important;
+}
+.anchor u, .anchor span {
+  cursor: pointer;
+  color: #2962ff;
+}
+.custom-modal-style {
+  width: 1380px !important;
+    transform: translateX(-10% ) !important;
+  }
+
+.autocomplete-container {
+  position: relative;
+}
+
+.autocomplete-input {
+  width: 300px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.autocomplete-suggestions {
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 300px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  list-style: none;
+}
+
+.autocomplete-suggestions li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.autocomplete-suggestions option {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.autocomplete-suggestions li:hover {
+  background-color: #f2f2f2;
+}
+.autocomplete-suggestions option:hover {
+  background-color: #f2f2f2;
 }

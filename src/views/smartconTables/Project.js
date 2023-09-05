@@ -146,7 +146,7 @@ const Project = () => {
             {project && project.map((element,i)=>{
                 return (<tr key={element.project_id}>
                 <td>{i+1}</td>
-                <td><Link to={`/ProjectEdit/${element.project_id}`}><Icon.Edit2 /></Link></td>
+                <td><Link to={`/ProjectEdit/${element.project_id}?tab=1`}><Icon.Edit2 /></Link></td>
                 {/* <td><Link to=""><span ><Icon.Trash2 /></span></Link></td> */}
                 <td>{element.project_code}</td>
                 <td>{element.title}</td>

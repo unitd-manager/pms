@@ -89,7 +89,7 @@ const StatsPmsDue = () => {
     
   return (
     <Row>
-      <Col md="6">
+      <Col md="12">
         <ComponentCard title="Employee Due Statistics">
           <Form>
             <FormGroup>
@@ -133,7 +133,7 @@ const StatsPmsDue = () => {
             </CardBody>
           </Form>
           {employeeStats && (
-          <Chart options={optionsdoughnut} series={seriesDonut} type="donut" height="300" />
+          <Chart options={optionsdoughnut} series={seriesDonut} type="donut" height="350" />
         )}
         </ComponentCard>
       </Col>

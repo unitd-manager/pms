@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
 import api from '../../constants/api';
 import message from '../../components/Message';
 
@@ -18,9 +20,13 @@ const ProjectDetails = () => {
   const handleInputs = (e) => {
     setProjectDetails({ ...projectDetails, [e.target.name]: e.target.value });
   };
+   //get staff details
+   const { loggedInuser } = useContext(AppContext);
 //Insert Setting
   const insertProject = () => {
-    if (projectDetails.title !== '')
+    if (projectDetails.title !== ''){
+      projectDetails.creation_date = creationdatetime;
+      projectDetails.created_by = loggedInuser.first_name;
     api.post('/project/insertProject', projectDetails)
       .then((res) => {
         const insertedDataId = res.data.data.insertId;
@@ -33,7 +39,7 @@ const ProjectDetails = () => {
       .catch(() => {
         message('Network connection error.', 'error');
       });
-      else {
+    }else {
         message('Please fill all required fields.', 'error');
       }
   };

@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Col, FormGroup, Label, Input,Row } from 'reactstrap';
 import Chart from 'react-apexcharts';
-import ComponentCard from '../ComponentCard';
-import api from '../../constants/api';
+import PropTypes from 'prop-types';
+import ComponentCard from '../../ComponentCard';
+import api from '../../../constants/api';
 
-const MilestoneCompleted = () => {
+export default function MilestoneStatsProject({ id }) {
+    MilestoneStatsProject.propTypes = {
+      id: PropTypes.any,
+    };
   const [taskTitles, setTaskTitles] = useState([]);
   const [actualHourData, setActualHourData] = useState([]);
   const [estimatedHourData, setEstimatedHourData] = useState([]);
@@ -38,16 +42,29 @@ const MilestoneCompleted = () => {
         console.log('Error fetching data:', error);
       });
   };
-
-  useEffect(() => {
-    api.get('projecttask/getProjectTitle')
+  const getJobs = () => {
+    api
+      .post('projecttask/getProjectTitleById', { project_id: id })
       .then((res) => {
         setProjects(res.data.data);
       })
-      .catch((error) => {
-        console.log('Error fetching projects:', error);
-      });
-  }, []);
+      .catch(() => {});
+  };
+
+  // Get the list of employees from the API
+  useEffect(() => {
+    getJobs();
+  }, [id]);
+
+//   useEffect(() => {
+//     api.get('projecttask/getProjectTitle')
+//       .then((res) => {
+//         setProjects(res.data.data);
+//       })
+//       .catch((error) => {
+//         console.log('Error fetching projects:', error);
+//       });
+//   }, []);
 
   const optionscolumn = {
     colors: ['#745af2', '#263238'],
@@ -160,4 +177,3 @@ const MilestoneCompleted = () => {
   );
 };
 
-export default MilestoneCompleted;

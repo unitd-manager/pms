@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane, Button} from 'reactstrap';
+=======
+import React, { useState, useEffect,useContext } from 'react';
+import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane, Button } from 'reactstrap';
+>>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
 import { ToastContainer } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -8,7 +13,6 @@ import DuctingCostModal from '../../components/ProjectModal/DuctingCostModal';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import ProjectTask from '../smartconTables/ProjectTask';
-import CostingSummary from '../../components/projectTabContent/CostingSummary';
 import ProjectTimeSheet from '../smartconTables/ProjectTimesheet';
 import ProjectTeam from '../smartconTables/ProjectTeam';
 import ProjectMilestones from '../../components/ProjectMilestones';
@@ -19,10 +23,20 @@ import ProjectTeamEdit from '../../components/ProjectTeamEdit';
 import Tab from '../../components/ProjectTabs/Tab';
 import ComponentCardV2 from '../../components/ComponentCardV2';
 import CalendarApp from '../apps/calendar/CalendarApp';
-import ActualHour from '../../components/dashboard/ActualHour';
-import AverageIssues from '../../components/dashboard/AverageIssues';
+import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
+// import ActualHour from '../../components/dashboard/ActualHour';
+// import AverageIssues from '../../components/dashboard/AverageIssues';
 import StatsPmsProjectId from '../../components/dashboard/ProjectStats/StatsPmsProjectId';
+<<<<<<< HEAD
 // import ApiButton from '../../components/ApiButton';
+=======
+import MilestoneStatsProject from '../../components/dashboard/ProjectStats/MilestoneStatsProject';
+import ActualHourStatsProject from '../../components/dashboard/ProjectStats/ActualHourStatsProject';
+import PriorityStatsProject from '../../components/dashboard/ProjectStats/PriorityStatsProject';
+import AverageStatsProject from '../../components/dashboard/ProjectStats/AverageStatsProject';
+import DueStatsProject from '../../components/dashboard/ProjectStats/DueStatsProject';
+>>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -32,26 +46,23 @@ const ProjectEdit = () => {
     navigate('/Project');
   };
 
+<<<<<<< HEAD
   console.log("project_id", id)
+=======
+  console.log('project_id', id);
+>>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
 
   const [projectDetail, setProjectDetail] = useState();
   const [company, setCompany] = useState();
   const [contact, setContact] = useState();
   const [contactData, setContactDatas] = useState();
-  const [getCostingSummary, setGetCostingSummary] = useState();
   const [editTaskEditModals, setEditTaskEditModals] = useState(false);
   const [activeTab, setActiveTab] = useState('1');
   const [addDuctingCostModal, setAddDuctingCostModal] = useState(false);
   const [addContactModals, setAddContactModals] = useState(false);
-  const [gTotal, setGtotal] = useState(0);
-  const [gTotal1, setGtotal1] = useState(0);
-  const [gTotal2, setGtotal2] = useState(0);
-  const [gTotal3, setGtotal3] = useState(0);
-  const [gTotal4, setGtotal4] = useState(0);
-  const [gTotal5, setGtotal5] = useState(0);
-  const [types, setTypes] = useState(0);
   const [milestoneById, setMilestone] = useState();
   const [taskById, setTaskById] = useState();
+  const [userSearchData, setUserSearchData] = useState('');
   const [contactDatas, setContactData] = useState();
   const [editTaskEditModal, setEditTaskEditModal] = useState(false);
   const [addContactModal, setAddContactModal] = useState(false);
@@ -63,7 +74,8 @@ const ProjectEdit = () => {
   const [contactDataTeam, setContactDataTeam] = useState();
   const [editTeamModal, setEditTeamEditModal] = useState(false);
   const [addContactModalTeam, setAddContactModalTeam] = useState(false);
-
+  //get staff details
+  const { loggedInuser } = useContext(AppContext);
 
   // Start for tab refresh navigation
   const tabs = [
@@ -74,13 +86,11 @@ const ProjectEdit = () => {
     { id: '5', name: 'Task' },
     { id: '6', name: 'Timesheet' },
     { id: '7', name: 'Calender' },
-
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
   };
   // End for tab refresh navigation
-  const [chargesdetails, setChargesDetails] = useState();
 
   const addContactToggles = () => {
     setAddContactModals(!addContactModals);
@@ -95,6 +105,7 @@ const ProjectEdit = () => {
     setAddContactModalTeam(!addContactModalTeam);
   };
 
+<<<<<<< HEAD
 
 
 
@@ -107,17 +118,13 @@ const ProjectEdit = () => {
       })
       .catch(() => { });
   };
+=======
+  // Fetch Costing Summary
+>>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
 
-  //Api call for getting Vehicle Fuel Data By ID
-  const getTransportChargesById = () => {
-    api
-      .post('/projecttabcostingsummary/getCostingSummaryChargesById', {
-        project_id: id,
-        title: 'Transport Charges',
-      })
-      .then((res) => {
-        setChargesDetails(res.data.data);
+  // Get Project By Id
 
+<<<<<<< HEAD
         let grandTotal = 0;
 
         res.data.data.forEach((elem) => {
@@ -235,6 +242,8 @@ const ProjectEdit = () => {
 
   // Get Project By Id
 
+=======
+>>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
   const getProjectById = () => {
     api
       .post('/project/getProjectsByIDs', { project_id: id })
@@ -252,6 +261,8 @@ const ProjectEdit = () => {
   };
 
   const UpdateData = () => {
+    projectDetail.modification_date = creationdatetime;
+    projectDetail.modified_by = loggedInuser.first_name;
     api
       .post('/project/edit-Project', projectDetail)
       .then(() => {
@@ -275,6 +286,7 @@ const ProjectEdit = () => {
       .post('/projecttask/getProjectTaskById', { project_id: id })
       .then((res) => {
         setTaskById(res.data.data);
+        setUserSearchData(res.data.data);
       })
       .catch(() => { });
   };
@@ -306,10 +318,15 @@ const ProjectEdit = () => {
       .then((res) => {
         setCompany(res.data.data);
       })
+<<<<<<< HEAD
       .catch(() => { });
 
 
   };//Getting data from contact
+=======
+      .catch(() => {});
+  }; //Getting data from contact
+>>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
   const getContact = (companyId) => {
     api
       .post('/project/getcontactById', { company_id: companyId })
@@ -319,16 +336,8 @@ const ProjectEdit = () => {
       .catch(() => { });
   };
 
-
   useEffect(() => {
-    getCostingbySummary();
-    getOtherChargesById();
     getProjectById();
-    getTransportChargesById();
-    getSalesmanCommissionById();
-    getFinancesChargesById();
-    getOfficeOverheadsById();
-    getLabourChargesById();
     getMilestoneById();
     getTaskById();
     getTimeSheetById();
@@ -343,7 +352,10 @@ const ProjectEdit = () => {
       getContact(selectedProjectId); // Fetch contact data based on selected company
     }
   }, [projectDetail && projectDetail.company_id]);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
 
   return (
     <>
@@ -368,7 +380,7 @@ const ProjectEdit = () => {
               color="primary"
               onClick={() => {
                 UpdateData();
-                applyChanges();
+                //applyChanges();
               }}
             >
               Apply
@@ -392,12 +404,7 @@ const ProjectEdit = () => {
   </Form>
       <Form>
         <FormGroup>
-          <ComponentCard
-            title={`Project Details | Code: ${projectDetail && projectDetail.project_code} | 
-            Category : ${projectDetail && projectDetail.category} | 
-            Company :  ${projectDetail && projectDetail.company_name}  | 
-            Status : ${projectDetail && projectDetail.status} `}
-          >
+          <ComponentCard title="Project Details" creationModificationDate={projectDetail}>
             <Row>
               <Col md="3">
                 <FormGroup>
@@ -461,10 +468,18 @@ const ProjectEdit = () => {
                     name="company_id"
                     value={projectDetail && projectDetail.company_id}
                     onChange={(e) => {
+<<<<<<< HEAD
                       handleInputs(e)
                       const selectedProject = e.target.value;
                       getContact(selectedProject);
                     }}>
+=======
+                      handleInputs(e);
+                      const selectedProject = e.target.value;
+                      getContact(selectedProject);
+                    }}
+                  >
+>>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
                     <option defaultValue="selected">Please Select</option>
                     {company &&
                       company.map((e) => (
@@ -559,29 +574,44 @@ const ProjectEdit = () => {
           setAddDuctingCostModal={setAddDuctingCostModal}
         />
 
-        <Tab toggle={toggle} tabs={tabs} />
         {/* Tab 1 */}
         <TabContent className="p-4" activeTab={activeTab}>
+          <Tab toggle={toggle} tabs={tabs} />
           <TabPane tabId="1">
+<<<<<<< HEAD
             <StatsPmsProjectId
               id={id}></StatsPmsProjectId>             <ActualHour />
             <AverageIssues />
+=======
+            <br />
+            <Row>
+              <Col>
+                <StatsPmsProjectId id={id}></StatsPmsProjectId>
+              </Col>
+              <Col>
+                <DueStatsProject id={id}></DueStatsProject>
+              </Col>
+            </Row>
+            <br/>
+            <Row>
+              <Col>
+                <MilestoneStatsProject id={id}></MilestoneStatsProject>
+              </Col>
+              <Col>
+                <AverageStatsProject id={id}></AverageStatsProject>
+              </Col>
+            </Row>
+            <br/>
+            <ActualHourStatsProject id={id}></ActualHourStatsProject>
+            <br/>
+            <PriorityStatsProject id={id}></PriorityStatsProject>
+>>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
           </TabPane>
           {/* Tab 2 */}
-          <TabPane tabId="2">
-            <CostingSummary
-              getCostingSummary={getCostingSummary}
-              gTotal={gTotal}
-              gTotal1={gTotal1}
-              gTotal2={gTotal2}
-              gTotal3={gTotal3}
-              gTotal4={gTotal4}
-              gTotal5={gTotal5}
-              getCostingbySummary={getCostingbySummary}
-            ></CostingSummary>
-          </TabPane>
-          {/* Tab 3 Materials Purchased */}
+          <TabPane tabId="2"></TabPane>
+          {/* Tab 3 Milestone */}
           <TabPane tabId="3">
+            <br />
             <ProjectMilestones
               setContactDatas={setContactDatas}
               id={id}
@@ -600,6 +630,7 @@ const ProjectEdit = () => {
           </TabPane>
           {/* Tab 4 */}
           <TabPane tabId="4">
+            <br />
             <ProjectTeam
               setContactDataTeam={setContactDataTeam}
               id={id}
@@ -620,10 +651,13 @@ const ProjectEdit = () => {
           {/* Tab 5 */}
           <TabPane tabId="5">
             <ProjectTask
+              userSearchData={userSearchData}
+              setUserSearchData={setUserSearchData}
               setContactData={setContactData}
               id={id}
               getTaskById={getTaskById}
               taskById={taskById}
+              setTaskById={setTaskById}
               addContactToggle={addContactToggle}
               addContactModal={addContactModal}
               setEditTaskEditModal={setEditTaskEditModal}
@@ -656,9 +690,14 @@ const ProjectEdit = () => {
             ></ProjectTimeSheetEdit>
           </TabPane>
           <TabPane tabId="7">
+<<<<<<< HEAD
             <CalendarApp
               projectDetail={projectDetail}
               id={id}></CalendarApp>
+=======
+            <br />
+            <CalendarApp projectDetail={projectDetail} id={id}></CalendarApp>
+>>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
           </TabPane>
         </TabContent>
       </ComponentCard>

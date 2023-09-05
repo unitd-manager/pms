@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane, Button} from 'reactstrap';
-=======
 import React, { useState, useEffect,useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane, Button } from 'reactstrap';
->>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
 import { ToastContainer } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -28,29 +23,21 @@ import AppContext from '../../context/AppContext';
 // import ActualHour from '../../components/dashboard/ActualHour';
 // import AverageIssues from '../../components/dashboard/AverageIssues';
 import StatsPmsProjectId from '../../components/dashboard/ProjectStats/StatsPmsProjectId';
-<<<<<<< HEAD
-// import ApiButton from '../../components/ApiButton';
-=======
 import MilestoneStatsProject from '../../components/dashboard/ProjectStats/MilestoneStatsProject';
 import ActualHourStatsProject from '../../components/dashboard/ProjectStats/ActualHourStatsProject';
 import PriorityStatsProject from '../../components/dashboard/ProjectStats/PriorityStatsProject';
 import AverageStatsProject from '../../components/dashboard/ProjectStats/AverageStatsProject';
 import DueStatsProject from '../../components/dashboard/ProjectStats/DueStatsProject';
->>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
 
 const ProjectEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/Project');
   };
 
-<<<<<<< HEAD
-  console.log("project_id", id)
-=======
   console.log('project_id', id);
->>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
 
   const [projectDetail, setProjectDetail] = useState();
   const [company, setCompany] = useState();
@@ -89,7 +76,8 @@ const ProjectEdit = () => {
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
-  };
+  }
+
   // End for tab refresh navigation
 
   const addContactToggles = () => {
@@ -105,145 +93,10 @@ const ProjectEdit = () => {
     setAddContactModalTeam(!addContactModalTeam);
   };
 
-<<<<<<< HEAD
-
-
-
   // Fetch Costing Summary
-  const getCostingbySummary = () => {
-    api
-      .post('/projecttabcostingsummary/getTabCostingSummaryById', { project_id: id })
-      .then((res) => {
-        setGetCostingSummary(res.data.data);
-      })
-      .catch(() => { });
-  };
-=======
-  // Fetch Costing Summary
->>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
 
   // Get Project By Id
 
-<<<<<<< HEAD
-        let grandTotal = 0;
-
-        res.data.data.forEach((elem) => {
-          grandTotal += elem.amount;
-        });
-        setGtotal(grandTotal);
-      })
-      .catch(() => {
-        message('Costing Summary Data Not Found', 'info');
-      });
-  };
-
-  const getLabourChargesById = () => {
-    api
-      .post('/projecttabcostingsummary/getCostingSummaryChargesById', {
-        project_id: id,
-        title: 'Total Labour Charges',
-      })
-      .then((res) => {
-        setChargesDetails(res.data.data);
-        console.log(chargesdetails);
-        let grandTotal1 = 0;
-        res.data.data.forEach((elem) => {
-          grandTotal1 += elem.amount;
-        });
-
-        setGtotal1(grandTotal1);
-      })
-      .catch(() => {
-        message('Costing Summary Data Not Found', 'info');
-      });
-  };
-  const getSalesmanCommissionById = () => {
-    api
-      .post('/projecttabcostingsummary/getCostingSummaryChargesById', {
-        project_id: id,
-        title: 'Salesman Commission',
-      })
-      .then((res) => {
-        console.log('getCostingSummaryChargesById', res);
-        setChargesDetails(res.data.data);
-        let grandTotal2 = 0;
-        res.data.data.forEach((elem) => {
-          grandTotal2 += elem.amount;
-        });
-
-        setGtotal2(grandTotal2);
-      })
-      .catch(() => {
-        message('Costing Summary Data Not Found', 'info');
-      });
-  };
-
-  const getFinancesChargesById = () => {
-    api
-      .post('/projecttabcostingsummary/getCostingSummaryChargesById', {
-        project_id: id,
-        title: 'Finance Charges',
-      })
-      .then((res) => {
-        setChargesDetails(res.data.data);
-        let grandTotal3 = 0;
-
-        res.data.data.forEach((elem) => {
-          grandTotal3 += elem.amount;
-        });
-
-        setGtotal3(grandTotal3);
-      })
-      .catch(() => {
-        message('Costing Summary Data Not Found', 'info');
-      });
-  };
-
-  const getOfficeOverheadsById = () => {
-    api
-      .post('/projecttabcostingsummary/getCostingSummaryChargesById', {
-        project_id: id,
-        title: 'Office Overheads',
-      })
-      .then((res) => {
-        setChargesDetails(res.data.data);
-        setTypes(types);
-        let grandTotal4 = 0;
-        res.data.data.forEach((elem) => {
-          grandTotal4 += elem.amount;
-        });
-
-        setGtotal4(grandTotal4);
-      })
-      .catch(() => {
-        message('Costing Summary Data Not Found', 'info');
-      });
-  };
-  const getOtherChargesById = () => {
-    api
-      .post('/projecttabcostingsummary/getCostingSummaryChargesById', {
-        project_id: id,
-        title: 'Other Charges',
-      })
-      .then((res) => {
-        setChargesDetails(res.data.data);
-        let grandTotal5 = 0;
-
-        res.data.data.forEach((elem) => {
-          grandTotal5 += elem.amount;
-        });
-
-        setGtotal5(grandTotal5);
-      })
-      .catch(() => {
-        message('Costing Summary Data Not Found', 'info');
-      });
-  };
-
-  // Get Project By Id
-
-=======
->>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
   const getProjectById = () => {
     api
       .post('/project/getProjectsByIDs', { project_id: id })
@@ -269,7 +122,7 @@ const ProjectEdit = () => {
         message('Record editted successfully', 'success');
         getProjectById();
       })
-      .catch(() => { });
+      .catch(() => {});
   };
   //Getting data from milestone
   const getMilestoneById = () => {
@@ -278,7 +131,7 @@ const ProjectEdit = () => {
       .then((res) => {
         setMilestone(res.data.data);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
   //Getting data from milestone
   const getTaskById = () => {
@@ -288,17 +141,16 @@ const ProjectEdit = () => {
         setTaskById(res.data.data);
         setUserSearchData(res.data.data);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
   //Getting data from milestone
   const getTimeSheetById = () => {
     api
       .post('/projecttimesheet/getTimeSheetProjectById', { project_id: id })
       .then((res) => {
-        console.log("checking gobi record",res.data.data)
         setTimeSheetById(res.data.data);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   //Getting data from milestone
@@ -308,7 +160,7 @@ const ProjectEdit = () => {
       .then((res) => {
         setTeamById(res.data.data);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   //Getting data from Company
@@ -318,22 +170,15 @@ const ProjectEdit = () => {
       .then((res) => {
         setCompany(res.data.data);
       })
-<<<<<<< HEAD
-      .catch(() => { });
-
-
-  };//Getting data from contact
-=======
       .catch(() => {});
   }; //Getting data from contact
->>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
   const getContact = (companyId) => {
     api
       .post('/project/getcontactById', { company_id: companyId })
       .then((res) => {
         setContact(res.data.data);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   useEffect(() => {
@@ -352,10 +197,6 @@ const ProjectEdit = () => {
       getContact(selectedProjectId); // Fetch contact data based on selected company
     }
   }, [projectDetail && projectDetail.company_id]);
-<<<<<<< HEAD
-
-=======
->>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
 
   return (
     <>
@@ -468,18 +309,11 @@ const ProjectEdit = () => {
                     name="company_id"
                     value={projectDetail && projectDetail.company_id}
                     onChange={(e) => {
-<<<<<<< HEAD
-                      handleInputs(e)
-                      const selectedProject = e.target.value;
-                      getContact(selectedProject);
-                    }}>
-=======
                       handleInputs(e);
                       const selectedProject = e.target.value;
                       getContact(selectedProject);
                     }}
                   >
->>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
                     <option defaultValue="selected">Please Select</option>
                     {company &&
                       company.map((e) => (
@@ -578,11 +412,6 @@ const ProjectEdit = () => {
         <TabContent className="p-4" activeTab={activeTab}>
           <Tab toggle={toggle} tabs={tabs} />
           <TabPane tabId="1">
-<<<<<<< HEAD
-            <StatsPmsProjectId
-              id={id}></StatsPmsProjectId>             <ActualHour />
-            <AverageIssues />
-=======
             <br />
             <Row>
               <Col>
@@ -605,7 +434,6 @@ const ProjectEdit = () => {
             <ActualHourStatsProject id={id}></ActualHourStatsProject>
             <br/>
             <PriorityStatsProject id={id}></PriorityStatsProject>
->>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
           </TabPane>
           {/* Tab 2 */}
           <TabPane tabId="2"></TabPane>
@@ -690,14 +518,8 @@ const ProjectEdit = () => {
             ></ProjectTimeSheetEdit>
           </TabPane>
           <TabPane tabId="7">
-<<<<<<< HEAD
-            <CalendarApp
-              projectDetail={projectDetail}
-              id={id}></CalendarApp>
-=======
             <br />
             <CalendarApp projectDetail={projectDetail} id={id}></CalendarApp>
->>>>>>> 12c0968ba18749676970bdaf27c064a13fe12401
           </TabPane>
         </TabContent>
       </ComponentCard>

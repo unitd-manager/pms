@@ -104,12 +104,13 @@ const ProjectTaskEdit = ({
       [e.target.name]: e.target.value,
       project_task_id: taskProject?.project_task_id,
       room_name:taskProject?.title,
+      subject:taskProject?.task_title
     }));
     };
 
 
     const SubmitNote = () => {
-      if (addNoteData.comments !== null) {
+      if (addNoteData.comments !== '') {
         api.post('/note/addNote', addNoteData).then(() => {
           message('Add Note Successfully', 'success');
           // setTimeout(() => {
@@ -247,7 +248,7 @@ const ProjectTaskEdit = ({
                     <Row>
                       <Col md="4">
                         <FormGroup>
-                          <Label>Milestone Title {taskProject && taskProject.project_task_id}</Label>
+                          <Label>Milestone Title</Label>
                           <Input
                             type="select"
                             name="project_milestone_id"

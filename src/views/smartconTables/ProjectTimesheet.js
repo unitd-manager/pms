@@ -76,6 +76,7 @@ export default function ProjectTimeSheet({
     newContactWithCompany.creation_date = creationdatetime;
     newContactWithCompany.created_by = loggedInuser.first_name;
     newContactWithCompany.project_id = id;
+    
     api
       .post('/projecttimesheet/insertTimeSheet', newContactWithCompany)
       .then((res) => {

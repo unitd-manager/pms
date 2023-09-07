@@ -77,7 +77,8 @@ const ProjectEdit = () => {
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
-  };
+  }
+
   // End for tab refresh navigation
 
   const addContactToggles = () => {

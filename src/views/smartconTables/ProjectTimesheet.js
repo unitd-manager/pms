@@ -208,24 +208,29 @@ export default function ProjectTimeSheet({
                         <Form>
                           <Row>
                             <Col md="4">
+                              <Label>Milestone Title</Label>
                               <FormGroup>
-                                <Label>Milestone Title</Label>
                                 <Input
                                   type="select"
-                                  name="project_milestone_id"
                                   onChange={(e) => {
                                     handleInputsTime(e);
-                                    const selectedTask = e.target.value;
-                                    getTaskName(selectedTask);
                                   }}
+                                  value={insertTimeSheet && insertTimeSheet.project_milestone_id}
+                                  name="project_milestone_id"
                                 >
-                                  <option>Select Project</option>
+                                  <option value="selected">Please Select</option>
                                   {milestones &&
-                                    milestones.map((e) => (
-                                      <option key={e.project_id} value={e.project_milestone_id}>
-                                        {e.milestone_title}
-                                      </option>
-                                    ))}
+                                    milestones.map((e) => {
+                                      return (
+                                        <option
+                                          key={e.project_milestone_id}
+                                          value={e.project_milestone_id}
+                                        >
+                                          {' '}
+                                          {e.milestone_title}{' '}
+                                        </option>
+                                      );
+                                    })}
                                 </Input>
                               </FormGroup>
                             </Col>
@@ -234,27 +239,48 @@ export default function ProjectTimeSheet({
                                 <Label>Task</Label>
                                 <Input
                                   type="select"
+                                  onChange={handleInputsTime}
+                                  value={insertTimeSheet && insertTimeSheet.project_task_id}
                                   name="project_task_id"
-                                  onChange={(e) => {
-                                    handleInputsTime(e);
-                                    const selectedStaff = e.target.value;
-                                    getStaffName(selectedStaff);
-                                  }}
                                 >
-                                  <option>Select Task</option>
+                                  <option value="" selected>
+                                    Please Select
+                                  </option>
                                   {taskdetail &&
-                                    taskdetail.map((e) => (
-                                      <option
-                                        key={e.project_milestone_id}
-                                        value={e.project_task_id}
-                                      >
-                                        {e.task_title}
-                                      </option>
-                                    ))}
+                                    taskdetail.map((e) => {
+                                      return (
+                                        <option key={e.project_task_id} value={e.project_task_id}>
+                                          {e.task_title}
+                                        </option>
+                                      );
+                                    })}
                                 </Input>
                               </FormGroup>
                             </Col>
                             <Col md="4">
+                              <FormGroup>
+                                <Label> Staff Name</Label>
+                                <Input
+                                  type="select"
+                                  onChange={handleInputsTime}
+                                  value={insertTimeSheet && insertTimeSheet.employee_id}
+                                  name="employee_id"
+                                >
+                                  <option value="" selected>
+                                    Please Select
+                                  </option>
+                                  {StaffDetail &&
+                                    StaffDetail.map((e) => {
+                                      return (
+                                        <option key={e.employee_id} value={e.employee_id}>
+                                          {e.first_name}
+                                        </option>
+                                      );
+                                    })}
+                                </Input>
+                              </FormGroup>
+                            </Col>
+                            {/* <Col md="4">
                               <FormGroup>
                                 <Label>Staff Name</Label>
                                 <Input
@@ -262,15 +288,17 @@ export default function ProjectTimeSheet({
                                   name="employee_id"
                                   onChange={handleInputsTime}
                                   value={insertTimeSheet && insertTimeSheet.employee_id} // Set the default employee name
-                                >
-                                  {insertTimeSheet && insertTimeSheet.employee_id ? ( // Render default employee name if it's set
+                                > */}
+                            {/* {insertTimeSheet && insertTimeSheet.employee_id ? ( // Render default employee name if it's set
                                     <option value={insertTimeSheet.employee_id}>
                                       {insertTimeSheet.employee_id}
                                     </option>
                                   ) : (
-                                    <option disabled>Select Staff Name</option>
-                                  )}
-                                  {StaffDetail &&
+                                    <option  disabled>
+                                      Select Staff Name
+                                    </option>
+                                  )} */}
+                            {/* {StaffDetail &&
                                     StaffDetail.map((e) => (
                                       <option key={e.project_task_id} value={e.employee_id}>
                                         {e.first_name}
@@ -278,7 +306,7 @@ export default function ProjectTimeSheet({
                                     ))}
                                 </Input>
                               </FormGroup>
-                            </Col>
+                            </Col> */}
                             <Col md="4">
                               <FormGroup>
                                 <Label>Date</Label>
@@ -390,7 +418,7 @@ export default function ProjectTimeSheet({
                   </td>
                   <td>{element.task_title}</td>
                   <td>{element.first_name}</td>
-                  <td>{moment(element.date).format('DD-MM-YYYY')}</td>
+                  <td>{element.date}</td>
                   <td>{element.hours}</td>
                   <td>{element.status}</td>
                   <td>{element.description}</td>

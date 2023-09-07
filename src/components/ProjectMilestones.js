@@ -258,9 +258,9 @@ export default function ProjectMilestones({
                     </td>
                     <td>{element.milestone_title}</td>
                     <td>{element.description}</td>
-                    <td>{moment(element.from_date).format('YYYY-MM-DD')}</td>
-                    <td>{moment(element.to_date).format('YYYY-MM-DD')}</td>
-                    <td>{moment(element.actual_completed_date).format('YYYY-MM-DD')}</td>
+                    <td>{element.from_date}</td>
+                    <td>{element.to_date}</td>
+                    <td>{element.actual_completed_date}</td>
                     <td>{element.status}</td>
                   </tr>
                 );

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CommonTable from "../CommonTable";
 import api from "../../constants/api";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const TenderSummary = () => {
 

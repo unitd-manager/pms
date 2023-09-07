@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Col, FormGroup, Label, Input,Row,Form } from 'reactstrap';
+import { Col, FormGroup, Label, Input, Row, Form } from 'reactstrap';
 import Chart from 'react-apexcharts';
 import PropTypes from 'prop-types';
 import ComponentCard from '../../ComponentCard';
 import api from '../../../constants/api';
 
 export default function AverageStatsProject({ id }) {
-    AverageStatsProject.propTypes = {
-      id: PropTypes.any,
-    };
+  AverageStatsProject.propTypes = {
+    id: PropTypes.any,
+  };
   //const [taskTitles, setTaskTitles] = useState([]);
   const [actualHourData, setActualHourData] = useState([]);
   const [estimatedHourData, setEstimatedHourData] = useState([]);
@@ -17,7 +17,10 @@ export default function AverageStatsProject({ id }) {
   const HourData = (selectedEmployeeId) => {
     // Make API call to retrieve the data
     api
-      .post('/stats/getProjectActualAveragestats', { employee_id: selectedEmployeeId,project_id:id })
+      .post('/stats/getProjectActualAveragestats', {
+        employee_id: selectedEmployeeId,
+        project_id: id,
+      })
       .then((response) => {
         // Check if the response data is not empty
         if (response.data && response.data.data && response.data.data.length > 0) {
@@ -164,13 +167,10 @@ export default function AverageStatsProject({ id }) {
               </Input>
             </FormGroup>
           </Form>
-          <ComponentCard title="Column Chart">
+
           <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
-        </ComponentCard>
         </ComponentCard>
       </Col>
     </Row>
   );
-};
-
-
+}

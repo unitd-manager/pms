@@ -131,18 +131,49 @@ const ProjectTaskEdit = ({
     //       });
     //   }
     // };
+    // const edittaskcompletiondate = () => {
+    //   taskProject.modification_date = creationdatetime;
+    //   taskProject.modified_by= loggedInuser.first_name; 
+    //   if (taskProject && taskProject.status === 'Completed') {
+    //     api
+    //       .post('/projecttask/editActualcompletedDate', { project_task_id: taskProject.project_task_id })
+    //       .then(() => {})
+    //       .catch(() => {
+    //         message('Unable to edit record.', 'error');
+    //       });
+    //   }
+    // };
     const edittaskcompletiondate = () => {
       taskProject.modification_date = creationdatetime;
-      taskProject.modified_by= loggedInuser.first_name; 
+      taskProject.modified_by = loggedInuser.first_name;
+      
       if (taskProject && taskProject.status === 'Completed') {
         api
           .post('/projecttask/editActualcompletedDate', { project_task_id: taskProject.project_task_id })
-          .then(() => {})
+          .then(() => {
+            // If the task is marked as Completed, update the milestone's actual_completed_date
+            if (taskProject.project_milestone_id) {
+              api
+                .post('/projecttask/UpdateActualcompletedDate', {
+                  project_milestone_id: taskProject.project_milestone_id,
+                  actual_completed_date: moment().format('YYYY-MM-DD'),
+                })
+                .then(() => {
+                  message('Task and milestone completed successfully', 'success');
+                })
+                .catch(() => {
+                  message('Unable to update milestone actual_completed_date.', 'error');
+                });
+            } else {
+              message('Task completed successfully', 'success');
+            }
+          })
           .catch(() => {
-            message('Unable to edit record.', 'error');
+            message('Unable to edit task record.', 'error');
           });
       }
     };
+    
     // Function to update the milestone's actual_completed_date
   // const updateMilestoneActualCompletedDate = (taskId) => {
   //   if (taskProject && taskProject.status === 'Completed') {

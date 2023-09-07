@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useContext} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   Row,
   Form,
@@ -26,7 +26,7 @@ import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import ViewNote from '../../components/Tender/ViewNote';
 import creationdatetime from '../../constants/creationdatetime';
- import AppContext from '../../context/AppContext';
+import AppContext from '../../context/AppContext';
 
 export default function ProjectTask({
   addContactToggle,
@@ -44,7 +44,7 @@ export default function ProjectTask({
     setEditTaskEditModal: PropTypes.func,
     addContactModal: PropTypes.bool,
     id: PropTypes.any,
-    taskById: PropTypes.any,
+    taskById: PropTypes.object,
     setContactData: PropTypes.func,
     getTaskById: PropTypes.func,
     setUserSearchData: PropTypes.func,
@@ -92,40 +92,13 @@ export default function ProjectTask({
       })
       .catch(() => {});
   };
+  
   //Milestone data in milestoneDetails
   const handleInputsTask = (e) => {
     setInsertTask({ ...insertTask, [e.target.name]: e.target.value });
   };
-    //get staff details
-    const { loggedInuser } = useContext(AppContext);
-    //const [employeeTime, setEmployee] = useState();
-  // //Insert Milestone
-  // const insertTaskData = () => {
-
-  //   if (insertTask.project_milestone_id !== '' &&
-  //   insertTask.task_title !== '' &&
-  //   insertTask.employee_id !=='') {
-  //     const newContactWithCompanyId = insertTask;
-  //     newContactWithCompanyId.project_id = id;
-  //     api
-  //       .post('/projecttask/insertTask', newContactWithCompanyId)
-  //       .then((res) => {
-  //         const insertedDataId = res.data.data.insertId;
-  //         console.log(insertedDataId);
-  //         message('Task inserted successfully.', 'success');
-  //         getTaskById();
-  //         setTimeout(() => {
-  //           addContactToggle(false);
-  //         }, 300);
-  //         window.location.reload();
-  //       })
-  //       .catch(() => {
-  //         message('Network connection error.', 'error');
-  //       });
-  //   } else {
-  //     message('error');
-  //   }
-  // };
+  //get staff details
+  const { loggedInuser } = useContext(AppContext);
 
   const insertTaskData = () => {
     if (isSubmitting) {
@@ -140,7 +113,7 @@ export default function ProjectTask({
       setIsSubmitting(true); // Set submission in progress
       const newContactWithCompanyId = insertTask;
       newContactWithCompanyId.creation_date = creationdatetime;
-    newContactWithCompanyId.created_by = loggedInuser.first_name;
+      newContactWithCompanyId.created_by = loggedInuser.first_name;
       newContactWithCompanyId.project_id = id;
       api
         .post('/projecttask/insertTask', newContactWithCompanyId)
@@ -185,6 +158,7 @@ export default function ProjectTask({
     numberOfEmployeesVistited,
     numberOfEmployeesVistited + employeesPerPage,
   );
+  
   console.log('displayEmployees', displayEmployees);
   const totalPages = Math.ceil(userSearchData.length / employeesPerPage);
   const changePage = ({ selected }) => {
@@ -202,27 +176,20 @@ export default function ProjectTask({
         message('Milestones not found', 'info');
       });
   };
-  // const handleBackToList = () => {
-  //   setCompanyName(''); // Reset the companyName state to empty string
-  //   setCategoryName(''); // Reset the categoryName state to empty string
-  //   // Additional logic to handle going back to the list...
-  // };
-  
- 
-  
+
   const handleBackToList = () => {
     // Clear the filter criteria
     setCompanyName('');
+
+    // Reset the status dropdown to "Please Select"
     setCategoryName('');
-   // window.location.reload();
+
     // Restore the full data
     setUserSearchData(taskById);
 
     // Clear the filtered data
     setFilteredData([]);
   };
-
- 
 
   //attachments
   const dataForAttachment = () => {
@@ -237,6 +204,17 @@ export default function ProjectTask({
     getMilestoneTitle();
   }, [id]);
 
+  // const handleBackToList = () => {
+  //   // Clear the filter criteria
+  //   setCompanyName('');
+  //   setCategoryName(''); // Reset the status dropdown to "Please Select"
+
+  //   // Restore the full data
+  //   setUserSearchData(taskById);
+
+  //   // Clear the filtered data
+  //   setFilteredData([]);
+  // };
   //Structure of projectTask list view
   const Projecttaskcolumn = [
     {
@@ -260,7 +238,7 @@ export default function ProjectTask({
       name: 'End Date',
     },
     {
-      name: 'Actual completed hours',
+      name: 'Actual completed Date',
     },
     {
       name: 'Actual Hours',
@@ -284,12 +262,14 @@ export default function ProjectTask({
       name: 'File',
     },
     {
-      name : 'Creation ',
+      name: 'Creation ',
     },
     {
-      name : 'Modification ',
+      name: 'Modification ',
     },
   ];
+
+  
   return (
     <div className="MainDiv">
       <div className=" pt-xs-25">
@@ -344,7 +324,9 @@ export default function ProjectTask({
                 </Button>
               </Col>
               <span
-                onClick={handleBackToList}
+                onClick={() => {
+                  handleBackToList();
+                }}
                 style={{
                   cursor: 'pointer', // Add this style to make it a pointer on hover
                   textDecoration: 'underline', // Add this style to underline the text
@@ -481,7 +463,7 @@ export default function ProjectTask({
                                     />
                                   </FormGroup>
                                 </Col>
-                                {/* {(TaskStatus === 'Completed' ) && ( */}
+                                {/* {(TaskStatus === 'Completed' ) && ( 
                                 <Col md="4">
                                   <FormGroup>
                                     <Label>Status</Label>
@@ -614,13 +596,9 @@ export default function ProjectTask({
                         </td>
                         <td style={{ borderRight: 1, borderWidth: 1 }}>{element.task_title}</td>
                         <td>{element.first_name}</td>
-                        <td>{moment(element.start_date).format('DD-MM-YYYY')}</td>
-                        <td>{moment(element.end_date).format('DD-MM-YYYY')}</td>
-                        <td>
-                          {element.actual_completed_date
-                            ? moment(element.actual_completed_date).format('YYYY-MM-DD')
-                            : ''}
-                        </td>
+                        <td>{element.start_date}</td>
+                        <td>{element.end_date}</td>
+                        <td>{element.actual_completed_date}</td>
                         <td>{element.actual_hours}</td>
                         <td>{element.estimated_hours}</td>
                         <td>{element.completion}</td>
@@ -660,8 +638,12 @@ export default function ProjectTask({
                             setUpdateFile={setUpdateFile}
                           />
                         </td>
-                        <td>{element.created_by} {element.creation_date}</td>
-                        <td>{element.modified_by} {element.modification_date}</td>
+                        <td>
+                          {element.created_by} {element.creation_date}
+                        </td>
+                        <td>
+                          {element.modified_by} {element.modification_date}
+                        </td>
                       </tr>
                       <tr>
                         <td colSpan="14" style={{ borderRight: 1, borderWidth: 1 }}>

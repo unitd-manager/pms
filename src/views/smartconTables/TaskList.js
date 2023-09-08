@@ -250,8 +250,7 @@ const ProjectTask = () => {
             </Row>
           </CardBody>
         </Card>
-        <Card>
-          <CardBody>
+       
             <CommonTable
               loading={loading}
               title="Task List"
@@ -314,9 +313,7 @@ const ProjectTask = () => {
               disabledClassName="navigationDisabled"
               activeClassName="navigationActive"
             />
-          </CardBody>
-        </Card>
-      </div>
+         </div>
     </div>
   );
 };

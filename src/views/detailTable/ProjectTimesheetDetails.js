@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext,useState, useEffect } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
+import creationdatetime from '../../constants/creationdatetime';
 import api from '../../constants/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import message from '../../components/Message';
+import AppContext from '../../context/AppContext';
 
 const ProjectTimesheetDetails = () => {
   //All state variables
@@ -28,6 +30,10 @@ const ProjectTimesheetDetails = () => {
   const [projectTime, setProjectTime] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
+
+  //get staff details
+   const { loggedInuser } = useContext(AppContext);
+
   //Insert Timesheet
   const insertTimesheet = () => {
     if (!formSubmitted)
@@ -36,6 +42,8 @@ const ProjectTimesheetDetails = () => {
         taskdetail.project_milestone_id !== '' &&
         taskdetail.project_task_id !== ''
       ) {
+        taskdetail.creation_date = creationdatetime;
+        taskdetail.created_by= loggedInuser.first_name;
         api
           .post('/projecttimesheet/insertTimeSheet', projectTimesheet)
           .then((res) => {

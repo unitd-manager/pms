@@ -64,6 +64,20 @@ const TenderSummary = () => {
       grow: 0,
       wrap: true,
     },
+    {
+      name: "Creation ",
+      selector: "",
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
+      name: "Modification",
+      selector: "",
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
   ];
 
   return (
@@ -88,6 +102,8 @@ const TenderSummary = () => {
                       <td>{element.hours}</td>
                       <td>{element.description}</td>
                       <td>{element.actual_hours}</td>
+                      <td>{element.creation_date}</td>
+                      <td>{element.modification_date}</td>    
                     </tr>
                   );
                 })}

@@ -41,10 +41,10 @@ const Classic = () => {
         </Col>
       </Row>
       <Row>
-        <Col sm="4" lg="6" xl="6" xxl="6">
+        <Col sm="4" lg="10" xl="6" xxl="6">
           <MilestoneCompleted />
         </Col>
-        <Col sm="4" lg="6" xl="5" xxl="6">
+        <Col sm="4" lg="10" xl="6" xxl="6">
           <AverageIssues />
         </Col>
       </Row>

@@ -5,20 +5,21 @@ import { useNavigate, useParams } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import message from '../../components/Message';
 
 const ProjectTimesheetDetails = () => {
   //All state variables
   const [projectTimesheet, setProjectTimesheet] = useState({
     task_title: '',
-    project_milestone_id:"",
-    project_task_id:"",
-    project_id:'',
+    project_milestone_id: '',
+    project_task_id: '',
+    project_id: '',
   });
-//Navigation and Parameters
-const { id } = useParams();
+  //Navigation and Parameters
+  const { id } = useParams();
   const navigate = useNavigate();
-//Timesheet data in projectTimesheet
+  //Timesheet data in projectTimesheet
   const handleInputs = (e) => {
     setProjectTimesheet({ ...projectTimesheet, [e.target.name]: e.target.value });
   };
@@ -27,33 +28,33 @@ const { id } = useParams();
   const [projectTime, setProjectTime] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-
-//Insert Timesheet
-  const insertTimesheet = () =>
-   {
+  //Insert Timesheet
+  const insertTimesheet = () => {
     if (!formSubmitted)
-    if (taskdetail.project_id !== '' &&
-    taskdetail.project_milestone_id !== '' &&
-    taskdetail.project_task_id !=='')  {
-    api.post('/projecttimesheet/insertTimeSheet', projectTimesheet)
-      .then((res) => {
-        const insertedDataId = res.data.data.insertId;
-        console.log(insertedDataId);
-        message('timesheet inserted successfully.', 'success');
-        setTimeout(() => {
-          navigate(`/ProjectTimesheetEdit/${insertedDataId}`);
-        }, 300);
-      })
-      .catch(() => {
-        message('Network connection error.', 'error');
-      });
-    }
-    else  {   setFormSubmitted(true);
-    }  else {
+      if (
+        taskdetail.project_id !== '' &&
+        taskdetail.project_milestone_id !== '' &&
+        taskdetail.project_task_id !== ''
+      ) {
+        api
+          .post('/projecttimesheet/insertTimeSheet', projectTimesheet)
+          .then((res) => {
+            const insertedDataId = res.data.data.insertId;
+            console.log(insertedDataId);
+            message('timesheet inserted successfully.', 'success');
+            setTimeout(() => {
+              navigate(`/ProjectTimesheetEdit/${insertedDataId}`);
+            }, 300);
+          })
+          .catch(() => {
+            message('Network connection error.', 'error');
+          });
+      } else {
+        setFormSubmitted(true);
+      }
+    else {
       message('Please fill all required fields', 'warning');
-      
     }
-      
   };
 
   //Api call for getting project name dropdown
@@ -68,19 +69,17 @@ const { id } = useParams();
       });
   };
   // Api call for getting milestone dropdown based on project ID
-const getMilestoneTime = () => {
-  api
-    .post('/projecttimesheet/getMilestoneTitle', { project_id: projectTimesheet.project_id })
-    .then((res) => {
-      // Assuming the response data is an array of milestones with keys: milestone_id and milestone_title
-      const milestoneTimeSheet = res.data.data;
-      setMilestones(milestoneTimeSheet);
-    })
-    .catch(() => {
-      message('Milestone not found', 'info');
-    });
-};
-
+  const getMilestoneTime = () => {
+    api
+      .post('/projecttimesheet/getMilestoneTitle', { project_id: projectTimesheet.project_id })
+      .then((res) => {
+        // Assuming the response data is an array of milestones with keys: milestone_id and milestone_title
+        setMilestones(res.data.data);
+      })
+      .catch(() => {
+        message('Milestone not found', 'info');
+      });
+  };
 
   // Api call for getting milestone dropdown based on project ID
   const getTaskTime = (projectIds) => {
@@ -95,9 +94,9 @@ const getMilestoneTime = () => {
   };
   useEffect(() => {
     getProjectTime();
-  }, [id]); 
+  }, [id]);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (projectTimesheet.project_id) {
       // Use taskdetails.project_id directly to get the selected project ID
       const selectedTimesheet = projectTimesheet.project_id;
@@ -113,27 +112,27 @@ const getMilestoneTime = () => {
     }
   }, [projectTimesheet.project_milestone_id]);
 
-  
   return (
     <div>
       <BreadCrumbs />
       <ToastContainer />
       <Row>
-        <Col md="6" xs="12">
+        <Col md="6" xs="10">
           {/* Key Details */}
           <ComponentCard title="Timesheet Details">
-          <Form>
+            <Form>
               <FormGroup>
                 <Row>
-                <Col md="12">
+                  <Col md="10">
                     <FormGroup>
                       <Label>Project Title</Label>
-                      <Input type="select" name="project_id"   onChange={(e) => {
-                        handleInputs(e)
-                  const selectedTimesheet = e.target.value;
-                  getMilestoneTime(selectedTimesheet);
-                }}>
-                        <option>Select Project</option>
+                      <Input
+                        type="select"
+                        onChange={handleInputs}
+                        value={projectTimesheet && projectTimesheet.project_id}
+                        name="project_id"
+                      >
+                        <option defaultValue="selected">Please Select</option>
                         {projectTime &&
                           projectTime.map((e) => (
                             <option key={e.project_id} value={e.project_id}>
@@ -143,38 +142,48 @@ const getMilestoneTime = () => {
                       </Input>
                     </FormGroup>
                   </Col>
-                <Col md="4">
+                  <Col md="10">
+                    <Label>Milestone Title</Label>
                     <FormGroup>
-                      <Label>Milestone Title</Label>
-                      <Input type="select" name="project_milestone_id"   onChange={(e) => {
-                        handleInputs(e)
-                  const selectedTask = e.target.value;
-                  getTaskTime(selectedTask);
-                }}>
-                        <option>Select Project</option>
+                      <Input
+                        type="select"
+                        onChange={handleInputs}
+                        value={projectTimesheet && projectTimesheet.project_milestone_id}
+                        name="project_milestone_id"
+                      >
+                        <option value="selected">Please Select</option>
                         {milestones &&
-                          milestones.map((e) => (
-                            <option key={e.project_id} value={e.project_milestone_id}>
-                              {e.milestone_title}
-                            </option>
-                          ))}
+                          milestones.map((e) => {
+                            return (
+                              <option key={e.project_milestone_id} value={e.project_milestone_id}>
+                                {' '}
+                                {e.milestone_title}{' '}
+                              </option>
+                            );
+                          })}
                       </Input>
                     </FormGroup>
                   </Col>
-                  <Col md="4">
+                  <Col md="10">
                     <FormGroup>
                       <Label>Task</Label>
-                      <Input type="select" name="project_task_id" onChange={handleInputs}>
-                        <option>Select Task</option>
+                      <Input
+                        type="select"
+                        onChange={handleInputs}
+                        value={projectTimesheet && projectTimesheet.project_task_id}
+                        name="project_task_id"
+                      >
+                        <option value="" selected>
+                          Please Select
+                        </option>
                         {taskdetail &&
-                          taskdetail.map((e) => (
-                            <option
-                              key={e.project_milestone_id}
-                              value={e.project_task_id}
-                            >
-                              {e.task_title}
-                            </option>
-                          ))}
+                          taskdetail.map((e) => {
+                            return (
+                              <option key={e.project_task_id} value={e.project_task_id}>
+                                {e.task_title}
+                              </option>
+                            );
+                          })}
                       </Input>
                     </FormGroup>
                   </Col>
@@ -182,24 +191,33 @@ const getMilestoneTime = () => {
               </FormGroup>
               <FormGroup>
                 <Row>
-          <div className="pt-3 mt-3 d-flex align-items-center gap-2">
-            <Button color="primary"
-              onClick={() => {
-                insertTimesheet();
-              }}
-              type="button"
-              className="btn mr-2 shadow-none"
-            >Save & Continue
-            </Button>
-            <Button
-              onClick={() => {
-                navigate('/ProjectTimesheet');
-              }}
-              type="button"
-              className="btn btn-dark shadow-none" 
-            >Go to List
-            </Button>
-            </div>
+                  <div className="pt-3 mt-3 d-flex align-items-center gap-2">
+                    <Button
+                      color="primary"
+                      onClick={() => {
+                        insertTimesheet();
+                      }}
+                      type="button"
+                      className="btn mr-2 shadow-none"
+                    >
+                      Save & Continue
+                    </Button>
+                    <Button
+                      className="shadow-none"
+                      color="dark"
+                      onClick={() => {
+                        if (
+                          window.confirm(
+                            'Are you sure you want to cancel  \n  \n You will lose any changes made',
+                          )
+                        ) {
+                          navigate(-1);
+                        }
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
                 </Row>
               </FormGroup>
             </Form>

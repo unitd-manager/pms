@@ -19,7 +19,8 @@ import {
   ModalFooter,
   Card,
   CardBody,
-} from 'reactstrap';import { ToastContainer } from 'react-toastify';
+} from 'reactstrap';
+import { ToastContainer } from 'react-toastify';
 import * as Icon from 'react-feather';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import moment from 'moment';
@@ -29,6 +30,7 @@ import htmlToDraft from 'html-to-draftjs';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import ComponentCardV2 from '../../components/ComponentCardV2';
@@ -54,7 +56,6 @@ const MilestoneEdit = () => {
   const [employeeTeam, setEmployeeTeam] = useState();
   const [activeTab, setActiveTab] = useState('1');
   const [actualCompletedDate, setActualCompletedDate] = useState('');
-
 
   //navigation and parameters
   const { id } = useParams();
@@ -85,7 +86,6 @@ const MilestoneEdit = () => {
 
     setMilestoneEdit({ ...milestone, [name]: value });
   };
-  
 
   // data in Description Modal
   const handleDataEditor = (e, type) => {
@@ -112,7 +112,7 @@ const MilestoneEdit = () => {
         convertHtmlToDraft(milestoneData.description);
       }
     });
-  };  
+  };
 
   //Api call for getting project name dropdown
   const getProjectname = () => {
@@ -297,13 +297,13 @@ const MilestoneEdit = () => {
     getProjectname();
     editJob();
     getProjectTaskById();
-    getTaskById()
+    getTaskById();
   }, [id]);
 
   useEffect(() => {
     updateActualCompletedDate();
   }, [milestone && milestone.task_status]);
-  
+
   return (
     <>
       <BreadCrumbs />
@@ -311,7 +311,7 @@ const MilestoneEdit = () => {
         <FormGroup>
           <ToastContainer></ToastContainer>
           <ComponentCardV2>
-          <ApiButton
+            <ApiButton
               editData={editMilestone}
               navigate={navigate}
               applyChanges={editMilestone}
@@ -457,7 +457,6 @@ const MilestoneEdit = () => {
                           value={actualCompletedDate}
                           name="actual_completed_date"
                           disabled={milestone && milestone.task_status !== 'completed'} // Disable the input when status is not "completed"
-
                         />
                       </FormGroup>
                     </Col>
@@ -469,7 +468,7 @@ const MilestoneEdit = () => {
                           onChange={handleInputs}
                           value={milestone && milestone.status}
                           name="status"
-                          >
+                        >
                           {' '}
                           <option value="" selected="selected">
                             Please Select
@@ -484,8 +483,8 @@ const MilestoneEdit = () => {
                   </Row>
                 </Form>
               </ComponentCard>
- {/* Description form */}
- <ComponentCard title="Description">
+              {/* Description form */}
+              <ComponentCard title="Description">
                 <Editor
                   editorState={description}
                   wrapperClassName="demo-wrapper mb-0"
@@ -497,271 +496,286 @@ const MilestoneEdit = () => {
                 />
               </ComponentCard>
               <ComponentCard title="More Details">
-            <ToastContainer></ToastContainer>
-            <Nav tabs>
-              <NavItem>
-                <NavLink
-                  className={activeTab === '1' ? 'active' : ''}
-                  onClick={() => {
-                    toggle('1');
-                  }}
-                >
-                  Task
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  className={activeTab === '2' ? 'active' : ''}
-                  onClick={() => {
-                    toggle('2');
-                  }}
-                >
-                  Attachment
-                </NavLink>
-              </NavItem>
-            </Nav>
-            <TabContent className="p-4" activeTab={activeTab}>
-              <TabPane tabId="1">
-                <Row>
-                  <Col md="6">
-                    <Modal size="lg" isOpen={addTaskModal}>
-                      <ModalHeader>
-                        Edit Task
-                        <Button
-                          color="secondary"
-                          onClick={() => {
-                            setAddTaskModal(false);
-                          }}
-                        >
-                          X
-                        </Button>
-                      </ModalHeader>
-                      <ModalBody>
-                        <Row>
-                          <Col md="12">
-                            <Card>
-                              <CardBody>
-                                <Form>
-                                  <Row>
-                                    <Col>
-                                      <FormGroup>
-                                        <Label>Title</Label>
-                                        <Input
-                                          type="text"
-                                          name="task_title"
-                                          onChange={handleTaskInputs}
-                                          value={taskeditData && taskeditData.task_title}
-                                        />
-                                      </FormGroup>
-                                    </Col>
-                                    <Col md="4">
-                                      <FormGroup>
-                                        <Label>Start Date</Label>
-                                        <Input
-                                          type="date"
-                                          name="start_date"
-                                          value={
-                                            taskeditData
-                                              ? moment(taskeditData.start_date).format('YYYY-MM-DD')
-                                              : ''
-                                          }
-                                          onChange={handleTaskInputs}
-                                        />
-                                      </FormGroup>
-                                    </Col>
-                                    <Col md="4">
-                                      <FormGroup>
-                                        <Label>End Date</Label>
-                                        <Input
-                                          type="date"
-                                          name="end_date"
-                                          value={
-                                            taskeditData
-                                              ? moment(taskeditData.end_date).format('YYYY-MM-DD')
-                                              : ''
-                                          }
-                                          onChange={handleTaskInputs}
-                                        />
-                                      </FormGroup>
-                                    </Col>
-                                  </Row>
-                                  <Row>
-                                    <Col md="4">
-                                      <FormGroup>
-                                        <Label>Completion</Label>
-                                        <Input
-                                          type="text"
-                                          name="completion"
-                                          onChange={handleTaskInputs}
-                                          value={taskeditData && taskeditData.completion}
-                                        />
-                                      </FormGroup>
-                                    </Col>
-                                    <Col md="4">
-                                      <FormGroup>
-                                        <Label>Status</Label>
-                                        <Input
-                                          type="text"
-                                          name="status"
-                                          onChange={handleTaskInputs}
-                                          value={taskeditData && taskeditData.status}
-                                        />
-                                      </FormGroup>
-                                    </Col>
-                                    <Col md="4">
-                                      <FormGroup>
-                                        <Label>Actual Hours</Label>
-                                        <br />
-                  <span>{taskeditData && taskeditData.actual_hours}</span>
-                                      </FormGroup>
-                                    </Col>
-                                  </Row>
-                                  <Row>
-                                    <Col md="4">
-                                      <FormGroup>
-                                        <Label>Name</Label>
-                                        <Input
-                                          type="select"
-                                          name="first_name"
-                                          onChange={handleTaskInputs}
-                                          value={taskeditData && taskeditData.first_name}
+                <ToastContainer></ToastContainer>
+                <Nav tabs>
+                  <NavItem>
+                    <NavLink
+                      className={activeTab === '1' ? 'active' : ''}
+                      onClick={() => {
+                        toggle('1');
+                      }}
+                    >
+                      Task
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className={activeTab === '2' ? 'active' : ''}
+                      onClick={() => {
+                        toggle('2');
+                      }}
+                    >
+                      Attachment
+                    </NavLink>
+                  </NavItem>
+                </Nav>
+                <TabContent className="p-4" activeTab={activeTab}>
+                  <TabPane tabId="1">
+                    <Row>
+                      <Col md="6">
+                        <Modal size="lg" isOpen={addTaskModal}>
+                          <ModalHeader>
+                            Edit Task
+                            <Button
+                              color="secondary"
+                              onClick={() => {
+                                setAddTaskModal(false);
+                              }}
+                            >
+                              X
+                            </Button>
+                          </ModalHeader>
+                          <ModalBody>
+                            <Row>
+                              <Col md="12">
+                                <Card>
+                                  <CardBody>
+                                    <Form>
+                                      <Row>
+                                        <Col>
+                                          <FormGroup>
+                                            <Label>Title</Label>
+                                            <Input
+                                              type="text"
+                                              name="task_title"
+                                              onChange={handleTaskInputs}
+                                              value={taskeditData && taskeditData.task_title}
+                                            />
+                                          </FormGroup>
+                                        </Col>
+                                        <Col md="4">
+                                          <FormGroup>
+                                            <Label>Start Date</Label>
+                                            <Input
+                                              type="date"
+                                              name="start_date"
+                                              value={
+                                                taskeditData
+                                                  ? moment(taskeditData.start_date).format(
+                                                      'YYYY-MM-DD',
+                                                    )
+                                                  : ''
+                                              }
+                                              onChange={handleTaskInputs}
+                                            />
+                                          </FormGroup>
+                                        </Col>
+                                        <Col md="4">
+                                          <FormGroup>
+                                            <Label>End Date</Label>
+                                            <Input
+                                              type="date"
+                                              name="end_date"
+                                              value={
+                                                taskeditData
+                                                  ? moment(taskeditData.end_date).format(
+                                                      'YYYY-MM-DD',
+                                                    )
+                                                  : ''
+                                              }
+                                              onChange={handleTaskInputs}
+                                            />
+                                          </FormGroup>
+                                        </Col>
+                                      </Row>
+                                      <Row>
+                                        <Col md="4">
+                                          <FormGroup>
+                                            <Label>Completion</Label>
+                                            <Input
+                                              type="text"
+                                              name="completion"
+                                              onChange={handleTaskInputs}
+                                              value={taskeditData && taskeditData.completion}
+                                            />
+                                          </FormGroup>
+                                        </Col>
+                                        <Col md="4">
+                                          <FormGroup>
+                                            <Label>Status</Label>
+                                            <Input
+                                              type="text"
+                                              name="status"
+                                              onChange={handleTaskInputs}
+                                              value={taskeditData && taskeditData.status}
+                                            />
+                                          </FormGroup>
+                                        </Col>
+                                        <Col md="4">
+                                          <FormGroup>
+                                            <Label>Actual Hours</Label>
+                                            <br />
+                                            <span>{taskeditData && taskeditData.actual_hours}</span>
+                                          </FormGroup>
+                                        </Col>
+                                      </Row>
+                                      <Row>
+                                        <Col md="4">
+                                          <FormGroup>
+                                            <Label>Name</Label>
+                                            <Input
+                                              type="select"
+                                              name="first_name"
+                                              onChange={handleTaskInputs}
+                                              value={taskeditData && taskeditData.first_name}
+                                            >
+                                              <option value="" defaultValue="selected"></option>
+                                              {employeeTeam &&
+                                                employeeTeam.map((ele) => {
+                                                  return (
+                                                    <option
+                                                      key={ele.employee_id}
+                                                      value={ele.employee_id}
+                                                    >
+                                                      {ele.first_name}
+                                                    </option>
+                                                  );
+                                                })}
+                                            </Input>
+                                          </FormGroup>
+                                        </Col>
+                                      </Row>
+                                    </Form>
+                                  </CardBody>
+                                </Card>
+                              </Col>
+                            </Row>
+                          </ModalBody>
+                          <ModalFooter>
+                            <Button
+                              className="shadow-none"
+                              color="primary"
+                              onClick={() => {
+                                editTaskData();
+                                setAddTaskModal(false);
+                              }}
+                            >
+                              Save & Continue
+                            </Button>
+                            <Button
+                              className="shadow-none"
+                              color="secondary"
+                              onClick={() => {
+                                setAddTaskModal(false);
+                              }}
+                            >
+                              Cancel
+                            </Button>
+                          </ModalFooter>
+                        </Modal>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <div className="container">
+                        <Table id="example" className="display border border-secondary rounded">
+                          <thead>
+                            <tr>
+                              {columns.map((cell) => {
+                                return <td key={cell.name}>{cell.name}</td>;
+                              })}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {projecttaskdetails &&
+                              projecttaskdetails.map((element, index) => {
+                                return (
+                                  <tr key={element.project_milestone_id}>
+                                    <td>{index + 1}</td>
+                                    <td>
+                                      <Link to="">
+                                        <span
+                                          onClick={() => {
+                                            setAddTaskModal(true);
+                                            setTaskEditData(element);
+                                          }}
                                         >
-                                          <option value="" defaultValue="selected"></option>
-                          {employeeTeam &&
-                            employeeTeam.map((ele) => {
-                              return (
-                                <option key={ele.employee_id} value={ele.employee_id}>
-                                  {ele.first_name}
-                                </option>
-                              );
-                            })}
-                        </Input>
-                                      </FormGroup>
-                                    </Col>
-                                  </Row>
-                                </Form>
-                              </CardBody>
-                            </Card>
-                          </Col>
-                        </Row>
-                      </ModalBody>
-                      <ModalFooter>
-                        <Button
-                          className="shadow-none"
-                          color="primary"
-                          onClick={() => {
-                            editTaskData();
-                            setAddTaskModal(false);
-                          }}
-                        >
-                          Save & Continue
-                        </Button>
-                        <Button
-                          className="shadow-none"
-                          color="secondary"
-                          onClick={() => {
-                            setAddTaskModal(false);
-                          }}
-                        >
-                          Cancel
-                        </Button>
-                      </ModalFooter>
-                    </Modal>
-                  </Col>
-                </Row>
-                <Row>
-                  <div className="container">
-                    <Table id="example" className="display border border-secondary rounded">
-                      <thead>
-                        <tr>
-                          {columns.map((cell) => {
-                            return <td key={cell.name}>{cell.name}</td>;
-                          })}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {projecttaskdetails &&
-                          projecttaskdetails.map((element, index) => {
-                            return (
-                              <tr key={element.project_milestone_id}>
-                                <td>{index + 1}</td>
-                                <td>
-                                  <Link to="">
-                                    <span
-                                      onClick={() => {
-                                        setAddTaskModal(true);
-                                        setTaskEditData(element);
-                                      }}
-                                    >
-                                      <Icon.Edit2 />
-                                    </span>
-                                  </Link>
-                                </td>
-                    <td>{element.task_title}</td>
-                    <td>{element.start_date ? moment(element.start_date).format('DD-MM-YYYY') : ''}</td>
-                    <td>{element.end_date ? moment(element.end_date).format('DD-MM-YYYY') : ''}</td>
-                    <td>{element.completion}</td>
-                    <td>{element.status}</td>
-                    <td>{element.task_type}</td>
-                    <td>{element.priority}</td>
-                    <td>{element.actual_hours}</td>
-                    <td>{element.estimated_hours}</td>
-                    <td>{element.first_name}</td>
-                    <td>{element.description}</td>
-                              </tr>
-                            );
-                          })}
-                      </tbody>
-                    </Table>
-                  </div>
-                </Row>
-              </TabPane>
-              <TabPane tabId="2">
-                <Form>
-                  <FormGroup>
-                    <ComponentCard title="Attachments">
-                      <Row>
-                        <Col xs="12" md="3" className="mb-3">
-                          <Button
-                            className="shadow-none"
-                            color="primary"
-                            onClick={() => {
-                              setRoomName('TaskJob');
-                              setFileTypes(['JPG', 'PNG', 'GIF', 'PDF']);
-                              dataForAttachment();
-                              setAttachmentModal(true);
-                            }}
-                          >
-                            <Icon.File className="rounded-circle" width="20" />
-                          </Button>
-                        </Col>
-                      </Row>
-                      <AttachmentModalV2
-                        moduleId={id}
-                        roomName={roomName}
-                        fileTypes={fileTypes}
-                        altTagData="TaskJobRelated Data"
-                        recordType="RelatedPicture"
-                        desc="TaskJobRelated Data"
-                        modelType={attachmentData.modelType}
-                        attachmentModal={attachmentModal}
-                        setAttachmentModal={setAttachmentModal}
-                      />
-                      <ViewFileComponentV2
-                        moduleId={id}
-                        roomName="TimesheetList"
-                        recordType="RelatedPicture"
-                      />
-                    </ComponentCard>
-                  </FormGroup>
-                </Form>
-              </TabPane>
-            </TabContent>
+                                          <Icon.Edit2 />
+                                        </span>
+                                      </Link>
+                                    </td>
+                                    <td>{element.task_title}</td>
+                                    <td>
+                                      {element.start_date
+                                        ? moment(element.start_date).format('DD-MM-YYYY')
+                                        : ''}
+                                    </td>
+                                    <td>
+                                      {element.end_date
+                                        ? moment(element.end_date).format('DD-MM-YYYY')
+                                        : ''}
+                                    </td>
+                                    <td>{element.completion}</td>
+                                    <td>{element.status}</td>
+                                    <td>{element.task_type}</td>
+                                    <td>{element.priority}</td>
+                                    <td>{element.actual_hours}</td>
+                                    <td>{element.estimated_hours}</td>
+                                    <td>{element.first_name}</td>
+                                    <td>{element.description}</td>
+                                  </tr>
+                                );
+                              })}
+                          </tbody>
+                        </Table>
+                      </div>
+                    </Row>
+                  </TabPane>
+                  <TabPane tabId="2">
+                    <Form>
+                      <FormGroup>
+                        <ComponentCard title="Attachments">
+                          <Row>
+                            <Col xs="12" md="3" className="mb-3">
+                              <Button
+                                className="shadow-none"
+                                color="primary"
+                                onClick={() => {
+                                  setRoomName('TaskJob');
+                                  setFileTypes(['JPG', 'PNG', 'GIF', 'PDF']);
+                                  dataForAttachment();
+                                  setAttachmentModal(true);
+                                }}
+                              >
+                                <Icon.File className="rounded-circle" width="20" />
+                              </Button>
+                            </Col>
+                          </Row>
+                          <AttachmentModalV2
+                            moduleId={id}
+                            roomName={roomName}
+                            fileTypes={fileTypes}
+                            altTagData="TaskJobRelated Data"
+                            recordType="RelatedPicture"
+                            desc="TaskJobRelated Data"
+                            modelType={attachmentData.modelType}
+                            attachmentModal={attachmentModal}
+                            setAttachmentModal={setAttachmentModal}
+                          />
+                          <ViewFileComponentV2
+                            moduleId={id}
+                            roomName="TimesheetList"
+                            recordType="RelatedPicture"
+                          />
+                        </ComponentCard>
+                      </FormGroup>
+                    </Form>
+                  </TabPane>
+                </TabContent>
+              </ComponentCard>
+            </div>
           </ComponentCard>
-          </div>
-          </ComponentCard>
-          </FormGroup>
-          </Form>
+        </FormGroup>
+      </Form>
     </>
   );
 };

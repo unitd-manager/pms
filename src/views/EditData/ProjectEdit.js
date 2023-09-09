@@ -49,7 +49,7 @@ const ProjectEdit = () => {
   const [addDuctingCostModal, setAddDuctingCostModal] = useState(false);
   const [addContactModals, setAddContactModals] = useState(false);
   const [milestoneById, setMilestone] = useState();
-  const [taskById, setTaskById] = useState();
+  const [taskById, setTaskById] = useState([]);
   const [userSearchData, setUserSearchData] = useState([]);
   const [contactDatas, setContactData] = useState();
   const [editTaskEditModal, setEditTaskEditModal] = useState(false);
@@ -136,8 +136,9 @@ const ProjectEdit = () => {
   };
   //Getting data from milestone
   const getTaskById = () => {
+    
     api
-      .post('/projecttask/getProjectTaskfilterById', { project_id: id })
+      .post('/projecttask/getProjectTaskfiltersById', { project_id: id })
       .then((res) => {
         setTaskById(res.data.data);
         setUserSearchData(res.data.data);

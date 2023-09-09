@@ -15,6 +15,19 @@ export default function MilestoneStatsProject({ id }) {
   const [projects, setProjects] = useState([]);
 
   const HourData = (selectedProjectId) => {
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      const day = date.getDate();
+      const month = date.getMonth() + 1; // Months are zero-based
+      const yyyy = date.getFullYear(); // Get the last two digits of the year
+  
+      // Pad day and month with leading zeros if needed
+      const formattedDay = day < 10 ? `0${day}` : day;
+      const formattedMonth = month < 10 ? `0${month}` : month;
+      //const formattedYear = year.toString().slice(-2); // Get the last two digits of the year
+
+      return `${formattedDay}.${yyyy}.${formattedMonth}`;
+    };
     // Make API call to retrieve the data
     api.post('/stats/getMilestoneCompletedStats', { project_id: selectedProjectId })
       .then((response) => {
@@ -24,8 +37,8 @@ export default function MilestoneStatsProject({ id }) {
           const hourData = response.data.data;
           const milestoneData = hourData.map((item) => ({
             title: item.milestone_title,
-            actualDate: new Date(item.actual_completed_date).toLocaleDateString(), // Convert to local date string
-            estimatedDate: new Date(item.to_date).toLocaleDateString(), // Convert to local date string
+            actualDate: formatDate(item.actual_completed_date),  // Convert to local date string
+            estimatedDate: formatDate(item.to_date)// Convert to local date string
           }));
 
           setTaskTitles(milestoneData.map((item) => item.title));
@@ -83,9 +96,10 @@ export default function MilestoneStatsProject({ id }) {
     },
     stroke: {
       show: true,
-      width: 2,
+      width: 1,
       colors: ['transparent'],
     },
+    
     xaxis: {
       categories: taskTitles,
       labels: {
@@ -96,7 +110,7 @@ export default function MilestoneStatsProject({ id }) {
     },
     yaxis: {
       title: {
-        text: 'Date',
+       
         color: '#8898aa',
       },
       labels: {

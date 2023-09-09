@@ -92,7 +92,7 @@ export default function ProjectTask({
       })
       .catch(() => {});
   };
-  
+
   //Milestone data in milestoneDetails
   const handleInputsTask = (e) => {
     setInsertTask({ ...insertTask, [e.target.name]: e.target.value });
@@ -158,12 +158,50 @@ export default function ProjectTask({
     numberOfEmployeesVistited,
     numberOfEmployeesVistited + employeesPerPage,
   );
-  
+
   console.log('displayEmployees', displayEmployees);
   const totalPages = Math.ceil(userSearchData.length / employeesPerPage);
   const changePage = ({ selected }) => {
     setPage(selected);
   };
+  // Step 1: Define state variables for sorting
+  const [sortColumn, setSortColumn] = useState(''); // Column to sort by
+  const [sortOrder, setSortOrder] = useState('asc'); // Sorting order (asc or desc)
+
+  // Step 2: Create a function to handle sorting
+  const handleSort = (column) => {
+    // If clicking on the same column, toggle sorting order
+    if (sortColumn === column) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      // If clicking on a different column, set it as the new sorting column
+      setSortColumn(column);
+      setSortOrder('asc'); // Default to ascending order
+    }
+  };
+
+  // Step 4: Apply sorting to your data
+  const sortedData = [...displayEmployees]; // Create a copy of your data
+
+  if (sortColumn === 'Title') {
+    sortedData.sort((a, b) => {
+      const order = sortOrder === 'asc' ? 1 : -1;
+      return order * a.task_title.localeCompare(b.task_title);
+    });
+  } else if (sortColumn === 'Start Date') {
+    sortedData.sort((a, b) => {
+      const order = sortOrder === 'asc' ? 1 : -1;
+      return order * moment(a.start_date).diff(moment(b.start_date));
+    });
+  } else if (sortColumn === 'Status') {
+    sortedData.sort((a, b) => {
+      const order = sortOrder === 'asc' ? 1 : -1;
+      // Handle null values by treating them as empty strings for comparison
+      const statusA = a.status || '';
+      const statusB = b.status || '';
+      return order * statusA.localeCompare(statusB);
+    });
+  }
 
   // Api call for getting milestone dropdown based on project ID
   const getMilestoneTitle = () => {
@@ -175,20 +213,6 @@ export default function ProjectTask({
       .catch(() => {
         message('Milestones not found', 'info');
       });
-  };
-
-  const handleBackToList = () => {
-    // Clear the filter criteria
-    setCompanyName('');
-
-    // Reset the status dropdown to "Please Select"
-    setCategoryName('');
-
-    // Restore the full data
-    setUserSearchData(taskById);
-
-    // Clear the filtered data
-    setFilteredData([]);
   };
 
   //attachments
@@ -227,12 +251,14 @@ export default function ProjectTask({
     },
     {
       name: 'Title',
+      sortable: true,
     },
     {
       name: 'Staff',
     },
     {
-      name: 'Start Date',
+      name:'startdate',
+      sortable: true,
     },
     {
       name: 'End Date',
@@ -251,6 +277,7 @@ export default function ProjectTask({
     },
     {
       name: 'Status',
+      sortable: true,
     },
     {
       name: 'Task Type',
@@ -269,7 +296,6 @@ export default function ProjectTask({
     },
   ];
 
-  
   return (
     <div className="MainDiv">
       <div className=" pt-xs-25">
@@ -284,6 +310,7 @@ export default function ProjectTask({
                     type="select"
                     name="employee_id"
                     onChange={(e) => setCompanyName(e.target.value)} // Update companyName state
+                    value={companyName}
                   >
                     <option value="">Please Select</option>
                     {employee &&
@@ -306,6 +333,7 @@ export default function ProjectTask({
                     type="select"
                     name="status"
                     onChange={(e) => setCategoryName(e.target.value)}
+                    value={categoryName}
                   >
                     {' '}
                     <option value="">Select Category</option>
@@ -325,11 +353,19 @@ export default function ProjectTask({
               </Col>
               <span
                 onClick={() => {
-                  handleBackToList();
+                  // Clear the filter criteria for both Select Staff and Select Category
+                  setCompanyName('');
+                  setCategoryName('');
+
+                  // Restore the full data
+                  setUserSearchData(taskById);
+
+                  // Clear the filtered data
+                  setFilteredData([]);
                 }}
                 style={{
-                  cursor: 'pointer', // Add this style to make it a pointer on hover
-                  textDecoration: 'underline', // Add this style to underline the text
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
                 }}
               >
                 Back to List
@@ -573,13 +609,39 @@ export default function ProjectTask({
             <thead>
               <tr>
                 {Projecttaskcolumn.map((cell) => {
-                  return <td key={cell.name}>{cell.name}</td>;
+                  return (
+                    <th key={cell.name} onClick={() => cell.sortable && handleSort(cell.name)}>
+                      <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start', // Adjust this for desired alignment
+            }}
+          ></div>
+                      {cell.name}
+                      {cell.sortable && ( // Render sorting indicator if the column is sortable
+                        <span className="sort-indicator">
+                          {sortColumn === cell.name ? (
+                            sortOrder === 'asc' ? (
+                              <Icon.ArrowUp />
+                            ) : (
+                              <Icon.ArrowDown />
+                            )
+                          ) : (
+                            <Icon.ArrowDown /> // Default sorting indicator
+                          )}
+                        </span>
+                      )}
+                    </th>
+                  );
+                  // return <td key={cell.name}>{cell.name}</td>;
                 })}
               </tr>
             </thead>
+         
             <tbody>
-              {displayEmployees &&
-                displayEmployees.map((element, index) => {
+              {sortedData &&
+                sortedData.map((element, index) => {
                   return (
                     <>
                       <tr key={element.project_task_id}>
@@ -596,9 +658,19 @@ export default function ProjectTask({
                         </td>
                         <td style={{ borderRight: 1, borderWidth: 1 }}>{element.task_title}</td>
                         <td>{element.first_name}</td>
-                        <td>{element.start_date}</td>
-                        <td>{element.end_date}</td>
-                        <td>{element.actual_completed_date}</td>
+                        <td>
+                          {element.start_date
+                            ? moment(element.start_date).format('DD-MM-YYYY')
+                            : ''}
+                        </td>
+                        <td>
+                          {element.end_date ? moment(element.end_date).format('DD-MM-YYYY') : ''}
+                        </td>
+                        <td>
+                          {element.actual_completed_date
+                            ? moment(element.actual_completed_date).format('DD-MM-YYYY')
+                            : ''}
+                        </td>
                         <td>{element.actual_hours}</td>
                         <td>{element.estimated_hours}</td>
                         <td>{element.completion}</td>

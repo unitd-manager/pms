@@ -192,6 +192,7 @@ const ProjectTask = () => {
       grow: 0,
       wrap: true,
     },
+    
   ];
 
   return (

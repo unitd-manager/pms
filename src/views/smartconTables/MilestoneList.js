@@ -141,9 +141,9 @@ const MilestoneList = () => {
                       </td>
                       <td>{element.milestone_title}</td>
                       <td>{element.description}</td>
-                      <td>{moment(element.from_date).format('YYYY-MM-DD')}</td>
-                      <td>{moment(element.to_date).format('YYYY-MM-DD')}</td>
-                      <td>{moment(element.actual_completed_date).format('YYYY-MM-DD')}</td>
+                      <td>{element.from_date ? moment(element.from_date).format('DD-MM-YYYY') : ''}</td>
+                      <td>{element.to_date ? moment(element.to_date).format('DD-MM-YYYY') : ''}</td>
+                      <td>{element.actual_completed_date ? moment(element.actual_completed_date).format('DD-MM-YYYY') : ''}</td>
                       <td>{element.status}</td>
                     </tr>
                 );

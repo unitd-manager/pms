@@ -14,7 +14,7 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import TrainingCompany from '../../components/Training/TrainingCompany';
 import TrainingMainDetails from '../../components/Training/TrainingMainDetails';
-import TrainingButton from '../../components/Training/TrainingButton';
+//import TrainingButton from '../../components/Training/TrainingButton';
 import AttachmentModalV2 from '../../components/Tender/AttachmentModalV2';
 import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import ApiButton from '../../components/ApiButton';
@@ -37,7 +37,7 @@ const TrainingEdit = () => {
     const navigate = useNavigate();
 
   //Button fuctions
-  const applyChanges = () => {};
+  //const applyChanges = () => {};
   const backToList = () => {
     navigate('/Finance');
   };
@@ -212,7 +212,7 @@ const TrainingEdit = () => {
     <>
       <BreadCrumbs heading={trainingDetails && trainingDetails.title} />
         {/* Save,Apply Buttons */}
-        <TrainingButton navigate={navigate} insertTrainingData={insertTrainingData} applyChanges={applyChanges} backToList={backToList}></TrainingButton>
+        {/* <TrainingButton navigate={navigate} insertTrainingData={insertTrainingData} applyChanges={applyChanges} backToList={backToList}></TrainingButton> */}
         <ApiButton
               editData={insertTrainingData}
               navigate={navigate}

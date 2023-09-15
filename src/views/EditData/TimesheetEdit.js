@@ -51,7 +51,7 @@ const TimesheetEdit = () => {
     getStaff();
   }, [id]);
   const backToList = () => {
-    navigate('/Leave');
+    navigate('/Timesheet');
   };
 
   return (

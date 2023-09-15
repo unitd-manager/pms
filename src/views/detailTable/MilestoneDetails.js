@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
@@ -12,7 +13,7 @@ const MilestoneDetails = () => {
   const [projectdetails, setProjectDetails] = useState();
   const [milestoneDetails, setMilestoneDetails] = useState({
     milestone_title: '',
-    project_id:'',
+    project_id: '',
   });
 
   //Navigation and Parameters
@@ -36,8 +37,7 @@ const MilestoneDetails = () => {
   };
   //Insert Milestone
   const insertMilestone = () => {
-    if (milestoneDetails.milestone_title !== '' &&
-    milestoneDetails.project_id !== ''){
+    if (milestoneDetails.milestone_title !== '' && milestoneDetails.project_id !== '') {
       api
         .post('/milestone/insertmilestone', milestoneDetails)
         .then((res) => {
@@ -51,7 +51,7 @@ const MilestoneDetails = () => {
         .catch(() => {
           message('Network connection error.', 'error');
         });
-      }else {
+    } else {
       message('Please fill all required fields.', 'warning');
     }
   };
@@ -69,7 +69,6 @@ const MilestoneDetails = () => {
             <Form>
               <FormGroup>
                 <Row>
-                  
                   <Col md="12">
                     <FormGroup>
                       <Label>
@@ -87,7 +86,11 @@ const MilestoneDetails = () => {
                   <Col md="12">
                     <FormGroup>
                       <Label>Project Title</Label>
-                      <Input type="select" name="project_id" onChange={handleInputsmilestoneDetails}>
+                      <Input
+                        type="select"
+                        name="project_id"
+                        onChange={handleInputsmilestoneDetails}
+                      >
                         <option>Select Project</option>
                         {projectdetails &&
                           projectdetails.map((e) => {
@@ -116,13 +119,19 @@ const MilestoneDetails = () => {
                       Save & Continue
                     </Button>
                     <Button
+                      className="shadow-none"
+                      color="dark"
                       onClick={() => {
-                        navigate('/Milestone');
+                        if (
+                          window.confirm(
+                            'Are you sure you want to cancel  \n  \n You will lose any changes made',
+                          )
+                        ) {
+                          navigate(-1);
+                        }
                       }}
-                      type="button"
-                      className="btn btn-dark shadow-none"
                     >
-                      Go to List
+                      Cancel
                     </Button>
                   </div>
                 </Row>

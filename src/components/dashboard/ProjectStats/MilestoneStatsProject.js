@@ -1,16 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { Col, FormGroup, Label, Input,Row } from 'reactstrap';
 import Chart from 'react-apexcharts';
-import ComponentCard from '../ComponentCard';
-import api from '../../constants/api';
+import PropTypes from 'prop-types';
+import ComponentCard from '../../ComponentCard';
+import api from '../../../constants/api';
 
-const MilestoneCompleted = () => {
+export default function MilestoneStatsProject({ id }) {
+    MilestoneStatsProject.propTypes = {
+      id: PropTypes.any,
+    };
   const [taskTitles, setTaskTitles] = useState([]);
   const [actualHourData, setActualHourData] = useState([]);
   const [estimatedHourData, setEstimatedHourData] = useState([]);
   const [projects, setProjects] = useState([]);
 
   const HourData = (selectedProjectId) => {
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      const day = date.getDate();
+      const month = date.getMonth() + 1; // Months are zero-based
+      const yyyy = date.getFullYear(); // Get the last two digits of the year
+  
+      // Pad day and month with leading zeros if needed
+      const formattedDay = day < 10 ? `0${day}` : day;
+      const formattedMonth = month < 10 ? `0${month}` : month;
+      //const formattedYear = year.toString().slice(-2); // Get the last two digits of the year
+
+      return `${formattedDay}.${yyyy}.${formattedMonth}`;
+    };
     // Make API call to retrieve the data
     api.post('/stats/getMilestoneCompletedStats', { project_id: selectedProjectId })
       .then((response) => {
@@ -20,8 +37,8 @@ const MilestoneCompleted = () => {
           const hourData = response.data.data;
           const milestoneData = hourData.map((item) => ({
             title: item.milestone_title,
-            actualDate: new Date(item.actual_completed_date).toLocaleDateString(), // Convert to local date string
-            estimatedDate: new Date(item.to_date).toLocaleDateString(), // Convert to local date string
+            actualDate: formatDate(item.actual_completed_date),  // Convert to local date string
+            estimatedDate: formatDate(item.to_date)// Convert to local date string
           }));
 
           setTaskTitles(milestoneData.map((item) => item.title));
@@ -38,16 +55,29 @@ const MilestoneCompleted = () => {
         console.log('Error fetching data:', error);
       });
   };
-
-  useEffect(() => {
-    api.get('projecttask/getProjectTitle')
+  const getJobs = () => {
+    api
+      .post('projecttask/getProjectTitleById', { project_id: id })
       .then((res) => {
         setProjects(res.data.data);
       })
-      .catch((error) => {
-        console.log('Error fetching projects:', error);
-      });
-  }, []);
+      .catch(() => {});
+  };
+
+  // Get the list of employees from the API
+  useEffect(() => {
+    getJobs();
+  }, [id]);
+
+//   useEffect(() => {
+//     api.get('projecttask/getProjectTitle')
+//       .then((res) => {
+//         setProjects(res.data.data);
+//       })
+//       .catch((error) => {
+//         console.log('Error fetching projects:', error);
+//       });
+//   }, []);
 
   const optionscolumn = {
     colors: ['#745af2', '#263238'],
@@ -66,9 +96,10 @@ const MilestoneCompleted = () => {
     },
     stroke: {
       show: true,
-      width: 2,
+      width: 1,
       colors: ['transparent'],
     },
+    
     xaxis: {
       categories: taskTitles,
       labels: {
@@ -79,7 +110,7 @@ const MilestoneCompleted = () => {
     },
     yaxis: {
       title: {
-        text: 'Date',
+       
         color: '#8898aa',
       },
       labels: {
@@ -151,8 +182,8 @@ const MilestoneCompleted = () => {
         </FormGroup>
 
         
-          <Chart options={optionscolumn} series={seriescolumn} type="bar" height="300" />
- 
+          <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
+     
       </ComponentCard>
     </Col>
     </Row>
@@ -160,4 +191,3 @@ const MilestoneCompleted = () => {
   );
 };
 
-export default MilestoneCompleted;

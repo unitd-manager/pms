@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
@@ -14,10 +15,9 @@ const ProjectTaskDetails = () => {
   const [taskdetails, setTaskDetails] = useState({
     task_title: '',
     project_id: '',
-    project_milestone_id: ''
+    project_milestone_id: '',
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
-
 
   // Navigation and Parameters
   const navigate = useNavigate();
@@ -54,27 +54,29 @@ const ProjectTaskDetails = () => {
   // Insert Milestone
   const insertTaskDetails = () => {
     if (!formSubmitted)
-    if (taskdetails.project_id !== '' &&
-    taskdetails.project_milestone_id !== '' &&
-    taskdetails.task_title !=='')  {
-      api
-        .post('/projecttask/insertTask', taskdetails)
-        .then((res) => {
-          const insertedDataId = res.data.data.insertId;
-          message('Task inserted successfully.', 'success');
-          setTimeout(() => {
-            navigate(`/TaskEdit/${insertedDataId}`);
-          }, 300);
-        })
-        .catch(() => {
-          message('Network connection error.', 'error');
-        });
+      if (
+        taskdetails.project_id !== '' &&
+        taskdetails.project_milestone_id !== '' &&
+        taskdetails.task_title !== ''
+      ) {
+        api
+          .post('/projecttask/insertTask', taskdetails)
+          .then((res) => {
+            const insertedDataId = res.data.data.insertId;
+            message('Task inserted successfully.', 'success');
+            setTimeout(() => {
+              navigate(`/TaskEdit/${insertedDataId}`);
+            }, 300);
+          })
+          .catch(() => {
+            message('Network connection error.', 'error');
+          });
+      } else {
+        setFormSubmitted(true);
       }
-        else  {   setFormSubmitted(true);
-        }  else {
-          message('Please fill all required fields', 'warning');
-          
-        }
+    else {
+      message('Please fill all required fields', 'warning');
+    }
   };
 
   useEffect(() => {
@@ -82,13 +84,13 @@ const ProjectTaskDetails = () => {
   }, []);
 
   // Fetch milestones when project ID changes
-    useEffect(() => {
-      if (taskdetails.project_id) {
-        // Use taskdetails.project_id directly to get the selected project ID
-        const selectedProjectId = taskdetails.project_id;
-        getMilestone(selectedProjectId);
-      }
-    }, [taskdetails.project_id]);
+  useEffect(() => {
+    if (taskdetails.project_id) {
+      // Use taskdetails.project_id directly to get the selected project ID
+      const selectedProjectId = taskdetails.project_id;
+      getMilestone(selectedProjectId);
+    }
+  }, [taskdetails.project_id]);
 
   return (
     <div>
@@ -101,21 +103,24 @@ const ProjectTaskDetails = () => {
             <Form>
               <FormGroup>
                 <Row>
-                  <Col md="12">
+                  <Col md="10">
                     <FormGroup>
-                      <Label>Title <span className="required">*</span></Label>
+                      <Label>
+                        Title <span className="required">*</span>
+                      </Label>
                       <Input type="text" name="task_title" onChange={handleInputs} />
                     </FormGroup>
                   </Col>
-                  <Col md="12">
+                  <Col md="10">
                     <FormGroup>
                       <Label>Project Title</Label>
-                      <Input type="select" name="project_id"   onChange={(e) => {
-                        handleInputs(e)
-                  const selectedProject = e.target.value;
-                  getMilestone(selectedProject);
-                }}>
-                        <option>Select Project</option>
+                      <Input
+                        type="select"
+                        onChange={handleInputs}
+                        value={taskdetails && taskdetails.project_id}
+                        name="project_id"
+                      >
+                        <option defaultValue="selected">Please Select</option>
                         {projectdetails &&
                           projectdetails.map((e) => (
                             <option key={e.project_id} value={e.project_id}>
@@ -125,24 +130,29 @@ const ProjectTaskDetails = () => {
                       </Input>
                     </FormGroup>
                   </Col>
-                  <Col md="12">
+                  <Col md="10">
+                    <Label>Milestone Title</Label>
                     <FormGroup>
-                      <Label>Milestone</Label>
-                      <Input type="select" name="project_milestone_id" onChange={handleInputs}>
-                        <option>Select Milestone</option>
+                      <Input
+                        type="select"
+                        onChange={handleInputs}
+                        value={taskdetails && taskdetails.project_milestone_id}
+                        name="project_milestone_id"
+                      >
+                        <option value="selected">Please Select</option>
                         {milestoneDetails &&
-                          milestoneDetails.map((ele) => (
-                            <option
-                              key={ele.project_id}
-                              value={ele.project_milestone_id}
-                            >
-                              {ele.milestone_title}
-                            </option>
-                          ))}
+                          milestoneDetails.map((e) => {
+                            return (
+                              <option key={e.project_milestone_id} value={e.project_milestone_id}>
+                                {' '}
+                                {e.milestone_title}{' '}
+                              </option>
+                            );
+                          })}
                       </Input>
                     </FormGroup>
                   </Col>
-                  </Row>
+                </Row>
               </FormGroup>
               <FormGroup>
                 <Row>
@@ -156,13 +166,19 @@ const ProjectTaskDetails = () => {
                       Save & Continue
                     </Button>
                     <Button
+                      className="shadow-none"
+                      color="dark"
                       onClick={() => {
-                        navigate('/TaskList');
+                        if (
+                          window.confirm(
+                            'Are you sure you want to cancel  \n  \n You will lose any changes made',
+                          )
+                        ) {
+                          navigate(-1);
+                        }
                       }}
-                      type="button"
-                      className="btn btn-dark shadow-none"
                     >
-                      Go to List
+                      Cancel
                     </Button>
                   </div>
                 </Row>

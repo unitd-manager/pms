@@ -1,64 +1,66 @@
 import React, { useEffect, useState } from 'react';
-import { Col, FormGroup, Label, Input, Row, Form } from 'reactstrap';
+import { Col, FormGroup, Label, Input, Row,Form } from 'reactstrap';
 import Chart from 'react-apexcharts';
-import ComponentCard from '../ComponentCard';
-import api from '../../constants/api';
+import PropTypes from 'prop-types';
+import api from '../../../constants/api';
+import ComponentCard from '../../ComponentCard';
 
-const AverageIssues = () => {
-  //const [taskTitles, setTaskTitles] = useState([]);
+export default function ActualHourStatsProject({ id }) {
+    ActualHourStatsProject.propTypes = {
+      id: PropTypes.any,
+    };
+  const [taskTitles, setTaskTitles] = useState([]);
   const [actualHourData, setActualHourData] = useState([]);
   const [estimatedHourData, setEstimatedHourData] = useState([]);
   const [employees, setEmployees] = useState([]);
 
   const HourData = (selectedEmployeeId) => {
     // Make API call to retrieve the data
-    api
-      .post('/stats/getActualAveragestats', { employee_id: selectedEmployeeId })
-      .then((response) => {
-        // Check if the response data is not empty
-        if (response.data && response.data.data && response.data.data.length > 0) {
-          // Assuming the response data is an array of objects with keys: task_title, total_actual_hours, and estimated_hours
-          const monthNames = [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Aug',
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec',
-          ];
-          const hourData = response.data.data;
-          //const titles = hourData.map((item) => item.task_title);
-          const actualHours = hourData.map((item) => monthNames[item.month - 1]);
-          const estimatedHours = hourData.map((item) => item.num_issues);
+    api.post('/stats/getProjectActualHourStats', { employee_id: selectedEmployeeId ,project_id:id}).then((response) => {
+      // Check if the response data is not empty
+      if (response.data && response.data.data && response.data.data.length > 0) {
+        // Assuming the response data is an array of objects with keys: task_title, total_actual_hours, and estimated_hours
+        const hourData = response.data.data;
+        const titles = hourData.map((item) => item.task_title);
+        const actualHours = hourData.map((item) => item.total_actual_hours);
+        const estimatedHours = hourData.map((item) => item.estimated_hours);
 
-          // setTaskTitles(titles);
-          setActualHourData(actualHours);
-          setEstimatedHourData(estimatedHours);
-        } else {
-          // If the response data is empty, reset the state to show an empty chart or display a message
-          //setTaskTitles([]);
-          setActualHourData([]);
-          setEstimatedHourData([]);
-        }
-      });
+        setTaskTitles(titles);
+        setActualHourData(actualHours);
+        setEstimatedHourData(estimatedHours);
+      } else {
+        // If the response data is empty, reset the state to show an empty chart or display a message
+        setTaskTitles([]);
+        setActualHourData([]);
+        setEstimatedHourData([]);
+      }
+    });
   };
-
-  useEffect(() => {
+  
+  const getJobs = () => {
     api
-      .get('/jobinformation/getEmployee')
+      .post('projecttask/getEmployeeByID', { project_id: id })
       .then((res) => {
         setEmployees(res.data.data);
       })
-      .catch((error) => {
-        console.log('Error fetching employees:', error);
-      });
-  }, []);
+      .catch(() => {});
+  };
+
+  // Get the list of employees from the API
+  useEffect(() => {
+    getJobs();
+  }, [id]);
+
+//   useEffect(() => {
+//     api
+//       .get('/jobinformation/getEmployee')
+//       .then((res) => {
+//         setEmployees(res.data.data);
+//       })
+//       .catch((error) => {
+//         console.log('Error fetching employees:', error);
+//       });
+//   }, []);
 
   const optionscolumn = {
     colors: ['#745af2', '#263238'],
@@ -81,7 +83,7 @@ const AverageIssues = () => {
       colors: ['transparent'],
     },
     xaxis: {
-      categories: actualHourData,
+      categories: taskTitles,
       labels: {
         style: {
           cssClass: 'grey--text lighten-2--text fill-color',
@@ -90,10 +92,9 @@ const AverageIssues = () => {
     },
     yaxis: {
       title: {
-        text: 'Issues',
+        text: 'Hours',
         color: '#8898aa',
       },
-
       labels: {
         style: {
           cssClass: 'grey--text lighten-2--text fill-color',
@@ -107,7 +108,7 @@ const AverageIssues = () => {
       theme: 'dark',
       y: {
         formatter(val) {
-          return `${val} issues`;
+          return `${val} hours`;
         },
       },
     },
@@ -127,7 +128,11 @@ const AverageIssues = () => {
 
   const seriescolumn = [
     {
-      name: 'Issues',
+      name: 'Actual Hour',
+      data: actualHourData,
+    },
+    {
+      name: 'Estimated Hour',
       data: estimatedHourData,
     },
   ];
@@ -135,7 +140,7 @@ const AverageIssues = () => {
   return (
     <Row>
       <Col md="12">
-        <ComponentCard title="Employee Average issues">
+        <ComponentCard title="Employee Actual Hours">
           <Form>
             <FormGroup>
               <Label for="employeeSelect">Select Employee</Label>
@@ -157,12 +162,10 @@ const AverageIssues = () => {
               </Input>
             </FormGroup>
           </Form>
-
-          <Chart options={optionscolumn} series={seriescolumn} type="bar" height="300" />
+          <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
         </ComponentCard>
       </Col>
     </Row>
   );
 };
 
-export default AverageIssues;

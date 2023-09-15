@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import {
   Row,
   Col,
@@ -18,7 +18,10 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import moment from 'moment';
 import message from './Message';
 import api from '../constants/api';
-import ComponentCard from './ComponentCard';
+import creationdatetime from '../constants/creationdatetime';
+import AppContext from '../context/AppContext';
+
+//import { useParams } from 'react-router-dom';
 
 const ProjectTaskEdit = ({
   editTaskEditModal,
@@ -39,6 +42,8 @@ const ProjectTaskEdit = ({
   const [taskProject, setTaskProject] = useState();
   const [employees, setEmployees] = useState();
   const [milestonesTaskEdit, setMilestonesTaskEdit] = useState([]);
+      //get staff details
+      const { loggedInuser } = useContext(AppContext);
 
   // Gettind data from Job By Id
   const editJobByIds = () => {
@@ -67,15 +72,17 @@ const ProjectTaskEdit = ({
   };
 
   const editTaskProject = () => {
+    taskProject.modification_date = creationdatetime;
+    taskProject.modified_by= loggedInuser.first_name; 
     if (taskProject.task_title !== '') {
       api
         .post('/projecttask/editTask', taskProject)
         .then(() => {
           message('Record editted successfully', 'success');
           getTaskById();
-          setTimeout(() => {
-            setEditTaskEditModal(false);
-          }, 300);
+          // setTimeout(() => {
+          //   setEditTaskEditModal(false);
+          // }, 300);
         })
         .catch(() => {
           message('Network connection error.', 'error');
@@ -97,21 +104,117 @@ const ProjectTaskEdit = ({
       [e.target.name]: e.target.value,
       project_task_id: taskProject?.project_task_id,
       room_name:taskProject?.title,
+      subject:taskProject?.task_title
     }));
     };
 
 
     const SubmitNote = () => {
-      if (addNoteData.comments !== null) {
+      if (addNoteData.comments !== '') {
         api.post('/note/addNote', addNoteData).then(() => {
           message('Add Note Successfully', 'success');
-          setTimeout(() => {
-            window.location.reload();
-          }, 400);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 400);
         });
       }
       return null;
     };
+        
+    // const editLoanStartData = () => {
+    //   if (taskProject && taskProject.status === 'Completed') {
+    //     api
+    //       .post('/projecttask/editActualcompletedDate', { project_task_id: id })
+    //       .then(() => {})
+    //       .catch(() => {
+    //         message('Unable to edit record.', 'error');
+    //       });
+    //   }
+    // };
+    // const edittaskcompletiondate = () => {
+    //   taskProject.modification_date = creationdatetime;
+    //   taskProject.modified_by= loggedInuser.first_name; 
+    //   if (taskProject && taskProject.status === 'Completed') {
+    //     api
+    //       .post('/projecttask/editActualcompletedDate', { project_task_id: taskProject.project_task_id })
+    //       .then(() => {})
+    //       .catch(() => {
+    //         message('Unable to edit record.', 'error');
+    //       });
+    //   }
+    // };
+    const edittaskcompletiondate = () => {
+      taskProject.modification_date = creationdatetime;
+      taskProject.modified_by = loggedInuser.first_name;
+      
+      if (taskProject && taskProject.status === 'Completed') {
+        api
+          .post('/projecttask/editActualcompletedDate', { project_task_id: taskProject.project_task_id })
+          .then(() => {
+            // If the task is marked as Completed, update the milestone's actual_completed_date
+            if (taskProject.project_milestone_id) {
+              api
+                .post('/projecttask/UpdateActualcompletedDate', {
+                  project_milestone_id: taskProject.project_milestone_id,
+                  actual_completed_date: moment().format('YYYY-MM-DD'),
+                })
+                .then(() => {
+                  message('Task and milestone completed successfully', 'success');
+                })
+                .catch(() => {
+                  message('Unable to update milestone actual_completed_date.', 'error');
+                });
+            } else {
+              message('Task completed successfully', 'success');
+            }
+          })
+          .catch(() => {
+            message('Unable to edit task record.', 'error');
+          });
+      }
+    };
+    
+    // Function to update the milestone's actual_completed_date
+  // const updateMilestoneActualCompletedDate = (taskId) => {
+  //   if (taskProject && taskProject.status === 'Completed') {
+  //     api
+  //       .post('/projecttask/UpdateActualcompletedDate', { project_milestone_id: taskId })
+  //       .then(() => {
+  //         message('Actual Completed Date updated successfully', 'success');
+  //       })
+  //       .catch(() => {
+  //         message('Unable to update Actual Completed Date.', 'error');
+  //       });
+  //   }
+  // };
+
+  // ...
+
+  // Inside the Submit button click handler
+  // const handleSubmit = () => {
+  //   editTaskProject(); // Call your existing editTaskProject function
+
+  //   // Call the function to update milestone's actual_completed_date
+  //   updateMilestoneActualCompletedDate(taskProject.project_task_id);
+
+  //   SubmitNote();
+  // };
+
+ 
+
+    // const editmilestonecompletiondate = () => {
+    //   taskProject.modification_date = creationdatetime;
+    //   taskProject.modified_by= loggedInuser.first_name; 
+    //   if (taskProject && taskProject.status === 'Completed') {
+    //     api
+    //       .post('/projecttask/editActualcompletedDate', { project_milestone_id: taskProject.project_milestone_id })
+    //       .then(() => {})
+    //       .catch(() => {
+    //         message('Unable to edit record.', 'error');
+    //       });
+    //   }
+    // };
+
 
   useEffect(() => {
     editJobByIds();
@@ -126,6 +229,7 @@ const ProjectTaskEdit = ({
     <>
       <Modal size="lg" isOpen={editTaskEditModal}>
         <ModalHeader>
+          Task Details
           <Button
             color="secondary"
             onClick={() => {
@@ -140,12 +244,11 @@ const ProjectTaskEdit = ({
           {/* task Details */}
           <Form>
             <FormGroup>
-              <ComponentCard title="Task Details">
                   <Form>
                     <Row>
                       <Col md="4">
                         <FormGroup>
-                          <Label>Milestone Title {taskProject && taskProject.project_task_id}</Label>
+                          <Label>Milestone Title</Label>
                           <Input
                             type="select"
                             name="project_milestone_id"
@@ -221,19 +324,19 @@ const ProjectTaskEdit = ({
                           />
                         </FormGroup>
                       </Col>
-                      <Col md="4">
+                      {/* <Col md="4">
                         <FormGroup>
                           <Label>Act Comp date</Label>
                           <Input
                             type="date"
                             onChange={handleInputs}
                             value={moment(taskProject && taskProject.actual_completed_date).format(
-                              'YYYY-MM-DD',
+                              'DD-MM-YYYY',
                             )}
                             name="actual_completed_date"
                           />
                         </FormGroup>
-                      </Col>
+                      </Col> */}
                       <Col md="4">
                         <FormGroup>
                           <Label>Actual Hours</Label>
@@ -343,12 +446,11 @@ const ProjectTaskEdit = ({
                       <Col md="12">
                         <FormGroup>
                           <Label>Add Note</Label>
-                          <textarea id="note" name="comments" rows="4" cols="83" onChange={handleData} />
+                          <textarea id="note" name="comments" rows="4" cols="77" onChange={handleData} />
                         </FormGroup>
                       </Col>
                     </Row>
                   </Form>
-              </ComponentCard>
             </FormGroup>
           </Form>
         </ModalBody>
@@ -359,7 +461,10 @@ const ProjectTaskEdit = ({
                 color="primary"
                 onClick={() => {
                   editTaskProject();
+                  //editmilestonecompletiondate();
+                  edittaskcompletiondate();
                   SubmitNote();
+                  //handleSubmit();
                 }}
               >
                 Submit

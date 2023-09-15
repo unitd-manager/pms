@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, FormGroup, Label, Input } from 'reactstrap';
+import { Col, FormGroup, Label, Input, Row,Form } from 'reactstrap';
 import Chart from 'react-apexcharts';
 import ComponentCard from '../ComponentCard';
 import api from '../../constants/api';
@@ -10,12 +10,9 @@ const ActualHour = () => {
   const [estimatedHourData, setEstimatedHourData] = useState([]);
   const [employees, setEmployees] = useState([]);
 
-
   const HourData = (selectedEmployeeId) => {
     // Make API call to retrieve the data
-    api
-    .post('/stats/getActualHourStats', { employee_id: selectedEmployeeId })
-    .then((response) => {
+    api.post('/stats/getActualHourStats', { employee_id: selectedEmployeeId }).then((response) => {
       // Check if the response data is not empty
       if (response.data && response.data.data && response.data.data.length > 0) {
         // Assuming the response data is an array of objects with keys: task_title, total_actual_hours, and estimated_hours
@@ -33,11 +30,12 @@ const ActualHour = () => {
         setActualHourData([]);
         setEstimatedHourData([]);
       }
-    })
+    });
   };
 
   useEffect(() => {
-    api.get('/jobinformation/getEmployee')
+    api
+      .get('/jobinformation/getEmployee')
       .then((res) => {
         setEmployees(res.data.data);
       })
@@ -45,7 +43,6 @@ const ActualHour = () => {
         console.log('Error fetching employees:', error);
       });
   }, []);
-
 
   const optionscolumn = {
     colors: ['#745af2', '#263238'],
@@ -110,7 +107,6 @@ const ActualHour = () => {
       },
     },
   };
-  
 
   const seriescolumn = [
     {
@@ -121,13 +117,14 @@ const ActualHour = () => {
       name: 'Estimated Hour',
       data: estimatedHourData,
     },
-  
-   
   ];
 
   return (
-    <Col md="6">
-      <FormGroup>
+    <Row>
+      <Col md="12">
+        <ComponentCard title="Employee Actual Hours">
+          <Form>
+            <FormGroup>
               <Label for="employeeSelect">Select Employee</Label>
               <Input
                 type="select"
@@ -146,11 +143,11 @@ const ActualHour = () => {
                   ))}
               </Input>
             </FormGroup>
-            
-      <ComponentCard title="Column Chart">
-        <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
-      </ComponentCard>
-    </Col>
+          </Form>
+          <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
+        </ComponentCard>
+      </Col>
+    </Row>
   );
 };
 

@@ -1,19 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { Form, FormGroup, Label, Input, Row, Col, CardBody } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
 import Chart from 'react-apexcharts';
 import PropTypes from 'prop-types';
 import api from '../../../constants/api';
 import ComponentCard from '../../ComponentCard';
 
-export default function StatsPmsProjectId({ id }) {
-  StatsPmsProjectId.propTypes = {
-    id: PropTypes.any,
-  };
-
+export default function DueStatsProject({ id }) {
+    DueStatsProject.propTypes = {
+      id: PropTypes.any,
+    };
   const [employees, setEmployees] = useState([]);
   const [employeeStats, setEmployeeStats] = useState([]);
-  const [data, setData] = useState([]);
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+  //const [data, setData] = useState([]);
+
+  // Get the list of employees from the API
+//   const getEmployeeStats = (employeeId) => {
+//     api.post('/stats/getStatsEmployeeId', { employee_id: employeeId })
+//       .then((res) => {
+//         setData(res.data.data);
+//       })
+//       .catch(() => {});
+//   };
+
+  // Get the employee statistics based on the selected employee
+  const getStats = (employeeId) => {
+    api.post('/stats/getDuechartStats', { employee_id: employeeId ,project_id:id})
+      .then((res) => {
+        setEmployeeStats(res.data.data);
+      })
+      .catch(() => {});
+  };
+  
+
 
   const getJobs = () => {
     api
@@ -29,28 +47,9 @@ export default function StatsPmsProjectId({ id }) {
     getJobs();
   }, [id]);
 
-  // Get the employee and project-specific statistics based on the selected employee and project
-  useEffect(() => {
-    if (id) {
-      api
-        .post('/stats/getStatsEmployeeId', { employee_id: selectedEmployeeId, project_id: id })
-        .then((res) => {
-          setData(res.data.data);
-        })
-        .catch(() => {});
-
-      api
-        .post('/stats/getStatsId', { employee_id: selectedEmployeeId, project_id: id })
-        .then((res) => {
-          setEmployeeStats(res.data.data);
-        })
-        .catch(() => {});
-    }
-  }, [id, selectedEmployeeId]);
-
-  const optionsPie = {
+  const optionsdoughnut = {
     chart: {
-      id: 'pie-chart',
+      id: 'donut-chart',
       fontFamily: "'Rubik', sans-serif",
     },
     dataLabels: {
@@ -58,7 +57,7 @@ export default function StatsPmsProjectId({ id }) {
     },
     plotOptions: {
       pie: {
-        pie: {
+        donut: {
           size: '70px',
         },
       },
@@ -75,7 +74,6 @@ export default function StatsPmsProjectId({ id }) {
     colors: [
       'rgb(30, 136, 229)',
       'rgb(38, 198, 218)',
-      'rgb(17, 249, 232)',
       'rgb(116, 90, 242)',
       '#ef5350',
     ],
@@ -83,22 +81,25 @@ export default function StatsPmsProjectId({ id }) {
       fillSeriesColor: false,
       theme: 'dark',
     },
-    labels: ['Completed Tasks', 'Pending Tasks', 'In Progress Tasks', 'On Hold Tasks'],
+    labels: [
+      'With Due',
+      'Due',
+      'OverDue',
+    ],
   };
 
-  const seriesPie = employeeStats
-    ? [
-        employeeStats[0]?.completed_tasks || 0,
-        employeeStats[0]?.pending_tasks || 0,
-        employeeStats[0]?.in_progress_tasks || 0,
-        employeeStats[0]?.on_hold_tasks || 0,
-      ]
-    : [];
-
+  const seriesDonut = employeeStats
+  ? [
+      employeeStats[0]?.with_due || 0,
+      employeeStats[0]?.due || 0,
+      employeeStats[0]?.over_due || 0,
+    ]
+  : [];
+    
   return (
-    <Row>
+    <Row >
       <Col md="12">
-        <ComponentCard title="Employee Statistics">
+        <ComponentCard title="Employee Due Statistics">
           <Form>
             <FormGroup>
               <Label for="employeeSelect">Select Employee</Label>
@@ -106,25 +107,35 @@ export default function StatsPmsProjectId({ id }) {
                 type="select"
                 name="employee_id"
                 onChange={(e) => {
-                  const selectedId = e.target.value;
-                  setSelectedEmployeeId(selectedId);
+                  const selectedEmployeeId = e.target.value;
+                  //getEmployeeStats(selectedEmployeeId);
+                  getStats(selectedEmployeeId);
                 }}
               >
                 <option value="">Select Employee</option>
                 {employees &&
                   employees.map((element) => (
-                    <option key={element.project_id} value={element.employee_id}>
+                    <option key={element.employee_id} value={element.employee_id}>
                       {element.first_name}
                     </option>
                   ))}
               </Input>
             </FormGroup>
-
-            <CardBody>
+            {/* <CardBody>
               {data &&
                 data.map((ele) => (
-                  <Row key={ele.project_task_id}>
+                  <Row key={ele.employee_id}>
                     <Col md="6">
+                      <Row>
+                        <Label>
+                          <b>Title:</b> {ele.task_titles}
+                        </Label>
+                      </Row>
+                      <Row>
+                        <Label>
+                          <b>Completion:</b> {ele.total_completion}
+                        </Label>
+                      </Row>
                       <Row>
                         <Label>
                           <b>Project:</b> {ele.title}
@@ -133,13 +144,15 @@ export default function StatsPmsProjectId({ id }) {
                     </Col>
                   </Row>
                 ))}
-            </CardBody>
+            </CardBody> */}
           </Form>
           {employeeStats && (
-            <Chart options={optionsPie} series={seriesPie} type="pie" height="300" />
-          )}
+          <Chart options={optionsdoughnut} series={seriesDonut} type="donut" height="330" />
+        )}
         </ComponentCard>
       </Col>
+   
     </Row>
   );
-}
+};
+

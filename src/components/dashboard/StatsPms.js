@@ -115,7 +115,7 @@ const Stats = () => {
     
   return (
     <Row>
-      <Col md="6">
+      <Col md="12">
       <ComponentCard title="Employee Statistics">
           <Form>
             <FormGroup>
@@ -173,7 +173,7 @@ const Stats = () => {
             </CardBody>
           </Form>
           {employeeStats && (
-          <Chart options={optionsPie} series={seriesPie} type="pie" height="300" />
+          <Chart options={optionsPie} series={seriesPie} type="pie" height="270" />
         )}
         </ComponentCard>
       </Col>

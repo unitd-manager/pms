@@ -625,7 +625,7 @@ export default function ProjectTask({
                           </Col>
                           <Col md="4">
                             <FormGroup>
-                              <Label>Descrition</Label>
+                              <Label>Description</Label>
                               <Input
                                 type="textarea"
                                 name="description"
@@ -733,7 +733,7 @@ export default function ProjectTask({
                           <span
                             onClick={() => {
                               setRoomName('Task');
-                              setFileTypes(['JPG', 'PNG', 'GIF', 'PDF']);
+                              setFileTypes(['JPG', 'PNG', 'GIF', 'PDF', 'XLS', 'XLSX']);
                               dataForAttachment();
                               setAttachmentModal(true);
                               setModuleId(element.project_task_id);

@@ -150,9 +150,9 @@ const MilestoneCompleted = () => {
           </Input>
         </FormGroup>
 
-        <ComponentCard title="Column Chart">
-          <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
-        </ComponentCard>
+        
+          <Chart options={optionscolumn} series={seriescolumn} type="bar" height="300" />
+ 
       </ComponentCard>
     </Col>
     </Row>

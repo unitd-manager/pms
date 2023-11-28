@@ -16,7 +16,7 @@ import ProfileDD from '../../layouts/header/ProfileDD';
 
 
 const LoginFormik = ({ setToken }) => {
-  const [userEmail, setUserEmail] = useState(null);
+  const [userEmail, setUserEmail] = useState();
   const { setUser } = usePermify();
   const getPermissions = (user) => {
     loginApi

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, FormGroup, Label, Input,Row,Form } from 'reactstrap';
+import { Col, FormGroup, Label, Input, Row, Form } from 'reactstrap';
 import Chart from 'react-apexcharts';
 import ComponentCard from '../ComponentCard';
 import api from '../../constants/api';
@@ -157,9 +157,8 @@ const AverageIssues = () => {
               </Input>
             </FormGroup>
           </Form>
-          <ComponentCard title="Column Chart">
-          <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
-          </ComponentCard>
+
+          <Chart options={optionscolumn} series={seriescolumn} type="bar" height="300" />
         </ComponentCard>
       </Col>
     </Row>

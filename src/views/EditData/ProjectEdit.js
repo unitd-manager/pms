@@ -1,6 +1,7 @@
 import React, { useState, useEffect,useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { useParams, useNavigate } from 'react-router-dom';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
@@ -48,8 +49,8 @@ const ProjectEdit = () => {
   const [addDuctingCostModal, setAddDuctingCostModal] = useState(false);
   const [addContactModals, setAddContactModals] = useState(false);
   const [milestoneById, setMilestone] = useState();
-  const [taskById, setTaskById] = useState();
-  const [userSearchData, setUserSearchData] = useState('');
+  const [taskById, setTaskById] = useState([]);
+  const [userSearchData, setUserSearchData] = useState([]);
   const [contactDatas, setContactData] = useState();
   const [editTaskEditModal, setEditTaskEditModal] = useState(false);
   const [addContactModal, setAddContactModal] = useState(false);
@@ -135,8 +136,9 @@ const ProjectEdit = () => {
   };
   //Getting data from milestone
   const getTaskById = () => {
+    
     api
-      .post('/projecttask/getProjectTaskById', { project_id: id })
+      .post('/projecttask/getProjectTaskfilterById', { project_id: id })
       .then((res) => {
         setTaskById(res.data.data);
         setUserSearchData(res.data.data);
@@ -423,10 +425,10 @@ const ProjectEdit = () => {
             </Row>
             <br/>
             <Row>
-              <Col>
+            <Col sm="4" lg="10" xl="6" xxl="6">
                 <MilestoneStatsProject id={id}></MilestoneStatsProject>
               </Col>
-              <Col>
+              <Col sm="4" lg="10" xl="6" xxl="6">
                 <AverageStatsProject id={id}></AverageStatsProject>
               </Col>
             </Row>

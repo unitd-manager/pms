@@ -21,6 +21,7 @@ import {
   CardBody,
 } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import moment from 'moment';
 import * as Icon from 'react-feather';
 import { useNavigate, useParams, Link } from 'react-router-dom';
@@ -50,9 +51,8 @@ const TaskJobEdit = () => {
   const [fileTypes, setFileTypes] = useState();
   const [employeeTeam, setEmployeeTeam] = useState();
   const [milestonesTeam, setMilestonesTeam] = useState([]);
-const [taskdetailTeam, setTaskDetailTeam] = useState([]);
-const [project, setProject] = useState([]);
-
+  const [taskdetailTeam, setTaskDetailTeam] = useState([]);
+  const [project, setProject] = useState([]);
 
   //navigation and parameters
   const { id } = useParams();
@@ -132,8 +132,8 @@ const [project, setProject] = useState([]);
     console.log('inside DataForAttachment');
   };
 
-   //Api call for getting project name dropdown
-   const getProjectTeam = () => {
+  //Api call for getting project name dropdown
+  const getProjectTeam = () => {
     api
       .get('/projecttask/getProjectTitle')
       .then((res) => {
@@ -144,19 +144,18 @@ const [project, setProject] = useState([]);
       });
   };
   // Api call for getting milestone dropdown based on project ID
-const getMilestoneName = () => {
-  api
-    .post('/projecttimesheet/getMilestoneTitle', { project_id: projectTeam.project_id })
-    .then((res) => {
-      // Assuming the response data is an array of milestones with keys: milestone_id and milestone_title
-      const milestones = res.data.data;
-      setMilestonesTeam(milestones);
-    })
-    .catch(() => {
-      message('Milestone not found', 'info');
-    });
-};
-
+  const getMilestoneName = () => {
+    api
+      .post('/projecttimesheet/getMilestoneTitle', { project_id: projectTeam.project_id })
+      .then((res) => {
+        // Assuming the response data is an array of milestones with keys: milestone_id and milestone_title
+        const milestones = res.data.data;
+        setMilestonesTeam(milestones);
+      })
+      .catch(() => {
+        message('Milestone not found', 'info');
+      });
+  };
 
   // Api call for getting milestone dropdown based on project ID
   const getTaskName = (projectId) => {
@@ -291,7 +290,7 @@ const getMilestoneName = () => {
     getTaskById();
     getProjectTeam();
   }, [id]);
-  useEffect(() => { 
+  useEffect(() => {
     if (projectTeam && projectTeam.project_id) {
       const selectedProject = projectTeam.project_id;
       getMilestoneName(selectedProject);
@@ -304,16 +303,15 @@ const getMilestoneName = () => {
       getTaskName(selectedTask);
     }
   }, [projectTeam && projectTeam.project_milestone_id]);
-  
 
   return (
     <>
-      <BreadCrumbs />
       <Form>
         <FormGroup>
+          <BreadCrumbs />
           <ToastContainer></ToastContainer>
           <ComponentCardV2>
-          <ApiButton
+            <ApiButton
               editData={editTaskJob}
               navigate={navigate}
               applyChanges={editTaskJob}
@@ -389,23 +387,18 @@ const getMilestoneName = () => {
             {' '}
             <ToastContainer></ToastContainer>
             <div>
-              <BreadCrumbs />
-
-              <ComponentCard>
-                <Form>
-                  <Row>
-                  <Col md="12">
+              <Form>
+                <Row>
+                  <Col md="4">
                     <FormGroup>
                       <Label>Project Title</Label>
-                      <Input type="select" 
-                      name="project_id"                     
-                      value={projectTeam && projectTeam.project_id}
-                       onChange={(e) => {
-                        handleInputsProjectteam(e)
-                  const selectedProject = e.target.value;
-                  getMilestoneName(selectedProject);
-                }}>
-                         <option defaultValue="selected">Please Select</option>
+                      <Input
+                        type="select"
+                        onChange={handleInputsProjectteam}
+                        value={projectTeam && projectTeam.project_id}
+                        name="project_id"
+                      >
+                        <option defaultValue="selected">Please Select</option>
                         {project &&
                           project.map((e) => (
                             <option key={e.project_id} value={e.project_id}>
@@ -415,85 +408,88 @@ const getMilestoneName = () => {
                       </Input>
                     </FormGroup>
                   </Col>
-                <Col md="4">
+                  <Col md="4">
+                    <Label>Milestone Title</Label>
                     <FormGroup>
-                      <Label>Milestone Title</Label>
-                      <Input type="select" 
-                      name="project_milestone_id"  
-                      value={projectTeam && projectTeam.project_milestone_id}
-                      onChange={(e) => {
-                        handleInputsProjectteam(e)
-                  const selectedTask = e.target.value;
-                  getTaskName(selectedTask);
-                }}>
-                    <option defaultValue="selected">Please Select</option>       
-                   {milestonesTeam &&
-                          milestonesTeam.map((e) => (
-                            <option key={e.project_id} value={e.project_milestone_id}>
-                              {e.milestone_title}
-                            </option>
-                          ))}
+                      <Input
+                        type="select"
+                        onChange={handleInputsProjectteam}
+                        value={projectTeam && projectTeam.project_milestone_id}
+                        name="project_milestone_id"
+                      >
+                        <option value="selected">Please Select</option>
+                        {milestonesTeam &&
+                          milestonesTeam.map((e) => {
+                            return (
+                              <option key={e.project_milestone_id} value={e.project_milestone_id}>
+                                {' '}
+                                {e.milestone_title}{' '}
+                              </option>
+                            );
+                          })}
                       </Input>
                     </FormGroup>
                   </Col>
                   <Col md="4">
                     <FormGroup>
                       <Label>Task</Label>
-                      <Input type="select"
-                       name="project_task_id" 
-                       value={projectTeam && projectTeam.project_task_id}
-                       onChange={handleInputsProjectteam}>
-                    <option defaultValue="selected">Please Select</option>       
+                      <Input
+                        type="select"
+                        onChange={handleInputsProjectteam}
+                        value={projectTeam && projectTeam.project_task_id}
+                        name="project_task_id"
+                      >
+                        <option value="" selected>
+                          Please Select
+                        </option>
                         {taskdetailTeam &&
-                          taskdetailTeam.map((e) => (
-                            <option
-                              key={e.project_milestone_id}
-                              value={e.project_task_id}
-                            >
-                              {e.task_title}
-                            </option>
-                          ))}
+                          taskdetailTeam.map((e) => {
+                            return (
+                              <option key={e.project_task_id} value={e.project_task_id}>
+                                {e.task_title}
+                              </option>
+                            );
+                          })}
                       </Input>
                     </FormGroup>
                   </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Name</Label>
-                        <Input
-                          type="select"
-                          name="employee_id"
-                          onChange={handleInputsProjectteam}
-                          value={projectTeam && projectTeam.employee_id}
-                        >
-                          <option value="" defaultValue="selected"></option>
-                          {employeeTeam &&
-                            employeeTeam.map((ele) => {
-                              return (
-                                <option key={ele.employee_id} value={ele.employee_id}>
-                                  {ele.first_name}
-                                </option>
-                              );
-                            })}
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Designation</Label>
-                        <br />
-                        <span>{projectTeam && projectTeam.designation}</span>
-                      </FormGroup>
-                    </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label>Department</Label>
-                        <br />
-                        <span>{projectTeam && projectTeam.department}</span>
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                </Form>
-              </ComponentCard>
+                  <Col md="4">
+                    <FormGroup>
+                      <Label>Team</Label>
+                      <Input
+                        type="select"
+                        name="employee_id"
+                        onChange={handleInputsProjectteam}
+                        value={projectTeam && projectTeam.employee_id}
+                      >
+                        <option value="" defaultValue="selected"></option>
+                        {employeeTeam &&
+                          employeeTeam.map((ele) => {
+                            return (
+                              <option key={ele.employee_id} value={ele.employee_id}>
+                                {ele.first_name}
+                              </option>
+                            );
+                          })}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                  <Col md="4">
+                    <FormGroup>
+                      <Label>Designation</Label>
+                      <br />
+                      <span>{projectTeam && projectTeam.designation}</span>
+                    </FormGroup>
+                  </Col>
+                  <Col md="3">
+                    <FormGroup>
+                      <Label>Department</Label>
+                      <br />
+                      <span>{projectTeam && projectTeam.department}</span>
+                    </FormGroup>
+                  </Col>
+                </Row>
+              </Form>
             </div>
           </ComponentCard>
           <ComponentCard title="More Details">
@@ -612,7 +608,7 @@ const getMilestoneName = () => {
                                       <FormGroup>
                                         <Label>Actual Hours</Label>
                                         <br />
-                  <span>{taskeditData && taskeditData.actual_hours}</span>
+                                        <span>{taskeditData && taskeditData.actual_hours}</span>
                                       </FormGroup>
                                     </Col>
                                   </Row>
@@ -687,17 +683,25 @@ const getMilestoneName = () => {
                                     </span>
                                   </Link>
                                 </td>
-                    <td>{element.task_title}</td>
-                    <td>{element.start_date ? moment(element.start_date).format('DD-MM-YYYY') : ''}</td>
-                    <td>{element.end_date ? moment(element.end_date).format('DD-MM-YYYY') : ''}</td>
-                    <td>{element.completion}</td>
-                    <td>{element.status}</td>
-                    <td>{element.task_type}</td>
-                    <td>{element.priority}</td>
-                    <td>{element.actual_hours}</td>
-                    <td>{element.estimated_hours}</td>
-                    <td>{element.first_name}</td>
-                    <td>{element.description}</td>
+                                <td>{element.task_title}</td>
+                                <td>
+                                  {element.start_date
+                                    ? moment(element.start_date).format('DD-MM-YYYY')
+                                    : ''}
+                                </td>
+                                <td>
+                                  {element.end_date
+                                    ? moment(element.end_date).format('DD-MM-YYYY')
+                                    : ''}
+                                </td>
+                                <td>{element.completion}</td>
+                                <td>{element.status}</td>
+                                <td>{element.task_type}</td>
+                                <td>{element.priority}</td>
+                                <td>{element.actual_hours}</td>
+                                <td>{element.estimated_hours}</td>
+                                <td>{element.first_name}</td>
+                                <td>{element.description}</td>
                               </tr>
                             );
                           })}

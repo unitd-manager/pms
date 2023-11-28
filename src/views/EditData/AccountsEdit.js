@@ -111,7 +111,7 @@ const AccountsEdit = () => {
               applyChanges={applyChanges}
               backToList={backToList}
              deleteData={deleteExpense}
-              module="Account"
+              module="Accounts"
             ></ApiButton>
       <ToastContainer></ToastContainer>
       <Form>

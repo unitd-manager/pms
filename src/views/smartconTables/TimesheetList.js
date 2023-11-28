@@ -120,7 +120,7 @@ const ProjectTimeSheet = () => {
 
         <CommonTable
           loading={loading}
-          title="Task List"
+          title="TimeSheet List"
           Button={
             <Link to="/ProjectTimesheetDetails">
               <Button color="primary" className="shadow-none">

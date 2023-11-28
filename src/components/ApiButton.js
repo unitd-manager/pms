@@ -5,11 +5,7 @@ import PropTypes from 'prop-types';
 import { HasAccess ,usePermify} from '@permify/react-role';
 import ComponentCardV2 from './ComponentCardV2';
 
-<<<<<<< HEAD
 const ApiButton = ({ editData, navigate, backToList, module,deleteData }) => {
-=======
-const ApiButton = ({ editData,deleteData, navigate, applyChanges, backToList, module }) => {
->>>>>>> 89ce5f7922e5601d54fb6b309b851ed1b30542cc
   ApiButton.propTypes = {
     editData: PropTypes.func,
     deleteData: PropTypes.func,
@@ -46,17 +42,10 @@ const ApiButton = ({ editData,deleteData, navigate, applyChanges, backToList, mo
         >
                 <Button
                   onClick={() => {
-<<<<<<< HEAD
                     editData()
                       setTimeout(()=>{
                         backToList();
                       },1000)
-=======
-                    editData();
-                    setTimeout(()=>{
-                      navigate(`/${module}`);
-                    },1000)
->>>>>>> 89ce5f7922e5601d54fb6b309b851ed1b30542cc
                     
                   }}
                   color="primary">
@@ -81,12 +70,7 @@ const ApiButton = ({ editData,deleteData, navigate, applyChanges, backToList, mo
                 </Button>
               </HasAccess>
             </Col>
-<<<<<<< HEAD
             <Col>
-=======
-            <Col className="d-flex" xl={3} sm={12}>
-              {' '}
->>>>>>> 89ce5f7922e5601d54fb6b309b851ed1b30542cc
               <Button
                 onClick={() => {
                   backToList();
@@ -103,16 +87,10 @@ const ApiButton = ({ editData,deleteData, navigate, applyChanges, backToList, mo
                 renderAuthFailed={<p></p>}
               >
                 <Button color="danger" onClick={() => {deleteData();
-<<<<<<< HEAD
                 //  setTimeout(()=>{
                 //   //backToList();
                 // },1000)
                 }}>
-=======
-                 setTimeout(()=>{
-                  navigate(`/${module}`);
-                },1000)}}>
->>>>>>> 89ce5f7922e5601d54fb6b309b851ed1b30542cc
                   Delete
                 </Button>
               </HasAccess>

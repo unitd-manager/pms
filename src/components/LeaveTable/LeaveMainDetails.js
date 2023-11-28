@@ -10,6 +10,8 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
     leavesDetails: PropTypes.object,
     difference:PropTypes.object,
   };
+
+  console.log("leavesDetails", leavesDetails)
   return (
     <>
       <ComponentCard title="LeaveEdit">

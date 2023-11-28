@@ -4,21 +4,21 @@ import { Row, Col, Button, Form, FormGroup } from 'reactstrap';
 import ComponentCardV2 from '../ComponentCardV2';
 import DeleteButton from '../DeleteButton';
 
-function UserGroupButtons({
+function Buttons({
   id,
     applyChanges,
     backToList,
-    editUserGroupData,
-    editRoomUserGroup,
+    editData,
+    editRoom,
     navigate
 }) {
 
-  UserGroupButtons.propTypes = {
+  Buttons.propTypes = {
         id: PropTypes.string,
         applyChanges: PropTypes.func,
         backToList: PropTypes.func,
-        editUserGroupData: PropTypes.func,
-        editRoomUserGroup: PropTypes.func,
+        editData: PropTypes.func,
+        editRoom: PropTypes.func,
         navigate: PropTypes.any
       };
 
@@ -32,10 +32,10 @@ function UserGroupButtons({
               <Button className='shadow-none'
                 color="primary"
                 onClick={() => {
-                  editUserGroupData();
-                  editRoomUserGroup();
+                  editData();
+                  editRoom();
                   setTimeout(()=>{
-                    navigate('/UserGroup');
+                    navigate('/');
                   },300)
                  
                 }}
@@ -47,8 +47,8 @@ function UserGroupButtons({
               <Button className='shadow-none'
                 color="primary"
                 onClick={() => {
-                  editUserGroupData();
-                  editRoomUserGroup();
+                  editData();
+                  editRoom();
                   applyChanges();
                 }}
               >
@@ -64,7 +64,7 @@ function UserGroupButtons({
                       'Are you sure you want to cancel  \n  \n You will lose any changes made',
                     )
                   ) {
-                    navigate('/UserGroup');
+                    navigate('/');
                   } else {
                     applyChanges();
                   }
@@ -98,4 +98,4 @@ function UserGroupButtons({
   )
 }
 
-export default UserGroupButtons
+export default Buttons

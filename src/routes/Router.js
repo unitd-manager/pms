@@ -14,6 +14,7 @@ const FullLayout = Loadable(lazy(() => import('../layouts/FullLayout')));
 const EditCostingSummaryModal = Loadable(
   lazy(() => import('../components/Tender/EditCostingSummaryModal')),
 );
+// const ApprovalSuccess = Loadable(lazy(() => import('../views/smartconTables/ApprovalSuccess')));
 const AddLineItemModal = Loadable(lazy(() => import('../components/Tender/AddLineItemModal')));
 const EditQuoteModal = Loadable(lazy(() => import('../components/Tender/EditQuoteModal')));
 const EditLineItemModal = Loadable(lazy(() => import('../components/Tender/EditLineItemModal')));
@@ -307,6 +308,7 @@ const Routernew = () => {
             name="editcostingsummary"
             element={<EditCostingSummaryModal />}
           ></Route>
+           {/* <Route path="/ApprovalSuccess" element={<ApprovalSuccess/>}></Route> */}
           <Route path="/addlineitem" name="addlineitem" element={<AddLineItemModal />}></Route>
           <Route path="/editquote" name="editquote" element={<EditQuoteModal />}></Route>
           <Route path="/editlineitem" name="editlineitem" element={<EditLineItemModal />}></Route>

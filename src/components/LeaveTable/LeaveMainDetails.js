@@ -12,6 +12,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
   };
 
   console.log("leavesDetails", leavesDetails)
+  const isDisabled = leavesDetails.status === 'Approved';
   return (
     <>
       <ComponentCard title="LeaveEdit">
@@ -52,6 +53,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                   onChange={handleInputs}
                   value={leavesDetails && leavesDetails.status}
                   name="status"
+                  disabled={isDisabled}
                 >
                   <option defaultValue="selected">
                     Applied

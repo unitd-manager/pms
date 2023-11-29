@@ -9,6 +9,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import { AppProvider } from './context/AppContext';
 import rbac from './context/role-based-access';
 // import ContextRBAC from './context/ContextRBAC';
+import VerifyRoute from './routes/VerifyRoute'
 
 rbac.addUserRoles('ADMIN123', ['ADMIN']);
 
@@ -26,6 +27,7 @@ const App = () => {
               dir={direction ? 'rtl' : 'ltr'}
             >
               <ThemeSelector />
+              <VerifyRoute/>
               <Themeroutes></Themeroutes>
             </div>
           </Suspense>

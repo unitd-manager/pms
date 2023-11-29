@@ -40,17 +40,17 @@ const LeaveDetails = () => {
   }
 
   // send Email To Admin
-  const SendEmailWeekly = (emailData) => {
+  const SendEmailWeekly = (emailData,LeaveIds) => {
 
     const to = employee.email; // baad m admin ki email id aayegi yaha
     const subject = "Leave Mail";
-
+  console.log('emailData',emailData)
     if (emailData) {
       const name = employee.employee_name
       const fromDate = emailData.from_date;
       const toDate = emailData.to_date;
       const leaveType = emailData.leave_type;
-
+      const leaveId = LeaveIds;
       api
         .post('/commonApi/sendUseremailBooking', {
           to,
@@ -58,11 +58,12 @@ const LeaveDetails = () => {
           fromDate,
           toDate,
           leaveType,
-          name
+          name,
+          leaveId
         })
         .then(response => {
           if (response.status === 200) {
-            alert('Booking Email Sent successfully');
+            alert('Leave request Email Sent successfully');
           } else {
             console.error('Error');
           }
@@ -102,7 +103,7 @@ const LeaveDetails = () => {
 
               console.log(employee.name)
 
-              SendEmailWeekly(leaveInsertData);
+              SendEmailWeekly(leaveInsertData,insertedDataId);
               setTimeout(() => {
                 navigate(`/LeavesEdit/${insertedDataId}?tab=1`);
               }, 300);

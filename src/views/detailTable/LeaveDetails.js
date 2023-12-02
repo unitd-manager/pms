@@ -36,6 +36,7 @@ const LeaveDetails = () => {
   };
 
   function isDateInRange(dateToCheck, fromDateArray, toDateArray) {
+    
     for (let i = 0; i < fromDateArray.length; i++) {
       const fromDate = new Date(fromDateArray[i]);
       const toDate = new Date(toDateArray[i]);
@@ -81,11 +82,11 @@ const LeaveDetails = () => {
     }
   };
 
-
-
+  console.log('employee', employee);
+ // console.log('employ', emp);
   //Api insertLeave
   const insertLeave = () => {
-    if (new Date(leaveInsertData.to_date) >= new Date(leaveInsertData.from_date)) {
+   
       if (
         leaveInsertData.employee_id !== '' &&
         leaveInsertData.from_date !== '' &&
@@ -93,12 +94,13 @@ const LeaveDetails = () => {
         leaveInsertData.leave_type !== ''
       ) {
         console.log('leaveinsertdataid', leaveInsertData.employee_id);
+       
         const emp = employee.find((a) => {
           return a.employee_id === Number(leaveInsertData.employee_id);
         });
         const dateToCheckFromDate = new Date(leaveInsertData.from_date);
         const dateToCheckToDate = new Date(leaveInsertData.to_date);
-
+        console.log('emps', emp);
         if (
           isDateInRange(dateToCheckFromDate, emp.from_date, emp.to_date) ||
           isDateInRange(dateToCheckToDate, emp.from_date, emp.to_date)
@@ -126,15 +128,16 @@ const LeaveDetails = () => {
         message('Please fill all required fields', 'warning');
       }
 
-    }
-    else {
-      message('The To date should be the future date of From date', 'error');
-    }
+   
   };
   // getEmployee dropDown
   const getEmployee = () => {
     api
     .post('/leave/getEmployeeEmail',{ email: loggedInuser.email }).then((res) => {
+      res.data.data.forEach((el)=>{
+el.from_date=String(el.from_date).split(',')
+el.to_date=String(el.to_date).split(',')
+      })
       setEmployee(res.data.data);
       console.log("setEmployee", res.data.data)
     });

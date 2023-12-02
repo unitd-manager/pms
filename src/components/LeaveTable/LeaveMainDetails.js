@@ -41,6 +41,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                     onChange={handleInputs}
                     value={leavesDetails && moment(leavesDetails.date).format('YYYY-MM-DD')}
                     name="date"
+                    disabled
                   />
                 </FormGroup>
               </Col>
@@ -76,6 +77,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                   }}
                   value={leavesDetails && leavesDetails.leave_type}
                   name="leave_type"
+                  disabled
                 >
                   <option defaultValue="selected">
                     Please Select
@@ -126,6 +128,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                   onChange={handleInputs}
                   value={leavesDetails && moment(leavesDetails.from_date).format('YYYY-MM-DD')}
                   name="from_date"
+                  disabled
                 />
               </FormGroup>
             </Col>
@@ -137,6 +140,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                   onChange={handleInputs}
                   value={leavesDetails && moment(leavesDetails.to_date).format('YYYY-MM-DD')}
                   name="to_date"
+                  disabled
                 />
               </FormGroup>
             </Col>

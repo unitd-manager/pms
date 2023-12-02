@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext} from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -7,7 +7,9 @@ import moment from 'moment';
 import message from '../../components/Message';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
+import AppContext from '../../context/AppContext';
 import api from '../../constants/api';
+
 
 const LeaveDetails = () => {
   //Navigation and parameters
@@ -20,6 +22,13 @@ const LeaveDetails = () => {
     to_date: '',
     leave_type: '',
   });
+
+  const { loggedInuser } = useContext(AppContext);
+  console.log('loggevdInuser',loggedInuser)
+  console.log('loggevdInuser',loggedInuser.first_name)
+  console.log('loggevdInuseremail',loggedInuser.email)
+
+  // const email = loggedInuser.email
   //setting data in leaveInsertData
   const handleInputs = (e) => {
     console.log({ ...leaveInsertData, [e.target.name]: e.target.value })
@@ -38,15 +47,16 @@ const LeaveDetails = () => {
 
     return false; // The date is not within any of the ranges
   }
-
+  
   // send Email To Admin
   const SendEmailWeekly = (emailData,LeaveIds) => {
 
     const to = employee.email; // baad m admin ki email id aayegi yaha
     const subject = "Leave Mail";
+    console.log('email',employee.email)
   console.log('emailData',emailData)
     if (emailData) {
-      const name = employee.employee_name
+      const name = loggedInuser.first_name
       const fromDate = emailData.from_date;
       const toDate = emailData.to_date;
       const leaveType = emailData.leave_type;
@@ -123,11 +133,8 @@ const LeaveDetails = () => {
   };
   // getEmployee dropDown
   const getEmployee = () => {
-    api.get('/leave/getEmployee').then((res) => {
-      res.data.data.forEach((el) => {
-        el.from_date = String(el.from_date).split(',');
-        el.to_date = String(el.to_date).split(',');
-      });
+    api
+    .post('/leave/getEmployeeEmail',{ email: loggedInuser.email }).then((res) => {
       setEmployee(res.data.data);
       console.log("setEmployee", res.data.data)
     });
@@ -214,7 +221,7 @@ const LeaveDetails = () => {
                       name="leave_type"
                     >
                       <option value="selected">Please Select</option>
-                      <option value="Absent">Absent</option>
+                      <option value="Permission">Permission</option>
                       <option value="Annual Leave">Annual Leave</option>
                       <option value="Hospitalization Leave">Hospitalization Leave</option>
                       <option value="Sick Leave">Sick Leave</option>

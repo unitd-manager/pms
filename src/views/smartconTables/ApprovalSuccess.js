@@ -46,7 +46,7 @@ const ApprovalSuccess = () => {
             .then((res) => {
               setLeavesDetails(res.data.data[0]);
               setSuccess(true)
-              console.log('leavesDetails',leavesDetails.email)
+              console.log('leavesDetails',res.data.data[0].employee_name)
               const to = res.data.data[0].email; 
               const subject = "Leave Confirm Mail";
               const name = res.data.data[0].employee_name

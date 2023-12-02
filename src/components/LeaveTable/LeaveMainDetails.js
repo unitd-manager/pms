@@ -11,8 +11,8 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
     difference:PropTypes.object,
   };
 
-  console.log("leavesDetails", leavesDetails)
-  const isDisabled = leavesDetails.status === 'Approved';
+  // console.log("leavesDetails", leavesDetails)
+  // const isDisabled = leavesDetails.status === 'Approved';
   return (
     <>
       <ComponentCard title="LeaveEdit">
@@ -53,7 +53,8 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                   onChange={handleInputs}
                   value={leavesDetails && leavesDetails.status}
                   name="status"
-                  disabled={isDisabled}
+                  disabled
+                  // disabled={isDisabled}
                 >
                   <option defaultValue="selected">
                     Applied
@@ -79,7 +80,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                   <option defaultValue="selected">
                     Please Select
                   </option>
-                  <option value="Absent">Absent</option>
+                  <option value="Permission">Permission</option>
                   <option value="Annual Leave">Annual Leave</option>
                   <option value="Hospitalization Leave">Hospitalization Leave</option>
                   <option value="Sick Leave">Sick Leave</option>

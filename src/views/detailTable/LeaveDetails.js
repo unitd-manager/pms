@@ -21,6 +21,7 @@ const LeaveDetails = () => {
     from_date: '',
     to_date: '',
     leave_type: '',
+    reason: '',
   });
 
   const { loggedInuser } = useContext(AppContext);
@@ -58,9 +59,10 @@ const LeaveDetails = () => {
   console.log('emailData',emailData)
     if (emailData) {
       const name = loggedInuser.first_name
-      const fromDate = emailData.from_date;
-      const toDate = emailData.to_date;
+      const fromDate = moment(emailData.from_date).format('DD-MM-YYYY');
+      const toDate = moment(emailData.to_date).format('DD-MM-YYYY');
       const leaveType = emailData.leave_type;
+      const leaveReason = emailData.reason;
       const leaveId = LeaveIds;
       api
         .post('/commonApi/sendUseremailBooking', {
@@ -70,6 +72,7 @@ const LeaveDetails = () => {
           toDate,
           leaveType,
           name,
+          leaveReason,
           leaveId
         })
         .then(response => {
@@ -91,7 +94,8 @@ const LeaveDetails = () => {
         leaveInsertData.employee_id !== '' &&
         leaveInsertData.from_date !== '' &&
         leaveInsertData.to_date !== '' &&
-        leaveInsertData.leave_type !== ''
+        leaveInsertData.leave_type !== ''&&
+        leaveInsertData.reason !== ''
       ) {
         console.log('leaveinsertdataid', leaveInsertData.employee_id);
        
@@ -230,6 +234,17 @@ el.to_date=String(el.to_date).split(',')
                       <option value="Sick Leave">Sick Leave</option>
                     </Input>
                   </Col>
+                  <Col md="3">
+              <FormGroup>
+                <Label>Reason</Label>
+                <Input
+                  type="textarea"
+                  onChange={handleInputs}
+                  value={leaveInsertData && leaveInsertData.reason}
+                  name="reason"
+                />
+              </FormGroup>
+            </Col>
                 </Row>
               </FormGroup>
               <FormGroup>

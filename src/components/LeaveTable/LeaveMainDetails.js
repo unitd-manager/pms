@@ -10,6 +10,9 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
     leavesDetails: PropTypes.object,
     difference:PropTypes.object,
   };
+
+  // console.log("leavesDetails", leavesDetails)
+  // const isDisabled = leavesDetails.status === 'Approved';
   return (
     <>
       <ComponentCard title="LeaveEdit">
@@ -38,6 +41,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                     onChange={handleInputs}
                     value={leavesDetails && moment(leavesDetails.date).format('YYYY-MM-DD')}
                     name="date"
+                    disabled
                   />
                 </FormGroup>
               </Col>
@@ -50,6 +54,8 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                   onChange={handleInputs}
                   value={leavesDetails && leavesDetails.status}
                   name="status"
+                  disabled
+                  // disabled={isDisabled}
                 >
                   <option defaultValue="selected">
                     Applied
@@ -71,11 +77,12 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                   }}
                   value={leavesDetails && leavesDetails.leave_type}
                   name="leave_type"
+                  disabled
                 >
                   <option defaultValue="selected">
                     Please Select
                   </option>
-                  <option value="Absent">Absent</option>
+                  <option value="Permission">Permission</option>
                   <option value="Annual Leave">Annual Leave</option>
                   <option value="Hospitalization Leave">Hospitalization Leave</option>
                   <option value="Sick Leave">Sick Leave</option>
@@ -121,6 +128,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                   onChange={handleInputs}
                   value={leavesDetails && moment(leavesDetails.from_date).format('YYYY-MM-DD')}
                   name="from_date"
+                  disabled
                 />
               </FormGroup>
             </Col>
@@ -132,6 +140,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
                   onChange={handleInputs}
                   value={leavesDetails && moment(leavesDetails.to_date).format('YYYY-MM-DD')}
                   name="to_date"
+                  disabled
                 />
               </FormGroup>
             </Col>
@@ -139,7 +148,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
           <Row>
             <Col md="6">
               <FormGroup>
-                <Label>No of Days(Current Month)</Label>
+                <Label>No of Days</Label>
                 <Input
                   type="text"
                   onChange={handleInputs}

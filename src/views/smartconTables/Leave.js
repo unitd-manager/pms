@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
 import {Button } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
-import $ from 'jquery';
 import moment from 'moment';
 import 'datatables.net-buttons/js/buttons.colVis';
 import 'datatables.net-buttons/js/buttons.flash';
@@ -14,39 +13,62 @@ import { Link } from 'react-router-dom';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
+import AppContext from '../../context/AppContext';
 // import ApiButton from '../../components/ApiButton'
 
 const Leaves = () => {
   //Const Variables
   const [leaves, setLeaves] = useState(null);
-  const [loading, setLoading] = useState(false)
+  const { loggedInuser } = useContext(AppContext);
+  const [mail, setMail] = useState(null);
 
-
-  // get Leave
-  const getLeave = () => {
-    api.get('/leave/getLeave').then((res) => {
-      setLeaves(res.data.data);
-      $('#example').DataTable({
-        pagingType: 'full_numbers',
-        pageLength: 20,
-        processing: true,
-        dom: 'Bfrtip',
-        buttons: [ {
-          extend: 'print',
-          text: "Print",
-          className:"shadow-none btn btn-primary",
-      }],
-      });
-      setLoading(false)
-    }).catch(()=>{
-      setLoading(false)
-    });
+  const getMail = async () => {
+    try {
+      const response = await api.get('/setting/getMail');
+      const adminEmails = response.data.data.map((item) => item.value);
+      setMail(adminEmails);
+      console.log('adminEmails', adminEmails);
+    } catch (error) {
+      // Handle error
+    }
   };
-
+  
+  const getLeave = () => {
+    const userEmail = loggedInuser.email;
+  
+    // Check if the logged-in user's email is in the array of admin emails
+    if (mail.includes(userEmail)) {
+      // If the logged-in user is admin, fetch all leave records
+      api
+        .get('/leave/getAllLeave')
+        .then((res) => {
+          setLeaves(res.data.data);
+        })
+        .catch(() => {
+          // Handle error
+        });
+    } else {
+      // If the logged-in user is not admin, fetch leave records for the logged-in user
+      api
+        .post('/leave/getLeave', { email: userEmail })
+        .then((res) => {
+          setLeaves(res.data.data);
+        })
+        .catch(() => {
+          // Handle error
+        });
+    }
+  };
+  
+  useEffect(() => {
+    getMail();
+  }, []);
 
   useEffect(() => {
-    getLeave();
-  }, []);
+    if (mail !== null) {
+      getLeave();
+    }
+  }, [mail]);
   //  stucture of leave list view
   const columns = [
     {
@@ -127,7 +149,6 @@ const Leaves = () => {
         <BreadCrumbs/>
         {/* <ApiButton></ApiButton> */}
         <CommonTable
-                loading={loading}
           title="Leave List"
           Button={
             <Link to="/LeaveDetails">
@@ -151,7 +172,7 @@ const Leaves = () => {
                   <tr key={element.leave_id}>
                     <td>{i+1}</td>
                     <td>
-                      <Link to={`/LeavesEdit/${element.leave_id}`}>
+                      <Link to={`/LeavesEdit/${element.leave_id}/${element.employee_id}`}>
                         <Icon.Edit2 />
                       </Link>
                     </td>

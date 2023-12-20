@@ -10,13 +10,13 @@ import 'datatables.net-buttons/js/buttons.flash';
 import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
+//import moment from 'moment';
 import { ToastContainer } from 'react-toastify';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
-import Flag from '../../components/Flag';
-import message from '../../components/Message';
+// import Flag from '../../components/Flag';
+// import message from '../../components/Message';
 
 const Lead = () => {
   //Const Variables
@@ -47,18 +47,18 @@ const Lead = () => {
 
     
   // update publish
-  const updateFlag = (obj) => {
-    obj.flag = !obj.flag;
-    api
-      .post('/lead/update-flag', obj)
-      .then(() => {
-        getLead();
-        message('Flag updated successfully', 'success');
-      })
-      .catch(() => {
-        message('Unable to edit record.', 'error');
-      });
-  };
+  // const updateFlag = (obj) => {
+  //   obj.flag = !obj.flag;
+  //   api
+  //     .post('/lead/update-flag', obj)
+  //     .then(() => {
+  //       getLead();
+  //       message('Flag updated successfully', 'success');
+  //     })
+  //     .catch(() => {
+  //       message('Unable to edit record.', 'error');
+  //     });
+  // };
 
   useEffect(() => {
   
@@ -82,39 +82,46 @@ const Lead = () => {
       button: true,
       sortable: false,
     },
+    // {
+    //   name: 'Flag',
+    //   selector: 'flag',
+    //   cell: () => <Icon.Flag />,
+    //   grow: 0,
+    //   width: 'auto',
+    //   button: true,
+    //   sortable: false,
+    // },
     {
-      name: 'Flag',
-      selector: 'flag',
-      cell: () => <Icon.Flag />,
-      grow: 0,
-      width: 'auto',
-      button: true,
-      sortable: false,
-    },
-    {
-      name: 'Title',
+      name: 'Lead Name',
       selector: 'lead_title',
       sortable: true,
       grow: 0,
       wrap: true,
     },
+    // {
+    //   name: 'Date',
+    //   selector: 'due_date',
+    //   sortable: true,
+    //   grow: 0,
+    //   wrap: true,
+    // },
     {
-      name: 'Date',
-      selector: 'due_date',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
-    {
-      name: 'Company Name',
-      selector: 'company_name',
+      name: 'Source of lead',
+      selector: 'source_of_lead',
       sortable: true,
       grow: 2,
       wrap: true,
     },
     {
-      name: 'Employee Name',
-      selector: 'employee_name',
+      name: 'Status',
+      selector: 'lead_status',
+      sortable: true,
+      grow: 2,
+      wrap: true,
+    },
+    {
+      name: 'Sales Person',
+      selector: 'first_name',
       sortable: true,
       grow: 0,
     },
@@ -155,7 +162,7 @@ const Lead = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>
+                    {/* <td>
                       <span
                         onClick={() => {
                           updateFlag(element);
@@ -163,11 +170,11 @@ const Lead = () => {
                       >
                         <Flag value={element.flag ? 1 : 0} />
                       </span>
-                    </td>
+                    </td> */}
                     <td>{element.lead_title}</td>
-                    <td>{element.due_date? moment(element.due_date).format('YYYY-MM-DD'):''}</td>
-                    <td>{element.company_name}</td>
-                    <td>{element.employee_name}</td>
+                    <td>{element.source_of_lead}</td>
+                    <td>{element.lead_status}</td>
+                    <td>{element.first_name}</td>
                   </tr>
                 );
               })}

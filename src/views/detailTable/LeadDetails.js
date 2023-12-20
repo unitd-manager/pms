@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -7,17 +7,20 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
+import AppContext from '../../context/AppContext';
+
 
 const LeadDetails = () => {
   
     // Navigation and Parameter Constants
   const navigate = useNavigate();
-
+  const { loggedInuser } = useContext(AppContext);
   //  insertClient
   const [leadForms, setLeadForms] = useState({
     lead_title: '',
     company_id:'',
     employee_id:'',
+    source_of_lead:'',
   });
 
   //Client Functions/Methods
@@ -27,8 +30,9 @@ const LeadDetails = () => {
 
   // Client Insert
   const insertLead = () => {
-    if(leadForms.lead_title !== ''){
-      leadForms.creation_date = creationdatetime
+    if(leadForms.lead_title !== '' && leadForms.source_of_lead !== '' ){
+      leadForms.creation_date = creationdatetime;
+      leadForms.created_by = loggedInuser.first_name;
     api
       .post('/lead/insertLeadCompany', leadForms)
       .then((res) => {
@@ -66,6 +70,17 @@ const LeadDetails = () => {
                     <Input
                       type="text"
                       name="lead_title"
+                      onChange={(e) => {
+                        handleLeadForms(e);
+                      }}
+                    ></Input>
+                  </Col>
+                  <Col md="12">
+                    <Label>Source of Lead {' '}<span className='required'> *</span>{' '}</Label>
+
+                    <Input
+                      type="text"
+                      name="source_of_lead"
                       onChange={(e) => {
                         handleLeadForms(e);
                       }}

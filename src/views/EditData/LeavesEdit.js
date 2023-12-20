@@ -26,6 +26,7 @@ const LeavesEdit = () => {
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [leavesDetails, setLeavesDetails] = useState({});
   const [PastleavesDetails, setPastLeavesDetails] = useState();
+  const [totalPastleavesDetails, setTotalPastLeavesDetails] = useState();
   const [RoomName, setRoomName] = useState('');
   const [fileTypes, setFileTypes] = useState('');
   const [attachmentData, setDataForAttachment] = useState({
@@ -35,9 +36,9 @@ const LeavesEdit = () => {
   const [update, setUpdate] = useState(false);
 
   // Navigation and Parameter Constants
-  const { id } = useParams();
+  const { employeeId, id } = useParams();
   const navigate = useNavigate();
-
+console.log('employeeId',employeeId);
   // Button Save Apply Back List
   const applyChanges = () => {};
   const backToList = () => {
@@ -55,9 +56,9 @@ const LeavesEdit = () => {
   // End for tab refresh navigation #Renuka 1-06-23
 
   //  get Leave Past history
-  const LeavePastHistoryById = (empId) => {
+  const LeavePastHistoryById = () => {
     api
-      .post('/leave/getPastLeaveHistoryById', { employee_id: empId })
+      .post('/leave/getPastLeaveHistoryById', { employee_id: employeeId })
       .then((res) => {
         setPastLeavesDetails(res.data.data);
       })
@@ -65,7 +66,16 @@ const LeavesEdit = () => {
         message('leaves Data Not Found', 'info');
       });
   };
-
+  const TotalLeavePastHistoryById = () => {
+    api
+      .post('/leave/getTotalPastLeaveHistoryById', { employee_id: employeeId })
+      .then((res) => {
+        setTotalPastLeavesDetails(res.data.data);
+      })
+      .catch(() => {
+        message('leaves Data Not Found', 'info');
+      });
+  };
   // Get Leaves By Id
   const editLeavesById = () => {
     api
@@ -130,6 +140,7 @@ const LeavesEdit = () => {
 
   useEffect(() => {
     editLeavesById();
+    TotalLeavePastHistoryById();
   }, [id]);
   const deleteLeaveData = () => {
     Swal.fire({
@@ -235,6 +246,7 @@ const LeavesEdit = () => {
             <LeavePastHistory
               PastleavesDetails={PastleavesDetails}
               leavesDetails={leavesDetails}
+              totalPastleavesDetails={totalPastleavesDetails}
             ></LeavePastHistory>
           </TabPane>
         </TabContent>

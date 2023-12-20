@@ -29,8 +29,7 @@ const LeaveDetails = () => {
   console.log('loggevdInuser',loggedInuser.first_name)
   console.log('loggevdInuseremail',loggedInuser.email)
 
-  // const email = loggedInuser.email
-  //setting data in leaveInsertData
+
   const handleInputs = (e) => {
     console.log({ ...leaveInsertData, [e.target.name]: e.target.value })
     setLeaveInsertData({ ...leaveInsertData, [e.target.name]: e.target.value });
@@ -121,7 +120,7 @@ const LeaveDetails = () => {
 
               SendEmailWeekly(leaveInsertData,insertedDataId);
               setTimeout(() => {
-                navigate(`/LeavesEdit/${insertedDataId}?tab=1`);
+                navigate(`/LeavesEdit/${insertedDataId}/${leaveInsertData.employee_id}`);
               }, 300);
             })
             .catch(() => {

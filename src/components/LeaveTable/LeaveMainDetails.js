@@ -148,7 +148,7 @@ export default function LeaveMainDetails({ handleInputs, leavesDetails, differen
           <Row>
             <Col md="6">
               <FormGroup>
-                <Label>No of Days(Current Month)</Label>
+                <Label>No of Days</Label>
                 <Input
                   type="text"
                   onChange={handleInputs}

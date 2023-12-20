@@ -329,7 +329,7 @@ const Routernew = () => {
           <Route path="/leadEdit/:id" name="leaddata" element={<LeadEdit />}></Route>
           <Route path="/sectionEdit/:id" name="sectiondata" element={<SectionEdit />}></Route>
           <Route path="/AccountsEdit/:id" name="accountdata" element={<AccountsEdit />}></Route>
-          <Route path="/LeavesEdit/:id" name="leavedata" element={<LeavesEdit />}></Route>
+          <Route path="/LeavesEdit/:id/:employeeId" name="leavedata" element={<LeavesEdit />}></Route>
 
           <Route path="/BookingEdit/:id" name="bookingdata" element={<BookingEdit />}></Route>
           <Route

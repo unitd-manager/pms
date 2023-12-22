@@ -4,11 +4,10 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import ComponentCard from '../ComponentCard';
 
-export default function LeadMainDetails({ handleInputs, lead, allCountries, projectdetails,sourceLinked,setSourceLinked }) {
+export default function LeadMainDetails({ handleInputs, lead, allCountries, projectdetails,sourceLinked }) {
   LeadMainDetails.propTypes = {
     handleInputs: PropTypes.func,
     sourceLinked:PropTypes.any,
-    setSourceLinked:PropTypes.any,
     allCountries: PropTypes.any,
     lead: PropTypes.any,
     projectdetails: PropTypes.any,

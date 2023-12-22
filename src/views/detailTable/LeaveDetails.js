@@ -14,8 +14,11 @@ import api from '../../constants/api';
 const LeaveDetails = () => {
   //Navigation and parameters
   const navigate = useNavigate();
+
   //All State Variable
   const [employee, setEmployee] = useState();
+  const [totalPastleavesDetails, setTotalPastLeavesDetails] = useState();
+
   const [leaveInsertData, setLeaveInsertData] = useState({
     employee_id: '',
     from_date: '',
@@ -24,10 +27,39 @@ const LeaveDetails = () => {
     reason: '',
   });
 
+
   const { loggedInuser } = useContext(AppContext);
   console.log('loggevdInuser',loggedInuser)
+
+  console.log("employeeId",loggedInuser.staff_id)
+
+
   console.log('loggevdInuser',loggedInuser.first_name)
   console.log('loggevdInuseremail',loggedInuser.email)
+
+    // getEmployee dropDown
+    const getEmployee = () => {
+      api
+      .post('/leave/getEmployeeEmail',{ email: loggedInuser.email }).then((res) => {
+        res.data.data.forEach((el)=>{
+  el.from_date=String(el.from_date).split(',')
+  el.to_date=String(el.to_date).split(',')
+        })
+        setEmployee(res.data.data);
+        console.log("setEmployee", res.data.data)
+      });
+    };
+
+  const TotalLeavePastHistoryById = () => {
+    api
+      .post('/leave/getTotalPastLeaveHistoryById', { employee_id: 10 })
+      .then((res) => {
+        setTotalPastLeavesDetails(res.data.data);
+      })
+      .catch(() => {
+        message('leaves Data Not Found', 'info');
+      });
+  };
 
 
   const handleInputs = (e) => {
@@ -48,7 +80,8 @@ const LeaveDetails = () => {
 
     return false; // The date is not within any of the ranges
   }
-  
+
+
   // send Email To Admin
   const SendEmailWeekly = (emailData,LeaveIds) => {
 
@@ -63,6 +96,9 @@ const LeaveDetails = () => {
       const leaveType = emailData.leave_type;
       const leaveReason = emailData.reason;
       const leaveId = LeaveIds;
+      const totalLeaveThisMonth = totalPastleavesDetails[0]?.TotalLeaveThisMonth
+      const totalLeaveThisYear = totalPastleavesDetails[0]?.TotalLeaveThisYear
+
       api
         .post('/commonApi/sendUseremailBooking', {
           to,
@@ -72,7 +108,9 @@ const LeaveDetails = () => {
           leaveType,
           name,
           leaveReason,
-          leaveId
+          leaveId,
+          totalLeaveThisMonth,
+          totalLeaveThisYear
         })
         .then(response => {
           if (response.status === 200) {
@@ -97,7 +135,6 @@ const LeaveDetails = () => {
         leaveInsertData.reason !== ''
       ) {
         console.log('leaveinsertdataid', leaveInsertData.employee_id);
-       
         const emp = employee.find((a) => {
           return a.employee_id === Number(leaveInsertData.employee_id);
         });
@@ -133,21 +170,10 @@ const LeaveDetails = () => {
 
    
   };
-  // getEmployee dropDown
-  const getEmployee = () => {
-    api
-    .post('/leave/getEmployeeEmail',{ email: loggedInuser.email }).then((res) => {
-      res.data.data.forEach((el)=>{
-el.from_date=String(el.from_date).split(',')
-el.to_date=String(el.to_date).split(',')
-      })
-      setEmployee(res.data.data);
-      console.log("setEmployee", res.data.data)
-    });
-  };
-  console.log('emp', employee);
+
   useEffect(() => {
     getEmployee();
+    TotalLeavePastHistoryById()
   }, []);
 
   return (

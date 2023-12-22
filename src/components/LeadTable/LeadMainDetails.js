@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import ComponentCard from '../ComponentCard';
 
-export default function LeadMainDetails({ handleInputs, lead, allCountries, projectdetails }) {
+export default function LeadMainDetails({ handleInputs, lead, allCountries, projectdetails,sourceLinked,setSourceLinked }) {
   LeadMainDetails.propTypes = {
     handleInputs: PropTypes.func,
-
+    sourceLinked:PropTypes.any,
+    setSourceLinked:PropTypes.any,
     allCountries: PropTypes.any,
     lead: PropTypes.any,
     projectdetails: PropTypes.any,
@@ -134,7 +135,17 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
                 onChange={handleInputs}
                 value={lead && lead.source_of_lead}
                 name="source_of_lead"
-              />
+              >
+                <option defaultValue="selected" value="">
+                  Please Select
+                </option>
+                {sourceLinked &&
+                  sourceLinked.map((country) => (
+                    <option key={country.source_of_lead} value={country.source_of_lead}>
+                      {country.name}
+                    </option>
+                  ))}
+                  </Input>
             </FormGroup>
           </Col>
 

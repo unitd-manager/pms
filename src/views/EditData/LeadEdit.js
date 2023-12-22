@@ -40,6 +40,7 @@ const LeadEdit = () => {
   const [editLineModal, setEditLineModal] = useState(false);
   const [editFollowupModelItem, setEditFollowupModelItem] = useState(null);
   const [editFollowupModal, setEditFollowupModal] = useState(false);
+  const [sourceLinked, setSourceLinked] = useState()
   // const [attachmentModal, setAttachmentModal] = useState(false);
   // const [attachmentData, setDataForAttachment] = useState({
   //   modelType: '',
@@ -128,6 +129,12 @@ const LeadEdit = () => {
       });
   };
 
+  const getSourceType = () => {
+    api.get('/lead/getSourceTypeFromValueList', sourceLinked).then((res) => {
+      setSourceLinked(res.data.data);
+    });
+  };
+
   //Update milestone
   const editLead = () => {
     api
@@ -170,6 +177,7 @@ const LeadEdit = () => {
     getAllCountries();
     getLineItem();
     getFollowupItem();
+    getSourceType();
   }, [id]);
 
   const columns1 = [
@@ -364,7 +372,8 @@ const LeadEdit = () => {
           projectdetails={projectdetails}
           companydetails={companydetails}
           allCountries={allCountries}
-          
+          sourceLinked={sourceLinked}
+          setSourceLinked={setSourceLinked}
         ></LeadMainDetails>
         <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>

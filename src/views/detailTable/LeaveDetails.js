@@ -24,7 +24,7 @@ const LeaveDetails = () => {
     from_date: '',
     to_date: '',
     leave_type: '',
-    reason: '',
+    reason: '', 
   });
 
 
@@ -51,14 +51,7 @@ const LeaveDetails = () => {
     };
 
   const TotalLeavePastHistoryById = () => {
-    api
-      .post('/leave/getTotalPastLeaveHistoryById', { employee_id: 10 })
-      .then((res) => {
-        setTotalPastLeavesDetails(res.data.data);
-      })
-      .catch(() => {
-        message('leaves Data Not Found', 'info');
-      });
+
   };
 
 
@@ -84,6 +77,15 @@ const LeaveDetails = () => {
 
   // send Email To Admin
   const SendEmailWeekly = (emailData,LeaveIds) => {
+    console.log('employeelgg',emailData.employee_id)
+    api
+    .post('/leave/getTotalPastLeaveHistoryById', { employee_id: emailData.employee_id })
+    .then((res) => {
+      setTotalPastLeavesDetails(res.data.data);
+    })
+    .catch(() => {
+      message('leaves Data Not Found', 'info');
+    });
 
     const to = employee.email; // baad m admin ki email id aayegi yaha
     const subject = "Leave Mail";

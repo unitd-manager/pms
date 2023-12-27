@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Form, FormGroup, Button,TabPane,TabContent,Table } from 'reactstrap';
+import {  Form, FormGroup } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer } from 'react-toastify';
 //import * as Icon from 'react-feather';
 import { useNavigate, useParams } from 'react-router-dom';
-import * as Icon from 'react-feather';
-import Swal from 'sweetalert2';
+// import * as Icon from 'react-feather';
+// import Swal from 'sweetalert2';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import '../form-editor/editor.scss';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -17,13 +18,13 @@ import api from '../../constants/api';
 // import ViewFileComponentV2 from '../../components/ProjectModal/ViewFileComponentV2';
 import ApiButton from '../../components/ApiButton';
 import LeadMainDetails from '../../components/LeadTable/LeadMainDetails';
-import Tab from '../../components/ProjectTabs/Tab';
-import AddNote from '../../components/Tender/AddNote';
-import ViewNote from '../../components/Tender/ViewNote';
-import EditLineItemModal from '../../components/LeadTable/EditLineItemModal';
-import CommunicationLineItem from '../../components/LeadTable/CommunicationLineItem';
-import EditFollowupItemModal from '../../components/LeadTable/EditFollowupItemModal';
-import FollowupLineItem from '../../components/LeadTable/FollowupLineItem';
+// import Tab from '../../components/ProjectTabs/Tab';
+// import AddNote from '../../components/Tender/AddNote';
+// import ViewNote from '../../components/Tender/ViewNote';
+// import EditLineItemModal from '../../components/LeadTable/EditLineItemModal';
+// import CommunicationLineItem from '../../components/LeadTable/CommunicationLineItem';
+// import EditFollowupItemModal from '../../components/LeadTable/EditFollowupItemModal';
+// import FollowupLineItem from '../../components/LeadTable/FollowupLineItem';
 
 
 const LeadEdit = () => {
@@ -32,22 +33,23 @@ const LeadEdit = () => {
   const [projectdetails, setProjectDetails] = useState();
   const [companydetails, setCompanyDetails] = useState();
   const [allCountries, setallCountries] = useState();
-  const [lineItem, setLineItem] = useState();
-  const [followupItem, setFollowupItem] = useState();
-  const [addLineItemModal, setAddLineItemModal] = useState(false);
-  const [addFollowupItemModal, setAddFollowupItemModal] = useState(false);
-  const [editLineModelItem, setEditLineModelItem] = useState(null);
-  const [editLineModal, setEditLineModal] = useState(false);
-  const [editFollowupModelItem, setEditFollowupModelItem] = useState(null);
-  const [editFollowupModal, setEditFollowupModal] = useState(false);
-  const [sourceLinked, setSourceLinked] = useState()
+  const [sourceLinked, setSourceLinked] = useState();
+  // const [lineItem, setLineItem] = useState();
+  // const [followupItem, setFollowupItem] = useState();
+  // const [addLineItemModal, setAddLineItemModal] = useState(false);
+  // const [addFollowupItemModal, setAddFollowupItemModal] = useState(false);
+  // const [editLineModelItem, setEditLineModelItem] = useState(null);
+  // const [editLineModal, setEditLineModal] = useState(false);
+  // const [editFollowupModelItem, setEditFollowupModelItem] = useState(null);
+  // const [editFollowupModal, setEditFollowupModal] = useState(false);
+  
   // const [attachmentModal, setAttachmentModal] = useState(false);
   // const [attachmentData, setDataForAttachment] = useState({
   //   modelType: '',
   // });
   // const [roomName, setRoomName] = useState('');
   // const [fileTypes, setFileTypes] = useState();
-  const [activeTab, setActiveTab] = useState('1');
+  //const [activeTab, setActiveTab] = useState('1');
   //const [description, setDescription] = useState('');
 
 
@@ -64,24 +66,24 @@ const LeadEdit = () => {
     setLeadEdit({ ...lead, [e.target.name]: e.target.value });
   };
 
-  const addQuoteItemsToggle = () => {
-    setAddLineItemModal(!addLineItemModal);
-  };
-  const addFollowupItemsToggle = () => {
-    setAddFollowupItemModal(!addFollowupItemModal);
-  };
+  // const addQuoteItemsToggle = () => {
+  //   setAddLineItemModal(!addLineItemModal);
+  // };
+  // const addFollowupItemsToggle = () => {
+  //   setAddFollowupItemModal(!addFollowupItemModal);
+  // };
 
-  const tabs = [
-    { id: '1', name: 'Add Notes' },
-    { id: '2', name: 'History of communications' },
-    { id: '3', name: 'Follow-up Tasks' },
-    { id: '4', name: 'Tele Calling' },
-    { id: '5', name: 'Attachment' },
-  ];
+  // const tabs = [
+  //   { id: '1', name: 'Add Notes' },
+  //   { id: '2', name: 'History of communications' },
+  //   { id: '3', name: 'Follow-up Tasks' },
+  //   { id: '4', name: 'Tele Calling' },
+  //   { id: '5', name: 'Attachment' },
+  // ];
 
-  const toggle = (tab) => {
-    if (activeTab !== tab) setActiveTab(tab);
-  };
+  // const toggle = (tab) => {
+  //   if (activeTab !== tab) setActiveTab(tab);
+  // };
   
 
 
@@ -134,6 +136,7 @@ const LeadEdit = () => {
       setSourceLinked(res.data.data);
     });
   };
+  
 
   //Update milestone
   const editLead = () => {
@@ -154,20 +157,20 @@ const LeadEdit = () => {
   //   console.log('inside DataForAttachment');
   // };
 
-  const getLineItem = () => {
-    api.post('/lead/getCommunicationItemById', { lead_id: id }).then((res) => {
-      setLineItem(res.data.data);
-      //setAddLineItemModal(true);
-    });
-  };
+  // const getLineItem = () => {
+  //   api.post('/lead/getCommunicationItemById', { lead_id: id }).then((res) => {
+  //     setLineItem(res.data.data);
+  //     //setAddLineItemModal(true);
+  //   });
+  // };
 
 
-  const getFollowupItem = () => {
-    api.post('/lead/getFollowupItemById', { lead_id: id }).then((res) => {
-      setFollowupItem(res.data.data);
-      //setAddLineItemModal(true);
-    });
-  };
+  // const getFollowupItem = () => {
+  //   api.post('/lead/getFollowupItemById', { lead_id: id }).then((res) => {
+  //     setFollowupItem(res.data.data);
+  //     //setAddLineItemModal(true);
+  //   });
+  // };
 
 
   useEffect(() => {
@@ -175,111 +178,112 @@ const LeadEdit = () => {
     getProjectname();
     getCompanyname();
     getAllCountries();
-    getLineItem();
-    getFollowupItem();
     getSourceType();
+    //getLineItem();
+    //getFollowupItem();
+    
   }, [id]);
 
-  const columns1 = [
-    {
-      name: '#',
-    },
+  // const columns1 = [
+  //   {
+  //     name: '#',
+  //   },
    
-    {
-      name: 'Interaction Date',
-    },
-    {
-      name: 'Interaction Type',
-    },
-    {
-      name: 'Subject',
-    },
-    {
-      name: 'Description',
-    },
-    {
-      name: 'Status',
-    },
-    {
-      name: 'Result',
-    },
+  //   {
+  //     name: 'Interaction Date',
+  //   },
+  //   {
+  //     name: 'Interaction Type',
+  //   },
+  //   {
+  //     name: 'Subject',
+  //   },
+  //   {
+  //     name: 'Description',
+  //   },
+  //   {
+  //     name: 'Status',
+  //   },
+  //   {
+  //     name: 'Result',
+  //   },
  
-    {
-      name: 'Priority ',
-    },
-    {
-      name: 'Duration ',
-    },
-    {
-      name: 'Action ',
-    },
-  ];
+  //   {
+  //     name: 'Priority ',
+  //   },
+  //   {
+  //     name: 'Duration ',
+  //   },
+  //   {
+  //     name: 'Action ',
+  //   },
+  // ];
 
-  const columns2 = [
-    {
-      name: '#',
-    },
+  // const columns2 = [
+  //   {
+  //     name: '#',
+  //   },
    
-    {
-      name: 'Task Description',
-    },
-    {
-      name: 'Due Date',
-    },
-    {
-      name: 'Assigned To',
-    },
+  //   {
+  //     name: 'Task Description',
+  //   },
+  //   {
+  //     name: 'Due Date',
+  //   },
+  //   {
+  //     name: 'Assigned To',
+  //   },
     
-    {
-      name: 'Priority',
-    },
-    {
-      name: 'Status',
-    },
+  //   {
+  //     name: 'Priority',
+  //   },
+  //   {
+  //     name: 'Status',
+  //   },
  
     
-    {
-      name: 'Action ',
-    },
-  ];
+  //   {
+  //     name: 'Action ',
+  //   },
+  // ];
 
-  const deleteRecord = (deleteID) => {
-    Swal.fire({
-      title: `Are you sure? ${deleteID}`,
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        api.post('/lead/deleteCommunicationItem', { history_of_communication_id: deleteID }).then(() => {
-          Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
-          window.location.reload();
-        });
-      }
-    });
-  };
+  // const deleteRecord = (deleteID) => {
+  //   Swal.fire({
+  //     title: `Are you sure? ${deleteID}`,
+  //     text: "You won't be able to revert this!",
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#3085d6',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Yes, delete it!',
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       api.post('/lead/deleteCommunicationItem', { history_of_communication_id: deleteID }).then(() => {
+  //         Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
+  //         window.location.reload();
+  //       });
+  //     }
+  //   });
+  // };
 
-  const deleteFollowupRecord = (deleteFollowup) => {
-    Swal.fire({
-      title: `Are you sure? ${deleteFollowup}`,
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        api.post('/lead/deleteFollowupItem', { followup_tasks_id : deleteFollowup }).then(() => {
-          Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
-          window.location.reload();
-        });
-      }
-    });
-  };
+  // const deleteFollowupRecord = (deleteFollowup) => {
+  //   Swal.fire({
+  //     title: `Are you sure? ${deleteFollowup}`,
+  //     text: "You won't be able to revert this!",
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#3085d6',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Yes, delete it!',
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       api.post('/lead/deleteFollowupItem', { followup_tasks_id : deleteFollowup }).then(() => {
+  //         Swal.fire('Deleted!', 'Your Line Items has been deleted.', 'success');
+  //         window.location.reload();
+  //       });
+  //     }
+  //   });
+  // };
 
   return (
     <>
@@ -364,7 +368,7 @@ const LeadEdit = () => {
             {' '}
             <ToastContainer></ToastContainer>
             <div>
-              <BreadCrumbs />
+              
 
               <LeadMainDetails
           handleInputs={handleInputs}
@@ -373,21 +377,21 @@ const LeadEdit = () => {
           companydetails={companydetails}
           allCountries={allCountries}
           sourceLinked={sourceLinked}
-          setSourceLinked={setSourceLinked}
+          
         ></LeadMainDetails>
-        <ComponentCard title="More Details">
-        <ToastContainer></ToastContainer>
+        {/* <ComponentCard title="More Details">
+        <ToastContainer></ToastContainer> */}
 
-        <Tab toggle={toggle} tabs={tabs} />
-        <TabContent className="p-4" activeTab={activeTab}>
-          <TabPane tabId="1">
+        {/* <Tab toggle={toggle} tabs={tabs} /> */}
+        {/* <TabContent className="p-4" activeTab={activeTab}> */}
+          {/* <TabPane tabId="1">
             <br />
             <AddNote recordId={id} roomName="AccountEdit" />
             <ViewNote recordId={id} roomName="AccountEdit" />
             
-          </TabPane>
-          <TabPane tabId="2" eventkey="Communication History">
-          <Row>
+          </TabPane> */}
+          {/* <TabPane tabId="2" eventkey="Communication History"> */}
+          {/* <Row>
               <Col md="6">
                 <Button
                   className="shadow-none"
@@ -449,9 +453,9 @@ const LeadEdit = () => {
                   </tbody>
                 </Table>
               </div>
-            </Row>
+            </Row> */}
             {/* End View Line Item Modal */}
-            <EditLineItemModal
+            {/* <EditLineItemModal
               editLineModal={editLineModal}
               setEditLineModal={setEditLineModal}
               FetchLineItemData={editLineModelItem}
@@ -466,10 +470,10 @@ const LeadEdit = () => {
                 handleInputs={handleInputs}
                 communicationLine={id}
               ></CommunicationLineItem>
-            )}
-          </TabPane>
-          <TabPane tabId="3" eventkey="Followup">
-          <Row>
+            )} */}
+          {/* </TabPane>
+          <TabPane tabId="3" eventkey="Followup"> */}
+          {/* <Row>
               <Col md="6">
                 <Button
                   className="shadow-none"
@@ -529,9 +533,9 @@ const LeadEdit = () => {
                   </tbody>
                 </Table>
               </div>
-            </Row>
+            </Row> */}
             {/* End View Line Item Modal */}
-            <EditFollowupItemModal
+            {/* <EditFollowupItemModal
               editFollowupModal={editFollowupModal}
               setEditFollowupModal={setEditFollowupModal}
               FetchFollowupItemData={editFollowupModelItem}
@@ -548,8 +552,8 @@ const LeadEdit = () => {
                 FollowupLine={id}
                 projectdetails={projectdetails}
               ></FollowupLineItem>
-            )}
-          </TabPane>
+            )} */}
+          {/* </TabPane>
           <TabPane tabId="4">
             
           </TabPane>
@@ -557,8 +561,8 @@ const LeadEdit = () => {
           <TabPane tabId="5">
             
           </TabPane>
-        </TabContent>
-      </ComponentCard>
+        </TabContent> */}
+      {/* </ComponentCard> */}
               
             </div>
           </ComponentCard>

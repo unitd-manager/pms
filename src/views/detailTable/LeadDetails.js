@@ -11,7 +11,7 @@ import AppContext from '../../context/AppContext';
 
 
 const LeadDetails = () => {
-  
+  const [sourceLinked, setSourceLinked] = useState();
     // Navigation and Parameter Constants
   const navigate = useNavigate();
   const { loggedInuser } = useContext(AppContext);
@@ -51,7 +51,14 @@ const LeadDetails = () => {
   }
   };
 
+  const getSourceType = () => {
+    api.get('/lead/getSourceTypeFromValueList', sourceLinked).then((res) => {
+      setSourceLinked(res.data.data);
+    });
+  };
+
   useEffect(() => {
+    getSourceType();
   }, []);
  
   return (
@@ -79,12 +86,22 @@ const LeadDetails = () => {
                     <Label>Source of Lead {' '}<span className='required'> *</span>{' '}</Label>
 
                     <Input
-                      type="text"
+                      type="select"
                       name="source_of_lead"
                       onChange={(e) => {
                         handleLeadForms(e);
                       }}
-                    ></Input>
+                    >
+                      <option defaultValue="selected" value="">
+                  Please Select
+                </option>
+                {sourceLinked &&
+                  sourceLinked.map((source) => (
+                    <option key={source.valuelist_id} value={source.value}>
+                      {source.value}
+                    </option>
+                    ))}
+                    </Input>
                   </Col>
                 </Row>
               </FormGroup>

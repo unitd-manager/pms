@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import ComponentCard from '../ComponentCard';
+//import ComponentCard from '../ComponentCard';
 
 export default function LeadMainDetails({ handleInputs, lead, allCountries, projectdetails,sourceLinked }) {
   LeadMainDetails.propTypes = {
@@ -14,7 +14,7 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
   };
 
   return (
-    <ComponentCard title="lead">
+    
       <Form>
         <Row>
           <Col md="3">
@@ -130,20 +130,20 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
             <FormGroup>
               <Label>Source of Lead</Label>
               <Input
-                type="text"
+                type="select"
                 onChange={handleInputs}
                 value={lead && lead.source_of_lead}
                 name="source_of_lead"
               >
-                <option defaultValue="selected" value="">
+              <option defaultValue="selected" value="">
                   Please Select
                 </option>
                 {sourceLinked &&
-                  sourceLinked.map((country) => (
-                    <option key={country.source_of_lead} value={country.source_of_lead}>
-                      {country.name}
+                  sourceLinked.map((source) => (
+                    <option key={source.valuelist_id} value={source.value}>
+                      {source.value}
                     </option>
-                  ))}
+                    ))}
                   </Input>
             </FormGroup>
           </Col>
@@ -238,6 +238,6 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
           </Col>
         </Row>
       </Form>
-    </ComponentCard>
+    
   );
 }

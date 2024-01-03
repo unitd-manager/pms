@@ -41,10 +41,11 @@ const columns = [
                       return (
                         <tr>
                        
-                       <td style={{ paddingLeft: '500px', fontWeight: 'bold' }}><span>Total Leave This Year: {element.TotalLeaveThisYear} Days</span></td>
+                       <td style={{ paddingLeft: '50px', fontWeight: 'bold' }}><span>Total Leave This Year: {element.TotalLeaveExceptPermissionThisYear} Days</span></td>
                          
-                       <td style={{fontWeight: 'bold' }}><span>Total Leave This Month: {element.TotalLeaveThisMonth} Days</span></td>
-                
+                       <td style={{fontWeight: 'bold' }}><span>Total Leave This Month: {element.TotalLeaveExceptPermissionThisMonth} Days</span></td>
+                       <td style={{fontWeight: 'bold' }}><span>Total Permission This Year: {element.TotalPermissionThisYear} Days</span></td>
+                       <td style={{fontWeight: 'bold' }}><span>Total Permission This Month: {element.TotalPermissionThisMonth} Days</span></td>
                   </tr>
                       );
                     })}

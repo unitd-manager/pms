@@ -256,6 +256,7 @@ const LeaveDetails = () => {
                     >
                       <option value="selected">Please Select</option>
                       <option value="Permission">Permission</option>
+                      <option value="Casual Leave">Casual Leave</option>
                       <option value="Annual Leave">Annual Leave</option>
                       <option value="Hospitalization Leave">Hospitalization Leave</option>
                       <option value="Sick Leave">Sick Leave</option>

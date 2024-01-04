@@ -10,7 +10,7 @@ import 'datatables.net-buttons/js/buttons.flash';
 import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
-//import moment from 'moment';
+import moment from 'moment';
 import { ToastContainer } from 'react-toastify';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -98,14 +98,8 @@ const Lead = () => {
       grow: 0,
       wrap: true,
     },
-    // {
-    //   name: 'Date',
-    //   selector: 'due_date',
-    //   sortable: true,
-    //   grow: 0,
-    //   wrap: true,
-    // },
-    {
+    
+       {
       name: 'Source of lead',
       selector: 'source_of_lead',
       sortable: true,
@@ -119,6 +113,21 @@ const Lead = () => {
       grow: 2,
       wrap: true,
     },
+    {
+      name: 'Date',
+      selector: 'date',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    {
+      name: 'Country',
+      selector: 'country',
+      sortable: true,
+      grow: 0,
+      wrap: true,
+    },
+    
     {
       name: 'Sales Person',
       selector: 'first_name',
@@ -174,6 +183,8 @@ const Lead = () => {
                     <td>{element.lead_title}</td>
                     <td>{element.source_of_lead}</td>
                     <td>{element.lead_status}</td>
+                    <td>{element.lead_date ? moment(element.lead_date).format('DD-MM-YYYY') : ''}</td>
+                    <td>{element.country}</td>
                     <td>{element.first_name}</td>
                   </tr>
                 );

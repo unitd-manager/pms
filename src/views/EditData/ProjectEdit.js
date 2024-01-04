@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -123,7 +123,7 @@ const ProjectEdit = () => {
         message('Record editted successfully', 'success');
         getProjectById();
       })
-      .catch(() => {});
+      .catch(() => { });
   };
   //Getting data from milestone
   const getMilestoneById = () => {
@@ -132,18 +132,18 @@ const ProjectEdit = () => {
       .then((res) => {
         setMilestone(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
   //Getting data from milestone
   const getTaskById = () => {
-    
+
     api
       .post('/projecttask/getProjectTaskfilterById', { project_id: id })
       .then((res) => {
         setTaskById(res.data.data);
         setUserSearchData(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
   //Getting data from milestone
   const getTimeSheetById = () => {
@@ -151,8 +151,9 @@ const ProjectEdit = () => {
       .post('/projecttimesheet/getTimeSheetProjectById', { project_id: id })
       .then((res) => {
         setTimeSheetById(res.data.data);
+        setUserSearchData(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   //Getting data from milestone
@@ -162,7 +163,7 @@ const ProjectEdit = () => {
       .then((res) => {
         setTeamById(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   //Getting data from Company
@@ -172,7 +173,7 @@ const ProjectEdit = () => {
       .then((res) => {
         setCompany(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   }; //Getting data from contact
   const getContact = (companyId) => {
     api
@@ -180,7 +181,7 @@ const ProjectEdit = () => {
       .then((res) => {
         setContact(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   useEffect(() => {
@@ -204,47 +205,47 @@ const ProjectEdit = () => {
     <>
       <BreadCrumbs />
       <Form>
-    <FormGroup>
-      <ComponentCardV2>
-        <Row>
-          <Col>
-            <Button className='shadow-none'
-              color="primary"
-              onClick={() => {
-                UpdateData();
-                navigate('/Project');
-              }}
-            >
-              Save
-            </Button>
-          </Col>
-          <Col>
-            <Button className='shadow-none'
-              color="primary"
-              onClick={() => {
-                UpdateData();
-                //applyChanges();
-              }}
-            >
-              Apply
-            </Button>
-          </Col>
+        <FormGroup>
+          <ComponentCardV2>
+            <Row>
+              <Col>
+                <Button className='shadow-none'
+                  color="primary"
+                  onClick={() => {
+                    UpdateData();
+                    navigate('/Project');
+                  }}
+                >
+                  Save
+                </Button>
+              </Col>
+              <Col>
+                <Button className='shadow-none'
+                  color="primary"
+                  onClick={() => {
+                    UpdateData();
+                    //applyChanges();
+                  }}
+                >
+                  Apply
+                </Button>
+              </Col>
 
-         
-          <Col>
-            <Button className='shadow-none'
-              color="dark"
-              onClick={() => {
-                backToList();
-              }}
-            >
-              Back to List
-            </Button>
-          </Col>
-        </Row>
-      </ComponentCardV2>
-    </FormGroup>
-  </Form>
+
+              <Col>
+                <Button className='shadow-none'
+                  color="dark"
+                  onClick={() => {
+                    backToList();
+                  }}
+                >
+                  Back to List
+                </Button>
+              </Col>
+            </Row>
+          </ComponentCardV2>
+        </FormGroup>
+      </Form>
       <Form>
         <FormGroup>
           <ComponentCard title="Project Details" creationModificationDate={projectDetail}>
@@ -423,18 +424,18 @@ const ProjectEdit = () => {
                 <DueStatsProject id={id}></DueStatsProject>
               </Col>
             </Row>
-            <br/>
+            <br />
             <Row>
-            <Col sm="4" lg="10" xl="6" xxl="6">
+              <Col sm="4" lg="10" xl="6" xxl="6">
                 <MilestoneStatsProject id={id}></MilestoneStatsProject>
               </Col>
               <Col sm="4" lg="10" xl="6" xxl="6">
                 <AverageStatsProject id={id}></AverageStatsProject>
               </Col>
             </Row>
-            <br/>
+            <br />
             <ActualHourStatsProject id={id}></ActualHourStatsProject>
-            <br/>
+            <br />
             <PriorityStatsProject id={id}></PriorityStatsProject>
           </TabPane>
           {/* Tab 2 */}
@@ -503,9 +504,12 @@ const ProjectEdit = () => {
           {/* Start Tab Content 6  Delivery Order */}
           <TabPane tabId="6">
             <ProjectTimeSheet
+             timeSheetById={timeSheetById}
+              setTimeSheetById={setTimeSheetById}
+              userSearchData={userSearchData}
+              setUserSearchData={setUserSearchData}
               setContactDatass={setContactDatass}
               id={id}
-              timeSheetById={timeSheetById}
               addContactToggless={addContactToggless}
               addContactModalss={addContactModalss}
               setEditTimeSheetEditModal={setEditTimeSheetEditModal}

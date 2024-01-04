@@ -34,8 +34,8 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
               <Input
                 type="date"
                 onChange={handleInputs}
-                value={lead && moment(lead.due_date).format('YYYY-MM-DD')}
-                name="due_date"
+                value={lead && moment(lead.lead_date).format('YYYY-MM-DD')}
+                name="lead_date"
               />
             </FormGroup>
           </Col>
@@ -108,7 +108,7 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
                 </option>
                 {allCountries &&
                   allCountries.map((country) => (
-                    <option key={country.country_code} value={country.country_code}>
+                    <option key={country.name} value={country.name}>
                       {country.name}
                     </option>
                   ))}

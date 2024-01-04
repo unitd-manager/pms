@@ -43,8 +43,8 @@ export default function ProjectTimeSheet({
     timeSheetById: PropTypes.any,
     setContactDatass: PropTypes.func,
     getTimeSheetById: PropTypes.func,
-    userSearchData:PropTypes.func,
-    setUserSearchData:PropTypes.func
+    userSearchData: PropTypes.func,
+    setUserSearchData: PropTypes.func
   };
 
   const [insertTimeSheet, setInsertTimesheet] = useState({
@@ -114,6 +114,16 @@ export default function ProjectTimeSheet({
       })
       .catch(() => { });
   };
+  const [hoveredCreationDate, setHoveredCreationDate] = useState('');
+
+  const displayCreationDate = (creationDate) => {
+    setHoveredCreationDate(creationDate);
+  };
+
+  const hideCreationDate = () => {
+    setHoveredCreationDate('');
+  };
+  
   console.log(filteredData);
   const handleSearch = () => {
     const newData = timeSheetById
@@ -226,17 +236,17 @@ export default function ProjectTimeSheet({
     {
       name: 'Description',
     },
-    
+
   ];
   return (
-    <Form>
-      <Row>
-        <Col md="3">
+    <>
+    <div className="MainDiv">
+    <div className=" pt-xs-25">
           <br />
           <Card>
             <CardBody>
               <Row>
-                <Col md="10">
+                <Col md="2">
                   <FormGroup>
                     <Label>Select Staff </Label>
                     <Input
@@ -264,27 +274,28 @@ export default function ProjectTimeSheet({
                     Go
                   </Button>
                 </Col>
-                </Row>
-                <span
-                  onClick={() => {
-                    // Clear the filter criteria for both Select Staff and Select Category
-                    setCompanyName('');
-                    // Restore the full data
-                    setUserSearchData(timeSheetById);
+              </Row>
+              <span
+                onClick={() => {
+                  // Clear the filter criteria for both Select Staff and Select Category
+                  setCompanyName('');
+                  // Restore the full data
+                  setUserSearchData(timeSheetById);
 
-                    // Clear the filtered data
-                    setFilteredData([]);
-                  }}
-                  style={{
-                    cursor: 'pointer',
-                    textDecoration: 'underline',
-                  }}
-                >
-                  Back to List
-                </span>
-              
+                  // Clear the filtered data
+                  setFilteredData([]);
+                }}
+                style={{
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                }}
+              >
+                Back to List
+              </span>
+
             </CardBody>
           </Card>
+          <Form>
           <FormGroup>
             <Button color="primary" className="shadow-none" onClick={addContactToggless.bind(null)}>
               Add New{' '}
@@ -423,7 +434,7 @@ export default function ProjectTimeSheet({
                                 />
                               </FormGroup>
                             </Col>
-                            
+
                             <Col md="4">
                               <FormGroup>
                                 <Label>Status</Label>
@@ -482,8 +493,7 @@ export default function ProjectTimeSheet({
               </ModalFooter>
             </Modal>
           </FormGroup>
-        </Col>
-      </Row>
+       
       <Table id="example" className="display border border-secondary rounded">
         <thead>
           <tr>
@@ -509,29 +519,45 @@ export default function ProjectTimeSheet({
                     </span>
                   </td>
                   <td>{element.task_title}</td>
-                  <td>{element.first_name}</td>
+                  <td>
+                    <span
+                      onMouseEnter={() => displayCreationDate(element.creation_date)}
+
+                      onMouseLeave={() => hideCreationDate()}
+                    >
+                      {element.first_name}</span></td>
+                  {/* Modify the following block for the modification date */}
+
                   <td>{element.date}</td>
                   <td>{element.hours}</td>
                   <td>{element.actual_hours}</td>
                   <td>{element.status}</td>
                   <td>{element.description}</td>
-                  
+
                 </tr>
               );
             })}
+          {hoveredCreationDate && (
+            <tr>
+              <td colSpan="9">Creation Date: {hoveredCreationDate}</td>
+            </tr>
+          )}
         </tbody>
       </Table>
       <ReactPaginate
-            previousLabel="Previous"
-            nextLabel="Next"
-            pageCount={totalPages}
-            onPageChange={changePage}
-            containerClassName="navigationButtons"
-            previousLinkClassName="previousButton"
-            nextLinkClassName="nextButton"
-            disabledClassName="navigationDisabled"
-            activeClassName="navigationActive"
-          />
-    </Form>
+        previousLabel="Previous"
+        nextLabel="Next"
+        pageCount={totalPages}
+        onPageChange={changePage}
+        containerClassName="navigationButtons"
+        previousLinkClassName="previousButton"
+        nextLinkClassName="nextButton"
+        disabledClassName="navigationDisabled"
+        activeClassName="navigationActive"
+      />
+      </Form>
+      </div>
+      </div>
+      </>
   );
 }

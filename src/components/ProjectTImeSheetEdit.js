@@ -299,6 +299,28 @@ const ProjectTimeSheetEdit = ({
                           />
                         </FormGroup>
                       </Col>
+                      <Col md="4">
+                        <FormGroup>
+                          <Label>creation Date</Label>
+                          <Input
+                            type="text"
+                            onChange={handleInputs}
+                            value={timeSheetProject && timeSheetProject.creation_date}
+                            name="creation_date"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col md="4">
+                        <FormGroup>
+                          <Label>Modification Date</Label>
+                          <Input
+                            type="text"
+                            onChange={handleInputs}
+                            value={timeSheetProject && timeSheetProject.modification_date}
+                            name="modification_date"
+                          />
+                        </FormGroup>
+                      </Col>
                     </Row>
                   </Form>
                 </CardBody>

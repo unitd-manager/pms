@@ -18,6 +18,8 @@ import api from '../../constants/api';
     //All State Variable
     const [employee, setEmployee] = useState();
     const [totalPastleavesDetails, setTotalPastLeavesDetails] = useState();
+    //const [totalPastPermissionsDetails, setTotalPermissionsDetails] = useState();
+
 
     const [leaveInsertData, setLeaveInsertData] = useState({
       employee_id: '',
@@ -100,6 +102,8 @@ import api from '../../constants/api';
         const leaveId = LeaveIds;
         const totalLeaveThisMonth = totalPastleavesDetails[0]?.TotalLeaveThisMonth
         const totalLeaveThisYear = totalPastleavesDetails[0]?.TotalLeaveThisYear
+        const totalPermissionThisMonth = totalPastleavesDetails[0]?.TotalPermissionThisMonth
+        const totalPermissionThisYear = totalPastleavesDetails[0]?.TotalPermissionThisYear
 
         api
           .post('/commonApi/sendUseremailBooking', {
@@ -112,7 +116,9 @@ import api from '../../constants/api';
             leaveReason,
             leaveId,
             totalLeaveThisMonth,
-            totalLeaveThisYear
+            totalLeaveThisYear,
+            totalPermissionThisMonth,
+            totalPermissionThisYear
           })
           .then(response => {
             if (response.status === 200) {

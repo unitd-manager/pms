@@ -13,11 +13,7 @@ import LinkedinBarStats from '../../components/dashboard/LinkedinBarStats';
 // import TenderSummaryCard from '../../components/dashboard/TenderSummaryCard';
 // import ProjectSummaryChart from '../../components/dashboard/ProjectSummaryChart';
 import TaskSummary from '../../components/dashboard/TenderSummary';
-// import InvoiceSummary from '../../components/dashboard/InvoiceSummary';
-// import InvoiceSummaryChart from '../../components/dashboard/InvoiceSummaryChart';
-// import EmployeeSummary from '../../components/dashboard/ecommerceDashboard/EmployeeSummary';
-// import PasspotExpirySummary from '../../components/dashboard/PasspotExpirySummary';
-// import WorkpermitExpirySummary from '../../components/dashboard/WorkpermitExpirySummary';
+import LeadStats from '../../components/dashboard/ProjectStats/LeadStats';
 
 const Classic = () => {
   return (
@@ -26,14 +22,7 @@ const Classic = () => {
       <Row>
         <Col lg="12">
           <TaskSummary />
-          {/* <TenderSummaryCard />
-          <ProjectSummaryChart/>
-          <InvoiceSummary/>
-          <InvoiceSummaryChart/>
-          <EmployeeSummary/>
-          <PasspotExpirySummary />
-          <WorkpermitExpirySummary/> */}
-          {/* <SalesOverview /> */}
+
           <Row>
         <Col sm="4" lg="6" xl="6" xxl="6">
           <Stats />
@@ -56,34 +45,13 @@ const Classic = () => {
       <PriorityStats/>
       <br />
       <LinkedinBarStats />
+      <PriorityStats />
+      <br />
+      <LeadStats/>
         </Col>
       </Row>
       {/*********************Email & Visitor ************************/}
-      {/* <Row>
-        <Col lg="8" sm="12">
-          <EmailCampaign />
-        </Col>
-        <Col lg="4" sm="12">
-          <ActiveVisitors />
-        </Col>
-      </Row>
-      
-      <Stats />
-     
-      <Row>
-        <Col lg="12">
-          <ProjectTable />
-        </Col>
-      </Row>
-     
-      <Row>
-        <Col lg="6" sm="12">
-          <RecentComments />
-        </Col>
-        <Col lg="6" sm="12">
-          <Chat />
-        </Col>
-      </Row> */}
+  
     </>
   );
 };

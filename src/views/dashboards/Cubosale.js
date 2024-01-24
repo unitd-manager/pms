@@ -5,6 +5,8 @@ import ActualHour from '../../components/dashboard/ActualHour';
 import PriorityStats from '../../components/dashboard/PriorityStats';
 import MilestoneCompleted from '../../components/dashboard/MilestoneCompletedChart';
 import AverageIssues from '../../components/dashboard/AverageIssues';
+import LinkedinBarStats from '../../components/dashboard/LinkedinBarStats';
+
 
 
 // import SalesOverview from '../../components/dashboard/classicDashboard/ProjectOverview';
@@ -51,7 +53,9 @@ const Classic = () => {
       <br />
       <ActualHour />
       <br />
-      <PriorityStats />
+      <PriorityStats/>
+      <br />
+      <LinkedinBarStats />
         </Col>
       </Row>
       {/*********************Email & Visitor ************************/}

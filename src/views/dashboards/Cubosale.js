@@ -7,6 +7,7 @@ import MilestoneCompleted from '../../components/dashboard/MilestoneCompletedCha
 import AverageIssues from '../../components/dashboard/AverageIssues';
 import TaskSummary from '../../components/dashboard/TenderSummary';
 import LeadStats from '../../components/dashboard/ProjectStats/LeadStats';
+import LeadStat2 from '../../components/dashboard/ProjectStats/LeadStat2';
 
 const Classic = () => {
   return (
@@ -38,6 +39,8 @@ const Classic = () => {
       <PriorityStats />
       <br />
       <LeadStats/>
+      <br />
+      <LeadStat2/>
         </Col>
       </Row>
       {/*********************Email & Visitor ************************/}

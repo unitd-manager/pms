@@ -2,11 +2,11 @@
 
 // let baseURL;
 
-// if (process.env.NODE_ENV === 'production') {
-//   baseURL = 'http://43.228.126.245:3007';
-// } else {
-//   baseURL = 'http://43.228.126.245:3007';
-// }
+if (process.env.NODE_ENV === 'production') {
+  baseURL = 'http://43.228.126.245:3007';
+} else {
+  baseURL = 'http://localhost:3007';
+}
 
 // console.log('NODE_ENV:', process.env.NODE_ENV);
 // const api = axios.create({
@@ -15,16 +15,8 @@
 
 // export default api;
 const api = axios.create({
-  //baseURL: 'http://43.228.126.245:4011',
-  baseURL: 'http://localhost:6001',
   
-  
-  });
-  
-  
-  // const loginApi = axios.create({
-  //   baseURL: 'https://art-cause.com:3003'
-  // });
-  
-  
-  export default api
+  baseURL, // Use the baseURL variable here
+});
+
+export default api;

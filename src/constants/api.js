@@ -8,15 +8,17 @@ if (process.env.NODE_ENV === 'production') {
   baseURL = 'http://localhost:3007';
 }
 
-// console.log('NODE_ENV:', process.env.NODE_ENV);
-// const api = axios.create({
-//   baseURL, // Use the baseURL variable here
-// });
-
-// export default api;
+console.log('NODE_ENV:', process.env.NODE_ENV);
 const api = axios.create({
-  
   baseURL, // Use the baseURL variable here
 });
+
+// export default api;
+// const api = axios.create({
+//   //baseURL: 'http://43.228.126.245:3007',
+//   baseURL: 'http://localhost:3007',
+  
+  
+//   });
 
 export default api;

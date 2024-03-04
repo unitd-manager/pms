@@ -1,6 +1,6 @@
  import axios from 'axios';
 
-// let baseURL;
+let baseURL;
 
 if (process.env.NODE_ENV === 'production') {
   baseURL = 'http://43.228.126.245:3007';

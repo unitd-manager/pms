@@ -1,4 +1,4 @@
-import axios from 'axios';
+ import axios from 'axios';
 
 let baseURL;
 
@@ -10,8 +10,15 @@ if (process.env.NODE_ENV === 'production') {
 
 console.log('NODE_ENV:', process.env.NODE_ENV);
 const api = axios.create({
-  
   baseURL, // Use the baseURL variable here
 });
+
+// export default api;
+// const api = axios.create({
+//   //baseURL: 'http://43.228.126.245:3007',
+//   baseURL: 'http://localhost:3007',
+  
+  
+//   });
 
 export default api;

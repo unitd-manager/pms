@@ -142,7 +142,7 @@ const Category = () => {
                         <Icon.Edit2 />
                       </Link>
                     </td>
-                    <td>{element.category_title}</td>
+                    <td>{element.title}</td>
                     <td>
                     <SortOrder
                      idValue={element.category_id}

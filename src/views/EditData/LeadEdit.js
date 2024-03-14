@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {  Form, FormGroup } from 'reactstrap';
+import { Form, FormGroup, TabPane, TabContent } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer } from 'react-toastify';
 //import * as Icon from 'react-feather';
@@ -14,8 +14,10 @@ import ComponentCardV2 from '../../components/ComponentCardV2';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import ApiButton from '../../components/ApiButton';
+import AddNote from '../../components/Tender/AddNote';
+import ViewNote from '../../components/Tender/ViewNote';
+import Tab from '../../components/ProjectTabs/Tab';
 import LeadMainDetails from '../../components/LeadTable/LeadMainDetails';
-
 
 const LeadEdit = () => {
   //All state variable
@@ -24,6 +26,7 @@ const LeadEdit = () => {
   const [companydetails, setCompanyDetails] = useState();
   const [allCountries, setallCountries] = useState();
   const [sourceLinked, setSourceLinked] = useState();
+  const [activeTab, setActiveTab] = useState('1');
 
   //navigation and parameters
   const { id } = useParams();
@@ -38,15 +41,23 @@ const LeadEdit = () => {
     setLeadEdit({ ...lead, [e.target.name]: e.target.value });
   };
 
-
   const getLeadById = () => {
     api.post('/lead/getLeadById', { lead_id: id }).then((res) => {
       const leadData = res.data.data[0];
       setLeadEdit(leadData);
-      
     });
-  };  
+  };
 
+
+  // Start for tab refresh navigation  #Renuka 1-06-23  
+  const tabs =  [
+  
+    {id:'1',name:'Add notes'},
+  ];
+
+  const toggle = (tab) => {
+    if (activeTab !== tab) setActiveTab(tab);
+  };
   //Api call for getting project name dropdown
   const getProjectname = () => {
     api
@@ -88,7 +99,6 @@ const LeadEdit = () => {
       setSourceLinked(res.data.data);
     });
   };
-  
 
   //Update milestone
   const editLead = () => {
@@ -101,8 +111,6 @@ const LeadEdit = () => {
         message('Unable to edit record.', 'error');
       });
   };
- 
-
 
   useEffect(() => {
     getLeadById();
@@ -110,10 +118,8 @@ const LeadEdit = () => {
     getCompanyname();
     getAllCountries();
     getSourceType();
-    
   }, [id]);
 
-  
   return (
     <>
       <BreadCrumbs />
@@ -121,14 +127,13 @@ const LeadEdit = () => {
         <FormGroup>
           <ToastContainer></ToastContainer>
           <ComponentCardV2>
-          <ApiButton
-        editData={editLead}
-        navigate={navigate}
-        applyChanges={applyChanges}
-        backToList={backToList}
-        module="Lead"
-      ></ApiButton>
-           
+            <ApiButton
+              editData={editLead}
+              navigate={navigate}
+              applyChanges={applyChanges}
+              backToList={backToList}
+              module="Lead"
+            ></ApiButton>
           </ComponentCardV2>
         </FormGroup>
       </Form>
@@ -139,21 +144,34 @@ const LeadEdit = () => {
             {' '}
             <ToastContainer></ToastContainer>
             <div>
-              
-
               <LeadMainDetails
-          handleInputs={handleInputs}
-          lead={lead}
-          projectdetails={projectdetails}
-          companydetails={companydetails}
-          allCountries={allCountries}
-          sourceLinked={sourceLinked}    
-        ></LeadMainDetails>
-     
+                handleInputs={handleInputs}
+                lead={lead}
+                projectdetails={projectdetails}
+                companydetails={companydetails}
+                allCountries={allCountries}
+                sourceLinked={sourceLinked}
+              ></LeadMainDetails>
             </div>
           </ComponentCard>
         </FormGroup>
       </Form>
+      {/* ADD NOTE */}
+      <ComponentCard title="More Details">
+        <ToastContainer></ToastContainer>
+        {/* Nav Tab */}
+       
+         {/* Nav Tab */}
+         <Tab toggle={toggle} tabs={tabs} />
+        <TabContent className="p-4" activeTab={activeTab}>
+          <TabPane tabId="1">
+            <ComponentCard title="Add a note">
+              <AddNote recordId={id} roomName="LeadEdit" />
+              <ViewNote recordId={id} roomName="LeadEdit" />
+            </ComponentCard>
+          </TabPane>
+        </TabContent>
+      </ComponentCard>
     </>
   );
 };

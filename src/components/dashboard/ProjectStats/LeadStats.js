@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Col, FormGroup, Label, Input, Row, Form, Button } from 'reactstrap';
 import Chart from 'react-apexcharts';
+import { Link } from 'react-router-dom';
 import api from '../../../constants/api';
 import ComponentCard from '../../ComponentCard';
 
@@ -16,6 +17,8 @@ export default function LeadStats() {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showChart, setShowChart] = useState(false);
+  const [LeadID, setLeadId] = useState(false);
+
 
   const HourData = () => {
     setIsLoading(true);
@@ -37,6 +40,9 @@ export default function LeadStats() {
   
           const titles = filteredData.map((item) => item.lead_title);
           const actualHours = filteredData.map((item) => new Date(item.lead_date).toLocaleDateString());
+
+          const firstLeadId = filteredData[0].lead_id;
+          setLeadId(firstLeadId);
   
           setTaskTitles(titles);
           setActualHourData(actualHours);
@@ -192,9 +198,11 @@ export default function LeadStats() {
               </Col>
             </Row>
           </Form>
+          <Link to={`/LeadEdit/${LeadID}`}>
           {showChart && (
             <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
           )}
+          </Link>
         </ComponentCard>
       </Col>
     </Row>

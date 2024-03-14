@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {  Form, FormGroup } from 'reactstrap';
+import {  Form, FormGroup, TabContent,
+  TabPane,
+  NavItem,
+  NavLink,
+  Nav, } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer } from 'react-toastify';
 //import * as Icon from 'react-feather';
@@ -15,10 +19,14 @@ import message from '../../components/Message';
 import api from '../../constants/api';
 import ApiButton from '../../components/ApiButton';
 import LeadMainDetails from '../../components/LeadTable/LeadMainDetails';
+import ViewNote from '../../components/Tender/ViewNote';
+import AddNote from '../../components/Tender/AddNote';
+
 
 
 const LeadEdit = () => {
   //All state variable
+  const [activeTab, setActiveTab] = useState('1');
   const [lead, setLeadEdit] = useState();
   const [projectdetails, setProjectDetails] = useState();
   const [companydetails, setCompanyDetails] = useState();
@@ -32,6 +40,9 @@ const LeadEdit = () => {
   const applyChanges = () => {};
   const backToList = () => {
     navigate('/Lead');
+  };
+  const toggle = (tab) => {
+    if (activeTab !== tab) setActiveTab(tab);
   };
   //milestone data in milestone
   const handleInputs = (e) => {
@@ -151,6 +162,27 @@ const LeadEdit = () => {
         ></LeadMainDetails>
      
             </div>
+            <Nav tabs>
+            <NavItem>
+              <NavLink
+                className={activeTab === '1' ? 'active' : ''}
+                onClick={() => {
+                  toggle('1');
+                }}
+              >
+                Working hours
+              </NavLink>
+            </NavItem>
+            </Nav>
+            <TabContent className="p-4" activeTab={activeTab}>
+            <TabPane tabId="1">
+            <ComponentCard title="Add a note">
+        <AddNote recordId={id} roomName="LeadInfo" />
+        <ViewNote recordId={id} roomName="LeadInfo" />
+      </ComponentCard>
+            </TabPane>
+            </TabContent>
+
           </ComponentCard>
         </FormGroup>
       </Form>

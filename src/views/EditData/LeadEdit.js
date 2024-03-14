@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Form, FormGroup, TabPane, TabContent } from 'reactstrap';
+import { Form, FormGroup, TabContent,
+  TabPane,
+  NavItem,
+  NavLink,
+  Nav, TabPane, TabContent } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer } from 'react-toastify';
 //import * as Icon from 'react-feather';
@@ -18,6 +22,9 @@ import AddNote from '../../components/Tender/AddNote';
 import ViewNote from '../../components/Tender/ViewNote';
 import Tab from '../../components/ProjectTabs/Tab';
 import LeadMainDetails from '../../components/LeadTable/LeadMainDetails';
+import ViewNote from '../../components/Tender/ViewNote';
+import AddNote from '../../components/Tender/AddNote';
+
 
 const LeadEdit = () => {
   //All state variable
@@ -36,6 +43,7 @@ const LeadEdit = () => {
   const backToList = () => {
     navigate('/Lead');
   };
+
   //milestone data in milestone
   const handleInputs = (e) => {
     setLeadEdit({ ...lead, [e.target.name]: e.target.value });
@@ -153,6 +161,27 @@ const LeadEdit = () => {
                 sourceLinked={sourceLinked}
               ></LeadMainDetails>
             </div>
+            <Nav tabs>
+            <NavItem>
+              <NavLink
+                className={activeTab === '1' ? 'active' : ''}
+                onClick={() => {
+                  toggle('1');
+                }}
+              >
+                Working hours
+              </NavLink>
+            </NavItem>
+            </Nav>
+            <TabContent className="p-4" activeTab={activeTab}>
+            <TabPane tabId="1">
+            <ComponentCard title="Add a note">
+        <AddNote recordId={id} roomName="LeadInfo" />
+        <ViewNote recordId={id} roomName="LeadInfo" />
+      </ComponentCard>
+            </TabPane>
+            </TabContent>
+
           </ComponentCard>
         </FormGroup>
       </Form>

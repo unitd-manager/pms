@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Col, FormGroup, Label, Input, Row, Form } from 'reactstrap';
 import Chart from 'react-apexcharts';
+import { Link } from 'react-router-dom';
 import api from '../../../constants/api';
 import ComponentCard from '../../ComponentCard';
 
@@ -8,10 +9,8 @@ export default function LeadStat2() {
   const [leadData, setLeadData] = useState([]);
   const [years, setYears] = useState([]);
   const [selectedYear, setSelectedYear] = useState("");
-  // const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = () => {
-    // setIsLoading(true);
   
     api.get('/stats/getLeadYear', { params: { year: selectedYear } })
       .then((response) => {
@@ -148,7 +147,9 @@ export default function LeadStat2() {
             <p>Loading...</p>
           ) : ( */}
             {/* leadData.length > 0 && ( */}
+            <Link to="/Lead">
               <Chart options={options} series={series} type="bar" height="280" />
+              </Link>
             {/* ) */}
           {/* )} */}
         </ComponentCard>

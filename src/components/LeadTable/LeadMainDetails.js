@@ -204,6 +204,30 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
               </Input>
             </FormGroup>
           </Col>
+          <Col md="4">
+              <FormGroup>
+                
+                <Label>Cold Call</Label>
+                <br></br>
+                <Input
+                  name="cold_call"
+                  value="1"
+                  type="radio"
+                  defaultChecked={lead && lead.cold_call === 1 && true}
+                  onChange={handleInputs}
+                />
+                <Label> Yes </Label>
+                <Input
+                  name="cold_call"
+                  value="0"
+                  type="radio"
+                  defaultChecked={lead && lead.cold_call === 0 && true}
+                  onChange={handleInputs}
+                />
+                <Label>No</Label>
+                
+              </FormGroup>
+              </Col>
           <Col md="3">
             <FormGroup>
               <Label>Interaction Type</Label>
@@ -228,7 +252,7 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
           </Col>
           <Col md="3">
             <FormGroup>
-              <Label>Notes</Label>
+              <Label>Profile Link</Label>
               <Input
                 type="textarea"
                 onChange={handleInputs}

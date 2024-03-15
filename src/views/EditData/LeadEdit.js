@@ -3,7 +3,7 @@ import { Form, FormGroup, TabContent,
   TabPane,
   NavItem,
   NavLink,
-  Nav, TabPane, TabContent } from 'reactstrap';
+  Nav, TabContent } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer } from 'react-toastify';
 //import * as Icon from 'react-feather';

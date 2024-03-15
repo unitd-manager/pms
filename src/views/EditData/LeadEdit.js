@@ -3,7 +3,7 @@ import { Form, FormGroup, TabContent,
   TabPane,
   NavItem,
   NavLink,
-  Nav, TabPane, TabContent } from 'reactstrap';
+  Nav } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer } from 'react-toastify';
 //import * as Icon from 'react-feather';
@@ -18,8 +18,6 @@ import ComponentCardV2 from '../../components/ComponentCardV2';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import ApiButton from '../../components/ApiButton';
-import AddNote from '../../components/Tender/AddNote';
-import ViewNote from '../../components/Tender/ViewNote';
 import Tab from '../../components/ProjectTabs/Tab';
 import LeadMainDetails from '../../components/LeadTable/LeadMainDetails';
 import ViewNote from '../../components/Tender/ViewNote';

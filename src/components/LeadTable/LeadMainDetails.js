@@ -180,6 +180,7 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
                 name="lead_status"
               >
                 <option>Please Select</option>
+                <option>New</option>
                 <option>In Progress</option>
                 <option>On Hold</option>
                 <option>Pending Approval</option>

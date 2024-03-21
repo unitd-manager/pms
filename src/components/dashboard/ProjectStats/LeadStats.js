@@ -17,7 +17,7 @@ export default function LeadStats() {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showChart, setShowChart] = useState(false);
-  const [LeadID, setLeadId] = useState(false);
+  const [leadID, setLeadId] = useState(false);
 
 
   const HourData = () => {
@@ -41,8 +41,11 @@ export default function LeadStats() {
           const titles = filteredData.map((item) => item.lead_title);
           const actualHours = filteredData.map((item) => new Date(item.lead_date).toLocaleDateString());
 
-          const firstLeadId = filteredData[0].lead_id;
-          setLeadId(firstLeadId);
+          const ids = filteredData.map((item) => item.lead_id); // Extract lead IDs
+
+          setLeadId(ids); // Update lead IDs state
+
+
   
           setTaskTitles(titles);
           setActualHourData(actualHours);
@@ -198,11 +201,11 @@ export default function LeadStats() {
               </Col>
             </Row>
           </Form>
-          <Link to={`/LeadEdit/${LeadID}`}>
           {showChart && (
-            <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
-          )}
-          </Link>
+  <Link to={`/LeadEdit/${leadID}`}>
+    <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
+  </Link>
+)}
         </ComponentCard>
       </Col>
     </Row>

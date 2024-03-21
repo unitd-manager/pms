@@ -23,6 +23,14 @@ const Classic = () => {
     <>
       {/*********************Sales Overview ************************/}
       <Row>
+      <Col lg="12">
+      <ProjectTitle/>
+      </Col>
+     <br />
+     <Col lg="12">
+     <StatusCards/>
+     </Col>
+     <br />
         <Col lg="12">
           <TaskSummary />
 
@@ -54,9 +62,7 @@ const Classic = () => {
       <br />
       <LeadStat2/>
       <br />
-<ProjectTitle/>
-     <br />
-     <StatusCards/>
+
         </Col>
       </Row>
       {/*********************Email & Visitor ************************/}

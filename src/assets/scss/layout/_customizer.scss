@@ -408,3 +408,50 @@ a.active.nav-link, a.nav-link:focus-visible  {
 .autocomplete-suggestions option:hover {
   background-color: #f2f2f2;
 }
+
+.custom-card {
+  position: absolute;
+  top: 50px;;
+  left: 50; /* Adjust left position if needed */
+  width: 10%;
+  background-color: #a9a9a9; /* Dark Grey */
+  color: #333; /* Black */
+}
+
+.custom-card1{
+  position: absolute;
+  top: 50px;;
+  left: 50; /* Adjust left position if needed */
+  width: 10%;
+  background-color: #9DD9F3; /* Dark Grey */
+  color: #333; /* Black */
+}
+
+.custom-card2{
+  position: absolute;
+  top: 50px;;
+  left: 50; /* Adjust left position if needed */
+  width: 10%;
+  background-color: #FFD580; /* Dark Grey */
+  color: #333; /* Black */
+}
+
+.custom-card3{
+  position: absolute;
+  top: 50px;;
+  left: 50; /* Adjust left position if needed */
+  width: 10%;
+  background-color: #d9fdd2; /* Dark Grey */
+  color: #333; /* Black */
+}
+
+.status-heading {
+  position: absolute;
+  top: 20px;;
+  left: 50; /* Adjust left position if needed */
+  width: 100%; /* Ensure it takes the full width of the column */
+}
+
+
+
+

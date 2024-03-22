@@ -56,12 +56,7 @@ const Classic = () => {
       <LeadStats/>
       <br />
       <LeadStat2/>
-<<<<<<< HEAD
       <br />
-=======
-
-
->>>>>>> b3e515bb71398cbe2ee1c03588959632bbb8bca7
         </Col>
       </Row>
   

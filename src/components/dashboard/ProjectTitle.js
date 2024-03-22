@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col } from 'reactstrap';
+import { Row, Col, Card, CardBody } from 'reactstrap';
 import Chart from 'react-apexcharts';
 import api from '../../constants/api';
-import ComponentCard from '../ComponentCard';
 
-const ProjectTitle = () => {
+const Dashboard = () => {
   const [projectStats, setProjectStats] = useState([]);
+  const [projectStatsTitle, setProjectStatsTitle] = useState([]);
 
-  // Get the project statistics
+  // Get the project statistics for StatusCards
   const getStats = () => {
-    api.get('stats/ProjectTitleStats')
+    api
+      .get('stats/ProjectTitleCards')
       .then((res) => {
         setProjectStats(res.data.data);
       })
@@ -18,8 +19,21 @@ const ProjectTitle = () => {
       });
   };
 
+  // Get the project statistics for ProjectTitle
+  const getStatsTitle = () => {
+    api
+      .get('stats/ProjectTitleStats')
+      .then((res) => {
+        setProjectStatsTitle(res.data.data);
+      })
+      .catch((error) => {
+        console.log('Error fetching project statistics:', error);
+      });
+  };
+
   useEffect(() => {
-    getStats(); 
+    getStats();
+    getStatsTitle();
   }, []);
 
   const optionsDonut = {
@@ -31,7 +45,7 @@ const ProjectTitle = () => {
       enabled: true,
       formatter(val, opts) {
         const { seriesIndex } = opts;
-        return projectStats[seriesIndex].task_title_count;
+        return projectStatsTitle[seriesIndex].task_title_count;
       },
     },
     plotOptions: {
@@ -61,20 +75,93 @@ const ProjectTitle = () => {
     },
   };
 
-  const seriesDonut = projectStats.map((stat) => stat.task_title_count);
-  const labelsDonut = projectStats.map((stat) => stat.title);
+  const seriesDonut = projectStatsTitle.map((stat) => stat.task_title_count);
+  const labelsDonut = projectStatsTitle.map((stat) => stat.title);
 
   return (
     <Row>
       <Col md="12">
-        <ComponentCard title="Overall Project Statistics">
-          {projectStats.length > 0 && (
-            <Chart options={{ ...optionsDonut, labels: labelsDonut }} series={seriesDonut} type="donut" height="360" />
-          )}
-        </ComponentCard>
+        <Card>
+          <CardBody>
+            <Row>
+              <Col md="4">
+              <h5>Overall Statistics</h5>
+                <Chart
+                  options={{ ...optionsDonut, labels: labelsDonut }}
+                  series={seriesDonut}
+                  type="donut"
+                  height="360"
+                />
+              </Col>
+              <Col md="6">
+              <h5 className="status-heading">Status</h5>
+                <Row>
+                
+                  {projectStats.map((project) => (
+                    <Col sm="12" lg="3" key={project.id}>
+                      <Card className="custom-card">
+                        <CardBody>
+                          <div className="d-flex align-items-center">
+                            <div>
+                              <h6 className="font-12 mb-3">In progress</h6>
+                              <h4 className="mt-4 fw-bolder mb-0"> {project.in_progress_task_count}</h4>
+                            </div>
+                          </div>
+                        </CardBody>
+                      </Card>
+                    </Col>
+                  ))}
+                  
+            {projectStats.map((project) => (
+              <Col sm="12" lg="3" key={project.id}>
+                <Card className="custom-card1">
+                  <CardBody>
+                    <div className="d-flex align-items-center">
+                      <div>
+                        <h6 className="font-12 mb-3">Completed</h6>
+                        <h4 className="mt-4 fw-bolder mb-0"> {project.completed}</h4>
+                      </div>
+                    </div>
+                  </CardBody>
+                </Card>
+              </Col>
+            ))}
+            {projectStats.map((project) => (
+              <Col sm="12" lg="3" key={project.id}>
+                <Card className="custom-card2">
+                  <CardBody>
+                    <div className="d-flex align-items-center">
+                      <div>
+                        <h6 className="font-12 mb-3">On Hold</h6>
+                        <h4 className="mt-4 fw-bolder mb-0"> {project.on_hold}</h4>
+                      </div>
+                    </div>
+                  </CardBody>
+                </Card>
+              </Col>
+            ))}
+            {projectStats.map((project) => (
+              <Col sm="12" lg="3" key={project.id}>
+                <Card className="custom-card3">
+                  <CardBody>
+                    <div className="d-flex align-items-center">
+                      <div>
+                        <h6 className="font-12 mb-2">Not Started</h6>
+                        <h4 className="mt-2 fw-bolder mb-0"> {project.not_started_task}</h4>
+                      </div>
+                    </div>
+                  </CardBody>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+              </Col>
+            </Row>
+          </CardBody>
+        </Card>
       </Col>
     </Row>
   );
 };
 
-export default ProjectTitle;
+export default Dashboard;

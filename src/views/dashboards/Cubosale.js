@@ -10,7 +10,7 @@ import TaskSummary from '../../components/dashboard/TenderSummary';
 import LeadStats from '../../components/dashboard/ProjectStats/LeadStats';
 import LeadStat2 from '../../components/dashboard/ProjectStats/LeadStat2';
 import ProjectTitle from '../../components/dashboard/ProjectTitle';
-import StatusCards from '../../components/dashboard/StatusCards';
+// import StatusCards from '../../components/dashboard/StatusCards';
 
 const Classic = () => {
   return (
@@ -21,9 +21,9 @@ const Classic = () => {
       <ProjectTitle/>
       </Col>
      <br />
-     <Col lg="12">
+     {/* <Col lg="12">
      <StatusCards/>
-     </Col>
+     </Col> */}
      <br />
         <Col lg="12">
           <TaskSummary />
@@ -56,7 +56,12 @@ const Classic = () => {
       <LeadStats/>
       <br />
       <LeadStat2/>
+<<<<<<< HEAD
       <br />
+=======
+
+
+>>>>>>> b3e515bb71398cbe2ee1c03588959632bbb8bca7
         </Col>
       </Row>
   

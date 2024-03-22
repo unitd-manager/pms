@@ -411,36 +411,43 @@ a.active.nav-link, a.nav-link:focus-visible  {
 
 .custom-card {
   position: absolute;
-  top: 50px;;
+  top: 55px;;
   left: 50; /* Adjust left position if needed */
-  width: 10%;
-  background-color: #a9a9a9; /* Dark Grey */
+  width: 9%;
+  background-color:  #D3D3D3; /* Dark Grey */
   color: #333; /* Black */
 }
 
 .custom-card1{
   position: absolute;
-  top: 50px;;
+  top: 55px;;
   left: 50; /* Adjust left position if needed */
-  width: 10%;
+
+  width: 8%; /* Adjust width */
+  margin-left: 23px;
   background-color: #9DD9F3; /* Dark Grey */
   color: #333; /* Black */
 }
-
+// .custom-card1 .font-12 {
+//   margin-top: -5px;
+//   //margin-left: 20px; /* Adjust the margin-top to reduce space */
+// }
 .custom-card2{
   position: absolute;
-  top: 50px;;
+  top: 55px;;
   left: 50; /* Adjust left position if needed */
-  width: 10%;
+  width: 8%;
+  margin-left: 32px;
   background-color: #FFD580; /* Dark Grey */
   color: #333; /* Black */
 }
 
 .custom-card3{
   position: absolute;
-  top: 50px;;
+  top: 55px;;
   left: 50; /* Adjust left position if needed */
-  width: 10%;
+  width: 9%;
+  margin-left: 40px;
   background-color: #d9fdd2; /* Dark Grey */
   color: #333; /* Black */
 }

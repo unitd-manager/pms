@@ -98,28 +98,28 @@ const Dashboard = () => {
                 <Row>
                 
                   {projectStats.map((project) => (
-                    <Col sm="12" lg="3" key={project.id}>
+                    <Col sm="6" lg="2" key={project.id}>
                       <Card className="custom-card">
-                        <CardBody>
-                          <div className="d-flex align-items-center">
-                            <div>
-                              <h6 className="font-12 mb-3">In progress</h6>
-                              <h4 className="mt-4 fw-bolder mb-0"> {project.in_progress_task_count}</h4>
-                            </div>
-                          </div>
-                        </CardBody>
-                      </Card>
+  <CardBody>
+    <div className="d-flex align-items-center">
+      <div>
+        <h6 className="font-12 mb-0">In Progress</h6>
+        <h4 className="mt-1 fw-bolder mb-0"> {project.in_progress_task_count}</h4>
+      </div>
+    </div>
+  </CardBody>
+</Card>
                     </Col>
                   ))}
                   
             {projectStats.map((project) => (
-              <Col sm="12" lg="3" key={project.id}>
+              <Col sm="6" lg="2" key={project.id}>
                 <Card className="custom-card1">
                   <CardBody>
                     <div className="d-flex align-items-center">
                       <div>
-                        <h6 className="font-12 mb-3">Completed</h6>
-                        <h4 className="mt-4 fw-bolder mb-0"> {project.completed}</h4>
+                        <h6 className="font-12 mb-0">Completed</h6>
+                        <h4 className="mt-1 fw-bolder mb-0"> {project.completed}</h4>
                       </div>
                     </div>
                   </CardBody>
@@ -127,13 +127,13 @@ const Dashboard = () => {
               </Col>
             ))}
             {projectStats.map((project) => (
-              <Col sm="12" lg="3" key={project.id}>
+              <Col sm="6" lg="2" key={project.id}>
                 <Card className="custom-card2">
                   <CardBody>
                     <div className="d-flex align-items-center">
                       <div>
-                        <h6 className="font-12 mb-3">On Hold</h6>
-                        <h4 className="mt-4 fw-bolder mb-0"> {project.on_hold}</h4>
+                        <h6 className="font-12 mb-0">On Hold</h6>
+                        <h4 className="mt-1 fw-bolder mb-0"> {project.on_hold}</h4>
                       </div>
                     </div>
                   </CardBody>
@@ -146,8 +146,8 @@ const Dashboard = () => {
                   <CardBody>
                     <div className="d-flex align-items-center">
                       <div>
-                        <h6 className="font-12 mb-2">Not Started</h6>
-                        <h4 className="mt-2 fw-bolder mb-0"> {project.not_started_task}</h4>
+                        <h6 className="font-12 mb-0">Not Started</h6>
+                        <h4 className="mt-1 fw-bolder mb-0"> {project.not_started_task}</h4>
                       </div>
                     </div>
                   </CardBody>

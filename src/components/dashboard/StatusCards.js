@@ -20,21 +20,7 @@ const StatusCards = () => {
     getStats();
   }, []);
 
-  // Function to assign colors based on status
-  // const getStatusColor = (status) => {
-  //   switch (status.toLowerCase()) {
-  //     case 'not started':
-  //       return 'bg-primary';
-  //     case 'in progress':
-  //       return 'bg-success';
-  //     case 'completed':
-  //       return 'bg-info';
-  //     case 'on hold':
-  //       return 'bg-warning';
-  //     default:
-  //       return 'bg-secondary';
-  //   }
-  // };
+ 
 
   return (
     <Row>
@@ -47,7 +33,7 @@ const StatusCards = () => {
          <CardBody>
            <div className="d-flex align-items-center">
              <div>
-               <h6 className="font-12 mb-3">In progress</h6>
+               <h6 className="font-12 mb-3">In Progress</h6>
                <h4 className="mt-4 fw-bolder mb-0"> {project.in_progress_task_count}</h4>
                
              </div>

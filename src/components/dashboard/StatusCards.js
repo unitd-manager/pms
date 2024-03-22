@@ -21,41 +21,66 @@ const StatusCards = () => {
     getStats();
   }, []);
 
-  // Function to assign colors based on status
-  // const getStatusColor = (status) => {
-  //   switch (status.toLowerCase()) {
-  //     case 'not started':
-  //       return 'bg-primary';
-  //     case 'in progress':
-  //       return 'bg-success';
-  //     case 'completed':
-  //       return 'bg-info';
-  //     case 'on hold':
-  //       return 'bg-warning';
-  //     default:
-  //       return 'bg-secondary';
-  //   }
-  // };
+ 
 
   return (
     <Row>
       {projectStats.map((project) => (
-        <Col sm="12" lg="3">
-          {/*--------------------------------------------------------------------------------*/}
-          {/* Card-3                                                                         */}
-          {/*--------------------------------------------------------------------------------*/}
-          <Card className="custom-card">
-  <CardBody>
-    <div className="d-flex align-items-center">
-      <div>
-        <h6 className="font-12 mb-3">In progress</h6>
-        <h4 className="mt-4 fw-bolder mb-0"> {project.in_progress_task_count}</h4>
-      </div>
-    </div>
-  </CardBody>
-</Card>
-
-        </Col>
+       <Col sm="12" lg="3">
+       {/*--------------------------------------------------------------------------------*/}
+       {/* Card-3                                                                         */}
+       {/*--------------------------------------------------------------------------------*/}
+       <Card className="bg-primary text-dark-white">
+         <CardBody>
+           <div className="d-flex align-items-center">
+             <div>
+               <h6 className="font-12 mb-3">In Progress</h6>
+               <h4 className="mt-4 fw-bolder mb-0"> {project.in_progress_task_count}</h4>
+               
+             </div>
+      
+           </div>
+         </CardBody>
+       </Card>
+     </Col>
+      ))}
+        {projectStats.map((project) => (
+       <Col sm="12" lg="3">
+       {/*--------------------------------------------------------------------------------*/}
+       {/* Card-3                                                                         */}
+       {/*--------------------------------------------------------------------------------*/}
+       <Card className="bg-secondary text-dark-white">
+         <CardBody>
+           <div className="d-flex align-items-center">
+             <div>
+               <h6 className="font-12 mb-3">Completed</h6>
+               <h4 className="mt-4 fw-bolder mb-0"> {project.completed}</h4>
+               
+             </div>
+      
+           </div>
+         </CardBody>
+       </Card>
+     </Col>
+      ))}
+       {projectStats.map((project) => (
+       <Col sm="12" lg="3">
+       {/*--------------------------------------------------------------------------------*/}
+       {/* Card-3                                                                         */}
+       {/*--------------------------------------------------------------------------------*/}
+       <Card className="bg-success text-dark-white">
+         <CardBody>
+           <div className="d-flex align-items-center">
+             <div>
+               <h6 className="font-12 mb-3">On Hold</h6>
+               <h4 className="mt-4 fw-bolder mb-0"> {project.on_hold}</h4>
+               
+             </div>
+      
+           </div>
+         </CardBody>
+       </Card>
+     </Col>
       ))}
       {projectStats.map((project) => (
         <Col sm="12" lg="3">

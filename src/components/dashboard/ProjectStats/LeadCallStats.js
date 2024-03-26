@@ -21,12 +21,14 @@ const LeadCallStats = () => {
 
           // Filter lead data where cold_call is equal to 1 and count cold calls for each lead
           const coldCallCounts = leadData.map(item => ({
+            leadId:item.lead_id,
             leadTitle: item.lead_title,
             coldCallCount: item.cold_call === 1 ? 1 : 0
           }));
+          console.log("leadlength",leadData.length);
          // Set the lead ID using the first lead's ID
-const firstLeadId = leadData.length > 0 ? leadData[0].lead_id : null;
-setLeadId(firstLeadId);
+     const firstLeadId = leadData.length > 0 ? leadData[0].lead_id : null;
+    setLeadId(firstLeadId);
           // Calculate total cold call count for each lead
           const groupedColdCallCounts = coldCallCounts.reduce((accumulator, currentValue) => {
             accumulator[currentValue.leadTitle] = (accumulator[currentValue.leadTitle] || 0) + currentValue.coldCallCount;
@@ -73,8 +75,11 @@ setLeadId(firstLeadId);
         dataPointSelection: (event, chartContext, config) => {
           const selectedLeadTitle = leadTitles[config.dataPointIndex];
           const selectedLead = LeadID.find(lead => lead.leadTitle === selectedLeadTitle);
+          const selectedLeadId = LeadID.find(lead => lead.leadId === selectedLeadTitle);
+          console.log("1",selectedLead); 
+          console.log("select",selectedLeadId);
           if (selectedLead) {
-            window.location.href = `/LeadEdit/${selectedLead.lead_id}`;
+            window.location.href = `/LeadEdit/${selectedLeadId}`;
           } else {
             console.error('Lead not found for selected lead title:', selectedLeadTitle);
           }

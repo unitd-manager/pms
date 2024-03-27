@@ -15,6 +15,7 @@ import LinkedinBarStats from '../../components/dashboard/LinkedinBarStats';
 import TaskSummary from '../../components/dashboard/TenderSummary';
 import LeadStats from '../../components/dashboard/ProjectStats/LeadStats';
 import LeadStat2 from '../../components/dashboard/ProjectStats/LeadStat2';
+import LeadStat3 from '../../components/dashboard/ProjectStats/LeadStat3';
 
 const Classic = () => {
   return (
@@ -51,6 +52,9 @@ const Classic = () => {
       <LeadStats/>
       <br />
       <LeadStat2/>
+      <br />
+      <LeadStat3/>
+      
         </Col>
       </Row>
       {/*********************Email & Visitor ************************/}

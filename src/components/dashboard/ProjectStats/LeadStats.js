@@ -8,8 +8,6 @@ import ComponentCard from '../../ComponentCard';
 export default function LeadStats() {
   const [taskTitles, setTaskTitles] = useState([]);
   const [actualHourData, setActualHourData] = useState([]);
-  const [years, setYears] = useState([]);
-  const [selectedYear, setSelectedYear] = useState("");
   const [months] = useState([
     "January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"
@@ -24,7 +22,7 @@ export default function LeadStats() {
     setIsLoading(true);
     setShowChart(false);
   
-    api.get('/stats/getLeadStats', { params: { year: selectedYear, month: selectedMonth } })
+    api.get('/stats/getEmployeeNameByColdCall', { params: { month: selectedMonth } })
       .then((response) => {
         setIsLoading(false);
   
@@ -34,12 +32,11 @@ export default function LeadStats() {
           // Filter data based on the selected year and month
           const filteredData = hourData.filter(item => {
             const dateObject = new Date(item.lead_date);
-            return dateObject.getFullYear() === parseInt(selectedYear, 10) && dateObject.getMonth() === months.indexOf(selectedMonth);
+            return  dateObject.getMonth() === months.indexOf(selectedMonth);
           });
           
-  
-          const titles = filteredData.map((item) => item.lead_title);
-          const actualHours = filteredData.map((item) => new Date(item.lead_date).toLocaleDateString());
+          const titles = filteredData.map((item) => item.first_name);
+          const actualHours = filteredData.map((item) => item.cold_call_count);
 
           const ids = filteredData.map((item) => item.lead_id); // Extract lead IDs
 
@@ -63,21 +60,9 @@ export default function LeadStats() {
   };
   
 
- const getYears = () => {
-  const currentYear = new Date().getFullYear();
-  const nextYears = Array.from({ length: currentYear + 5 - 2023 }, (_, index) => 2023 + index);
-  setYears(nextYears);
-  setSelectedYear(nextYears[0]);
-};
-
-
-  useEffect(() => {
-    getYears();
-  }, []);
-
   useEffect(() => {
     HourData();
-  }, [selectedYear, selectedMonth]);
+  }, [selectedMonth]);
 
   const optionscolumn = {
     colors: ['#745af2', '#263238'],
@@ -125,7 +110,7 @@ export default function LeadStats() {
       theme: 'dark',
       y: {
         formatter(val) {
-          return `${val} date`;
+          return `${val} `;
         },
       },
     },
@@ -145,7 +130,7 @@ export default function LeadStats() {
 
   const seriescolumn = [
     {
-      name: 'Actual Hour',
+      name: 'Lead Count',
       data: actualHourData,
     },
   ];
@@ -156,25 +141,6 @@ export default function LeadStats() {
         <ComponentCard title="Lead Stats">
           <Form>
             <Row>
-              <Col md={6}>
-                <FormGroup>
-                  <Label>Select Year</Label>
-                  <Input
-                    type="select"
-                    value={selectedYear}
-                    onChange={(e) => {
-                      const year = e.target.value;
-                      setSelectedYear(year);
-                    }}
-                  >
-                    {years.map((year) => (
-                      <option key={year} value={year}>
-                        {year}
-                      </option>
-                    ))}
-                  </Input>
-                </FormGroup>
-              </Col>
               <Col md={6}>
                 <FormGroup>
                   <Label>Select Month</Label>

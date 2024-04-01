@@ -6,22 +6,27 @@ import PriorityStats from '../../components/dashboard/PriorityStats';
 import MilestoneCompleted from '../../components/dashboard/MilestoneCompletedChart';
 import AverageIssues from '../../components/dashboard/AverageIssues';
 import LinkedinBarStats from '../../components/dashboard/LinkedinBarStats';
-
-
-
-// import SalesOverview from '../../components/dashboard/classicDashboard/ProjectOverview';
-// import TenderSummaryCard from '../../components/dashboard/TenderSummaryCard';
-// import ProjectSummaryChart from '../../components/dashboard/ProjectSummaryChart';
 import TaskSummary from '../../components/dashboard/TenderSummary';
 import LeadStats from '../../components/dashboard/ProjectStats/LeadStats';
 import LeadStat2 from '../../components/dashboard/ProjectStats/LeadStat2';
 import LeadStat3 from '../../components/dashboard/ProjectStats/LeadStat3';
+import ProjectTitle from '../../components/dashboard/ProjectTitle';
+import LeadCallStats from '../../components/dashboard/ProjectStats/LeadCallStats';
+// import StatusCards from '../../components/dashboard/StatusCards';
 
 const Classic = () => {
   return (
     <>
       {/*********************Sales Overview ************************/}
       <Row>
+      <Col lg="12">
+      <ProjectTitle/>
+      </Col>
+     <br />
+     {/* <Col lg="12">
+     <StatusCards/>
+     </Col> */}
+     <br />
         <Col lg="12">
           <TaskSummary />
 
@@ -47,6 +52,7 @@ const Classic = () => {
       <PriorityStats/>
       <br />
       <LinkedinBarStats />
+      <br />
       <PriorityStats />
       <br />
       <LeadStats/>
@@ -54,10 +60,10 @@ const Classic = () => {
       <LeadStat2/>
       <br />
       <LeadStat3/>
-      
+      <br/>
+      <LeadCallStats />
         </Col>
       </Row>
-      {/*********************Email & Visitor ************************/}
   
     </>
   );

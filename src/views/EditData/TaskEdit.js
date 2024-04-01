@@ -481,7 +481,7 @@ const TaskEdit = () => {
                           <option value="" selected="selected">
                             Please Select
                           </option>
-                          <option value="Pending">Pending</option>
+                          <option value="Not Started">Not Started</option>
                           <option value="InProgress">InProgress</option>
                           <option value="Completed">Completed</option>
                           <option value="OnHold">OnHold</option>

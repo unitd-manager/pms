@@ -20,12 +20,17 @@ const Classic = () => {
       <Row>
       <Col lg="12">
       <ProjectTitle/>
+      <br />
+      <LeadStats/>
+      <br />
+      <LeadStat2/>
+      <br />
+      <LeadCallStats />
       </Col>
+
      <br />
-     {/* <Col lg="12">
-     <StatusCards/>
-     </Col> */}
-     <br />
+
+
         <Col lg="12">
           <TaskSummary />
 
@@ -53,12 +58,7 @@ const Classic = () => {
       <LinkedinBarStats />
       <br />
       <PriorityStats />
-      <br />
-      <LeadStats/>
-      <br />
-      <LeadStat2/>
-      <br />
-      <LeadCallStats />
+      
         </Col>
       </Row>
   

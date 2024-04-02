@@ -7,7 +7,7 @@ const Dashboard = () => {
   const [projectStats, setProjectStats] = useState([]);
   const [projectStatsTitle, setProjectStatsTitle] = useState([]);
   const [projectStatsEmployee, setProjectStatsEmployee] = useState([]);
-console.log("project",projectStatsEmployee);
+
   // Get the project statistics for StatusCards
   const getStats = () => {
     api
@@ -77,6 +77,7 @@ console.log("project",projectStatsEmployee);
         },
       },
     },
+    
     legend: {
       show: true,
       position: 'bottom',
@@ -89,51 +90,51 @@ console.log("project",projectStatsEmployee);
     },
   };
 
-  // const optionsDonut1 = {
-  //   chart: {
-  //     id: 'donut-chart',
-  //     fontFamily: "'Rubik', sans-serif",
-  //   },
-  //   dataLabels: {
-  //     enabled: true,
-  //     formatter(val, opts) {
-  //       const { seriesIndex } = opts;
+  const optionsDonut1 = {
+    chart: {
+      id: 'donut-chart',
+      fontFamily: "'Rubik', sans-serif",
+    },
+    dataLabels: {
+      enabled: true,
+      formatter(val, opts) {
+        const { seriesIndex } = opts;
 
-  //       return projectStatsEmployee[seriesIndex].task_count;
-  //     },
-  //   },
-  //   plotOptions: {
-  //     pie: {
-  //       donut: {
-  //         size: '70px',
-  //         labels: {
-  //           show: true,
-  //           total: {
-  //             show: true,
-  //             label: 'Total',
-  //             color: '#99abb4',
-  //           },
-  //         },
-  //       },
-  //     },
-  //   },
-  //   legend: {
-  //     show: true,
-  //     position: 'bottom',
-  //     width: '50px',
-  //     fontFamily: "'Montserrat', sans-serif",
-  //   },
-  //   tooltip: {
-  //     fillSeriesColor: false,
-  //     theme: 'dark',
-  //   },
-  // };
+        return projectStatsEmployee[seriesIndex].task_count;
+      },
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '70px',
+          labels: {
+            show: true,
+            total: {
+              show: true,
+              label: 'Total',
+              color: '#99abb4',
+            },
+          },
+        },
+      },
+    },
+    legend: {
+      show: true,
+      position: 'bottom',
+      width: '50px',
+      fontFamily: "'Montserrat', sans-serif",
+    },
+    tooltip: {
+      fillSeriesColor: false,
+      theme: 'dark',
+    },
+  };
 
   const seriesDonut = projectStatsTitle.map((stat) => stat.task_title_count);
   const labelsDonut = projectStatsTitle.map((stat) => stat.title);
 
-  // const seriesDonut1 = projectStatsEmployee.map((stat) => stat.task_count);
-  // const labelsDonut1 = projectStatsEmployee.map((stat) => stat.first_name);
+  const seriesDonut1 = projectStatsEmployee.map((stat) => stat.task_count);
+  const labelsDonut1 = projectStatsEmployee.map((stat) => stat.first_name);
   return (
     <>
       <Row>
@@ -227,10 +228,10 @@ console.log("project",projectStatsEmployee);
             <CardBody>
               <Row>
                 <Col md="4">
-                  <h5>Overall Statistics</h5>
+                  <h5>Overall Employee Statistics</h5>
                   <Chart
-                    options={{ ...optionsDonut, labels: labelsDonut }}
-                    series={seriesDonut}
+                    options={{ ...optionsDonut1, labels: labelsDonut1 }}
+                    series={seriesDonut1}
                     type="donut"
                     height="360"
                   />

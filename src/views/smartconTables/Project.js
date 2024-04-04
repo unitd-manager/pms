@@ -4,50 +4,125 @@ import * as Icon from 'react-feather';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "datatables.net-dt/js/dataTables.dataTables"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
-import $ from 'jquery'; 
+//import $ from 'jquery'; 
 import "datatables.net-buttons/js/buttons.colVis"
 import "datatables.net-buttons/js/buttons.flash"
 import "datatables.net-buttons/js/buttons.html5"
 import "datatables.net-buttons/js/buttons.print"
 import { Link } from 'react-router-dom';
-import { Button } from 'reactstrap';
+import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap';
+/*eslint-disable*/
+import { CSVLink } from 'react-csv';
+import * as XLSX from 'xlsx';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
+//import ExportComponent from '../../components/ExportComponent';
+
 
 const Project = () => {
 
     const [project,setProject] = useState(null);
     const [loading,setLoading] = useState(null);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [userSearchData, setUserSearchData] = useState('');
 
-
+    
     const getProject = () =>{
       api.get('project/getProjects')
         .then((res)=> {
           setProject(res.data.data)
-          $('#example').DataTable({
-            pagingType: 'full_numbers',
-            pageLength: 20,
-            processing: true,
-            dom: 'Bfrtip',
-            buttons: [ {
-              extend: 'print',
-              text: "Print",
-              className:"shadow-none btn btn-primary",
-          }],
-          });
+          setUserSearchData(res.data.data)
+          // $('#example').DataTable({
+          //   pagingType: 'full_numbers',
+          //   pageLength: 20,
+          //   processing: true,
+          //   dom: 'Bfrtip',
+          //   buttons: [ {
+          //     extend: 'print',
+          //     text: "Print",
+          //     className:"shadow-none btn btn-primary",
+          // }],
+          // });
           setLoading(false)
         }).catch(()=>{
           setLoading(false)
         });
       };
+
+      const handleSearch = () => {
+        const newData = project
+          .filter((x) =>
+            endDate && startDate
+              ? x.start_date <= (endDate === '' ? x.start_date : endDate) &&
+                x.start_date >= (startDate === '' ? x.start_date : startDate)
+              : startDate
+              ? x.start_date === (startDate === '' ? x.start_date : startDate)
+              : x.start_date === (endDate === '' ? x.start_date : endDate),
+          );
+          setUserSearchData(newData);
+        }
     useEffect(() => {
         
     
         getProject()
 
     }, [])
-    
+    const [page, setPage] = useState(0);
+
+    const employeesPerPage = 20;
+    const numberOfEmployeesVistited = page * employeesPerPage;
+    const displayEmployees = userSearchData.slice(
+      numberOfEmployeesVistited,
+      numberOfEmployeesVistited + employeesPerPage,
+    );
+    const totalPages = Math.ceil(userSearchData.length / employeesPerPage);
+    const changePage = ({ selected }) => {
+      setPage(selected);
+    };
+    // const exportToCSV = () => {
+    //   const csvData = [
+    //     headers.map((header) => header.label),
+    //     ...userSearchData.map((row) => headers.map((header) => row[header.key])),
+    //   ];
+    //   const csvContent = csvData.map((row) => row.join(',')).join('\n');
+    //   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    //   const url = URL.createObjectURL(blob);
+    //   const link = document.createElement('a');
+    //   link.setAttribute('href', url);
+    //   link.setAttribute('download', 'data.csv');
+    //   document.body.appendChild(link);
+    //   link.click();
+    //   document.body.removeChild(link);
+    // };
+    const exportToCSV = () => {
+      const csvData = [];
+      const headers = Object.keys(userSearchData[0]);
+      csvData.push(headers.join(','));
+  
+      userSearchData.forEach(item => {
+        const values = headers.map(header => item[header]);
+        csvData.push(values.join(','));
+      });
+  
+      const csvContent = csvData.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'data.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    const exportToExcel = () => {
+      const worksheet = XLSX.utils.json_to_sheet(userSearchData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+      XLSX.writeFile(workbook, 'data.xlsx');
+    };
 
    const columns = [
         {
@@ -123,6 +198,53 @@ const Project = () => {
 <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs/>
+        {/* <CSVLink data={project} headers={headers}>CSV</CSVLink> */}
+        <button type='submit' onClick={exportToCSV}>Export CSV</button>
+      <button type='submit' onClick={exportToExcel}>Export Excel</button>
+      <Card>
+        <CardBody>
+          <Row>
+            <Col>
+              <FormGroup>
+                <Label>Start Date</Label>
+                <Input
+                  type="date"
+                  name="startDate"
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+              </FormGroup>
+            </Col>
+            <Col>
+              <FormGroup>
+                <Label>End Date</Label>
+                <Input type="date" name="endDate" onChange={(e) => setEndDate(e.target.value)} />
+              </FormGroup>
+            </Col>
+           
+            <Col md="1" className="mt-3">
+              <Button color="primary" className="shadow-none" onClick={() => handleSearch()}>Go</Button>
+            </Col>
+          </Row>
+        </CardBody>
+      </Card>
+
+      <Card>
+        <CardBody>
+          <Row>
+           
+            <Col md="3">
+              <Label>
+                <b>Start Date:</b> {startDate}
+              </Label>
+            </Col>
+            <Col md="3">
+              <Label>
+                <b> End Date:</b> {endDate}
+              </Label>
+            </Col>
+          </Row>
+        </CardBody>
+      </Card>
 
         <CommonTable
                 loading={loading}
@@ -143,7 +265,7 @@ const Project = () => {
               </tr>
           </thead>
           <tbody>
-            {project && project.map((element,i)=>{
+            {userSearchData && userSearchData.map((element,i)=>{
                 return (<tr key={element.project_id}>
                 <td>{i+1}</td>
                 <td><Link to={`/ProjectEdit/${element.project_id}?tab=1`}><Icon.Edit2 /></Link></td>
@@ -165,3 +287,4 @@ const Project = () => {
 }
 
 export default Project;
+

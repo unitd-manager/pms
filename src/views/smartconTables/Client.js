@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
-import { Button } from 'reactstrap';
+import { Button,Col } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -10,6 +10,7 @@ import 'datatables.net-buttons/js/buttons.flash';
 import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
+import readXlsxFile from 'read-excel-file';
 import { ToastContainer } from 'react-toastify';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
@@ -44,7 +45,76 @@ const Clients = () => {
     });
   };
 
-    
+    // TRIGGER TO IMPORT EXCEL SHEET
+    const importExcel = () => {
+      $('#import_excel').trigger('click');
+    }
+  
+    // UPLOAD FILE ON THER SERVER
+    const uploadOnServer = (arr) => {
+        api.post('/lead/import/excel', {data: JSON.stringify(arr)})
+        .then(() => {
+          message('File uploaded successfully', 'success');
+          $('#upload_file').val(null);
+        })
+        .catch(() => {
+          message('Failed to upload.', 'error');
+        });
+    }
+  
+    // PROCESSING AND FORMATTING THE DATA
+    const processData = (rows) => {
+      const arr = [];
+      rows.shift();
+  
+      console.log(rows[0]);
+      for ( let x = 0; x < rows.length; x++ ) {
+        arr.push(
+          {
+            CompanyName: rows[x][0],
+          Phone: rows[x][1],
+          Mobile: rows[x][2],
+          Email: rows[x][3],
+            // SourceofLead: rows[x][1],
+            // LeadStatus: rows[x][2],
+            // Address: rows[x][3],
+            // Country: rows[x][4],
+            // PostalCode: rows[x][5],
+            // Email: rows[x][6],
+            // PhoneNo: rows[x][7],
+            // LeadDate: rows[x][8],
+            
+          }
+        )
+      }
+  
+      uploadOnServer(arr);
+    }
+  
+  
+    // IMPORTING EXCEL FILE
+    const importExcelFile = (e) => {
+      console.log(e.target.id)
+      message('test1', 'success');
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          readXlsxFile(e.target.files[0])
+            .then((rows) => {
+              processData(rows);
+              message('Uploading File On The Server', 'info');
+            })
+            .finally(() => {
+              $('#upload_file').val(null);
+            }).catch(
+              err => console.log('Error Found:', err)
+            );
+        }
+      };
+      if (e.target.files[0]) {
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    }; 
   // update publish
   const updateFlag = (obj) => {
     obj.flag = !obj.flag;
@@ -136,6 +206,14 @@ const Clients = () => {
             </Link>
           }
         >
+            <Col md="4">
+            {/* <Link to=""> */}
+            <Button color="primary" className="shadow-none mr-2" onClick={() => importExcel()}>
+                Import
+              </Button>
+            {/* </Link> */}
+            <input type='file' style={{display: 'none'}} id="import_excel" onChange={importExcelFile} />
+            </Col>
           <thead>
             <tr>
               {columns.map((cell) => {

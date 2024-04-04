@@ -18,6 +18,7 @@ import {
 import PropTypes from 'prop-types';
 import * as Icon from 'react-feather';
 import moment from 'moment';
+import ReactPaginate from 'react-paginate';
 import message from '../../components/Message';
 import api from '../../constants/api';
 import creationdatetime from '../../constants/creationdatetime';
@@ -31,6 +32,8 @@ export default function ProjectTimeSheet({
   timeSheetById,
   setContactDatass,
   getTimeSheetById,
+  userSearchData,
+  setUserSearchData
 }) {
   ProjectTimeSheet.propTypes = {
     addContactToggless: PropTypes.func,
@@ -40,6 +43,8 @@ export default function ProjectTimeSheet({
     timeSheetById: PropTypes.any,
     setContactDatass: PropTypes.func,
     getTimeSheetById: PropTypes.func,
+    userSearchData: PropTypes.func,
+    setUserSearchData: PropTypes.func
   };
 
   const [insertTimeSheet, setInsertTimesheet] = useState({
@@ -52,6 +57,7 @@ export default function ProjectTimeSheet({
     project_milestone_id: '',
     project_task_id: '',
   });
+  const sortedData = [...userSearchData];
   //get staff details
   const { loggedInuser } = useContext(AppContext);
   //const [employeeTime, setEmployee] = useState();
@@ -64,7 +70,7 @@ export default function ProjectTimeSheet({
         console.log(res.data.data);
         //setEmployee(res.data.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
   //Milestone data in milestoneDetails
   const handleInputsTime = (e) => {
@@ -76,7 +82,7 @@ export default function ProjectTimeSheet({
     newContactWithCompany.creation_date = creationdatetime;
     newContactWithCompany.created_by = loggedInuser.first_name;
     newContactWithCompany.project_id = id;
-    
+
     api
       .post('/projecttimesheet/insertTimeSheet', newContactWithCompany)
       .then((res) => {
@@ -96,7 +102,50 @@ export default function ProjectTimeSheet({
   const [milestones, setMilestones] = useState([]);
   const [taskdetail, setTaskDetail] = useState([]);
   const [StaffDetail, setstaffDetail] = useState([]);
+  const [companyName, setCompanyName] = useState('');
+  const [employee, setEmployee] = useState();  // Gettind data from Job By Id
+  const [filteredData, setFilteredData] = useState([]);
 
+  const getStaffNamefilter = () => {
+    api
+      .post('projecttask/getEmployeeByID', { project_id: id })
+      .then((res) => {
+        setEmployee(res.data.data);
+      })
+      .catch(() => { });
+  };
+  const [hoveredCreationDate, setHoveredCreationDate] = useState('');
+
+  const displayCreationDate = (creationDate) => {
+    setHoveredCreationDate(creationDate);
+  };
+
+  const hideCreationDate = () => {
+    setHoveredCreationDate('');
+  };
+  
+  console.log(filteredData);
+  const handleSearch = () => {
+    const newData = timeSheetById
+      .filter((y) => y.first_name === (companyName === '' ? y.first_name : companyName))
+    setUserSearchData(newData);
+    // Store the filtered data in the state variable
+    setFilteredData(newData);
+  };
+  const [page, setPage] = useState(0);
+
+  const employeesPerPage = 10;
+  const numberOfEmployeesVistited = page * employeesPerPage;
+  const displayEmployees = sortedData.slice(
+    numberOfEmployeesVistited,
+    numberOfEmployeesVistited + employeesPerPage,
+  );
+
+  console.log('displayEmployees', displayEmployees);
+  const totalPages = Math.ceil(userSearchData.length / employeesPerPage);
+  const changePage = ({ selected }) => {
+    setPage(selected);
+  };
   // Api call for getting project name dropdown
   const getMilestoneName = () => {
     api
@@ -138,6 +187,7 @@ export default function ProjectTimeSheet({
 
   useEffect(() => {
     getMilestoneName();
+    getStaffNamefilter();
   }, [id]);
 
   useEffect(() => {
@@ -178,23 +228,74 @@ export default function ProjectTimeSheet({
       name: 'Hours',
     },
     {
+      name: 'Total Hours',
+    },
+    {
       name: 'Status',
     },
     {
       name: 'Description',
     },
-    {
-      name: 'Creation ',
-    },
-    {
-      name: 'Modification',
-    },
+
   ];
   return (
-    <Form>
-      <Row>
-        <Col md="3">
+    <>
+    <div className="MainDiv">
+    <div className=" pt-xs-25">
           <br />
+          <Card>
+            <CardBody>
+              <Row>
+                <Col md="2">
+                  <FormGroup>
+                    <Label>Select Staff </Label>
+                    <Input
+                      type="select"
+                      name="employee_id"
+                      onChange={(e) => setCompanyName(e.target.value)} // Update companyName state
+                      value={companyName}
+                    >
+                      <option value="">Please Select</option>
+                      {employee &&
+                        employee.map((ele) => {
+                          return (
+                            // ele.e_count === 0 && (
+                            <option key={ele.employee_id} value={ele.first_name}>
+                              {ele.first_name}
+                            </option>
+                          );
+                          // );
+                        })}
+                    </Input>
+                  </FormGroup>
+                </Col>
+                <Col md="1" className="mt-3">
+                  <Button color="primary" className="shadow-none" onClick={() => handleSearch()}>
+                    Go
+                  </Button>
+                </Col>
+              </Row>
+              <span
+                onClick={() => {
+                  // Clear the filter criteria for both Select Staff and Select Category
+                  setCompanyName('');
+                  // Restore the full data
+                  setUserSearchData(timeSheetById);
+
+                  // Clear the filtered data
+                  setFilteredData([]);
+                }}
+                style={{
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                }}
+              >
+                Back to List
+              </span>
+
+            </CardBody>
+          </Card>
+          <Form>
           <FormGroup>
             <Button color="primary" className="shadow-none" onClick={addContactToggless.bind(null)}>
               Add New{' '}
@@ -333,6 +434,7 @@ export default function ProjectTimeSheet({
                                 />
                               </FormGroup>
                             </Col>
+
                             <Col md="4">
                               <FormGroup>
                                 <Label>Status</Label>
@@ -391,8 +493,7 @@ export default function ProjectTimeSheet({
               </ModalFooter>
             </Modal>
           </FormGroup>
-        </Col>
-      </Row>
+       
       <Table id="example" className="display border border-secondary rounded">
         <thead>
           <tr>
@@ -402,8 +503,8 @@ export default function ProjectTimeSheet({
           </tr>
         </thead>
         <tbody>
-          {timeSheetById &&
-            timeSheetById.map((element, index) => {
+          {displayEmployees &&
+            displayEmployees.map((element, index) => {
               return (
                 <tr key={element.projecttimesheet_id}>
                   <td>{index + 1}</td>
@@ -418,22 +519,45 @@ export default function ProjectTimeSheet({
                     </span>
                   </td>
                   <td>{element.task_title}</td>
-                  <td>{element.first_name}</td>
+                  <td>
+                    <span
+                      onMouseEnter={() => displayCreationDate(element.creation_date)}
+
+                      onMouseLeave={() => hideCreationDate()}
+                    >
+                      {element.first_name}</span></td>
+                  {/* Modify the following block for the modification date */}
+
                   <td>{element.date}</td>
                   <td>{element.hours}</td>
+                  <td>{element.actual_hours}</td>
                   <td>{element.status}</td>
                   <td>{element.description}</td>
-                  <td>
-                    {element.created_by} {element.creation_date}
-                  </td>
-                  <td>
-                    {element.modified_by} {element.modification_date}
-                  </td>
+
                 </tr>
               );
             })}
+          {hoveredCreationDate && (
+            <tr>
+              <td colSpan="9">Creation Date: {hoveredCreationDate}</td>
+            </tr>
+          )}
         </tbody>
       </Table>
-    </Form>
+      <ReactPaginate
+        previousLabel="Previous"
+        nextLabel="Next"
+        pageCount={totalPages}
+        onPageChange={changePage}
+        containerClassName="navigationButtons"
+        previousLinkClassName="previousButton"
+        nextLinkClassName="nextButton"
+        disabledClassName="navigationDisabled"
+        activeClassName="navigationActive"
+      />
+      </Form>
+      </div>
+      </div>
+      </>
   );
 }

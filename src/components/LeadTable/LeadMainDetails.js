@@ -34,8 +34,8 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
               <Input
                 type="date"
                 onChange={handleInputs}
-                value={lead && moment(lead.due_date).format('YYYY-MM-DD')}
-                name="due_date"
+                value={lead && moment(lead.lead_date).format('YYYY-MM-DD')}
+                name="lead_date"
               />
             </FormGroup>
           </Col>
@@ -108,7 +108,7 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
                 </option>
                 {allCountries &&
                   allCountries.map((country) => (
-                    <option key={country.country_code} value={country.country_code}>
+                    <option key={country.name} value={country.name}>
                       {country.name}
                     </option>
                   ))}
@@ -180,6 +180,7 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
                 name="lead_status"
               >
                 <option>Please Select</option>
+                <option>New</option>
                 <option>In Progress</option>
                 <option>On Hold</option>
                 <option>Pending Approval</option>
@@ -203,6 +204,30 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
               </Input>
             </FormGroup>
           </Col>
+          <Col md="4">
+              <FormGroup>
+                
+                <Label>Cold Call</Label>
+                <br></br>
+                <Input
+                  name="cold_call"
+                  value="1"
+                  type="radio"
+                  defaultChecked={lead && lead.cold_call === 1 && true}
+                  onChange={handleInputs}
+                />
+                <Label> Yes </Label>
+                <Input
+                  name="cold_call"
+                  value="0"
+                  type="radio"
+                  defaultChecked={lead && lead.cold_call === 0 && true}
+                  onChange={handleInputs}
+                />
+                <Label>No</Label>
+                
+              </FormGroup>
+              </Col>
           <Col md="3">
             <FormGroup>
               <Label>Interaction Type</Label>
@@ -227,7 +252,7 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
           </Col>
           <Col md="3">
             <FormGroup>
-              <Label>Notes</Label>
+              <Label>Profile Link</Label>
               <Input
                 type="textarea"
                 onChange={handleInputs}

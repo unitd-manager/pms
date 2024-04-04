@@ -75,7 +75,7 @@ const CategoryEdit = () => {
   //Logic for edit data in db
   const editCategoryData = () => {
     categoryDetails.modification_date = creationdatetime
-    if (categoryDetails.category_title !== '') {
+    if (categoryDetails.title !== '') {
       api
         .post('/category/edit-Category', categoryDetails)
         .then(() => {

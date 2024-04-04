@@ -1,4 +1,4 @@
-import axios from 'axios';
+ import axios from 'axios';
 
 let baseURL;
 
@@ -12,5 +12,6 @@ console.log('NODE_ENV:', process.env.NODE_ENV);
 const api = axios.create({
   baseURL, // Use the baseURL variable here
 });
+
 
 export default api;

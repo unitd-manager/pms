@@ -22,7 +22,7 @@ export default function LeadStats() {
     setIsLoading(true);
     setShowChart(false);
   
-    api.get('/stats/getEmployeeNameByColdCall', { params: { month: selectedMonth } })
+    api.get('/stats/getEmployeeNameByComments', { params: { month: selectedMonth } })
       .then((response) => {
         setIsLoading(false);
   

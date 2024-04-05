@@ -119,7 +119,7 @@ export default function LeadStat2() {
   return (
     <Row>
       <Col md="12">
-        <ComponentCard title="Lead Stats 2">
+        <ComponentCard title="Lead call yearly stats">
           <Form>
             <Row>
               <Col md={6}>

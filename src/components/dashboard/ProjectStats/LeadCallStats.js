@@ -158,7 +158,7 @@ const LeadCallStats = () => {
   return (
     <Row>
       <Col md="12">
-        <ComponentCard title="Lead Call Statistics">
+        <ComponentCard title="Lead call per sales person Statistics">
           <Row>
             <Col md={6}>
               <FormGroup>

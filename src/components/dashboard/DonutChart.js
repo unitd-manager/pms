@@ -1,11 +1,12 @@
+/*eslint-disable*/
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Row, Col, Card, CardBody } from 'reactstrap';
-import Chart from 'react-apexcharts';
 import api from '../../constants/api';
+import MainChart from '../../views/charts/DonutChart';
 
 
-const Dashboard = () => {
+const DonutDashboard = () => {
   const [projectStats, setProjectStats] = useState([]);
   const [projectStatsTitle, setProjectStatsTitle] = useState([]);
   const [projectStatsEmployee, setProjectStatsEmployee] = useState([]);
@@ -163,12 +164,13 @@ const Dashboard = () => {
               <Row>
                 <Col md="4">
                   <h5>Overall Statistics</h5>
-                  <Chart
+                  {/* <Chart
                     options={{ ...optionsDonut, labels: labelsDonut }}
                     series={seriesDonut}
                     type="donut"
                     height="360"
-                  />
+                  /> */}
+                  <MainChart/>
                 </Col>
                 <Col md="6">
                   <h5 className="status-heading">Status</h5>
@@ -241,27 +243,28 @@ const Dashboard = () => {
         </Col>
       </Row>
 
-      <Row>
+      {/* <Row>
         <Col md="12">
           <Card>
             <CardBody>
               <Row>
                 <Col md="4">
                   <h5>Overall Employee Statistics</h5>
-                  <Chart
+                  {/* <Chart
                     options={{ ...optionsDonut1, labels: labelsDonut1 }}
                     series={seriesDonut1}
                     type="donut"
                     height="360"
-                  />
+                  /> */}
+                  {/* <MainChart/>
                 </Col>
               </Row>
             </CardBody>
           </Card>
         </Col>
-      </Row>
+      </Row> */} 
     </>
   );
 };
 
-export default Dashboard;
+export default DonutDashboard;

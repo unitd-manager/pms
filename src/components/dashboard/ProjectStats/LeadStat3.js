@@ -15,13 +15,14 @@ export default function LeadStats() {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showChart, setShowChart] = useState(false);
-  const [leadIDs, setLeadIDs] = useState([]);
+  const [leadID, setLeadId] = useState(false);
+
 
   const HourData = () => {
     setIsLoading(true);
     setShowChart(false);
   
-    api.get('/stats/getEmployeeNameByColdCall', { params: { month: selectedMonth } })
+    api.get('/stats/getEmployeeNameByComments', { params: { month: selectedMonth } })
       .then((response) => {
         setIsLoading(false);
   
@@ -39,11 +40,10 @@ export default function LeadStats() {
 
           const ids = filteredData.map((item) => item.lead_id); // Extract lead IDs
 
-          // setLeadId(ids); // Update lead IDs state
+          setLeadId(ids); // Update lead IDs state
 
 
   
-          setLeadIDs(ids);
           setTaskTitles(titles);
           setActualHourData(actualHours);
           setShowChart(true);
@@ -138,7 +138,7 @@ export default function LeadStats() {
   return (
     <Row>
       <Col md="12">
-        <ComponentCard title="Lead Stats">
+        <ComponentCard title="Lead Stats3">
           <Form>
             <Row>
               <Col md={6}>
@@ -168,13 +168,9 @@ export default function LeadStats() {
             </Row>
           </Form>
           {showChart && (
-  <div>
-    {leadIDs.map((leadID) => (
-      <Link key={leadID} to={`/LeadEdit/${leadID}`}>
-        <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
-      </Link>
-    ))}
-  </div>
+  <Link to={`/LeadEdit/${leadID}`}>
+    <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
+  </Link>
 )}
         </ComponentCard>
       </Col>

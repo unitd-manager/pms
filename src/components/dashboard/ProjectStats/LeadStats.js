@@ -17,8 +17,7 @@ export default function LeadStats() {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showChart, setShowChart] = useState(false);
-  const [leadID, setLeadId] = useState(false);
-
+  const [leadIDs, setLeadIDs] = useState([]);
 
   const HourData = () => {
     setIsLoading(true);
@@ -36,17 +35,12 @@ export default function LeadStats() {
             const dateObject = new Date(item.lead_date);
             return dateObject.getFullYear() === parseInt(selectedYear, 10) && dateObject.getMonth() === months.indexOf(selectedMonth);
           });
-          
   
           const titles = filteredData.map((item) => item.lead_title);
           const actualHours = filteredData.map((item) => new Date(item.lead_date).toLocaleDateString());
-
-          const ids = filteredData.map((item) => item.lead_id); // Extract lead IDs
-
-          setLeadId(ids); // Update lead IDs state
-
-
+          const ids = filteredData.map((item) => item.lead_id);
   
+          setLeadIDs(ids);
           setTaskTitles(titles);
           setActualHourData(actualHours);
           setShowChart(true);
@@ -61,15 +55,13 @@ export default function LeadStats() {
         setShowChart(true);
       });
   };
-  
 
- const getYears = () => {
-  const currentYear = new Date().getFullYear();
-  const nextYears = Array.from({ length: currentYear + 5 - 2023 }, (_, index) => 2023 + index);
-  setYears(nextYears);
-  setSelectedYear(nextYears[0]);
-};
-
+  const getYears = () => {
+    const currentYear = new Date().getFullYear();
+    const nextYears = Array.from({ length: currentYear + 5 - 2023 }, (_, index) => 2023 + index);
+    setYears(nextYears);
+    setSelectedYear(nextYears[0]);
+  };
 
   useEffect(() => {
     getYears();
@@ -202,9 +194,13 @@ export default function LeadStats() {
             </Row>
           </Form>
           {showChart && (
-  <Link to={`/LeadEdit/${leadID}`}>
-    <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
-  </Link>
+  <div>
+    {leadIDs.map((leadID) => (
+      <Link key={leadID} to={`/LeadEdit/${leadID}`}>
+        <Chart options={optionscolumn} series={seriescolumn} type="bar" height="280" />
+      </Link>
+    ))}
+  </div>
 )}
         </ComponentCard>
       </Col>

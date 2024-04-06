@@ -10,7 +10,7 @@ import "datatables.net-buttons/js/buttons.flash"
 import "datatables.net-buttons/js/buttons.html5"
 import "datatables.net-buttons/js/buttons.print"
 import { Link } from 'react-router-dom';
-import { Button } from 'reactstrap';
+import { Button,Card,CardBody,Col,Row,Input,Label,FormGroup } from 'reactstrap';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
@@ -19,6 +19,9 @@ const Project = () => {
 
     const [project,setProject] = useState(null);
     const [loading,setLoading] = useState(null);
+    const [companyName, setCompanyName] = useState('');
+    const [filteredData, setFilteredData] = useState('');
+
 
 
     const getProject = () =>{
@@ -41,9 +44,20 @@ const Project = () => {
           setLoading(false)
         });
       };
+      console.log(filteredData);
+      const handleSearch = () => {
+        const newData = project.filter((item) => {
+          // Check if companyName is empty, if so, return true for all items
+          if (companyName === '') {
+            return true;
+          }
+          // If companyName is provided, filter based on general property
+          return item.general === (companyName === '1' ? 1 : 0);
+        });
+        setFilteredData(newData);
+      };
+      
     useEffect(() => {
-        
-    
         getProject()
 
     }, [])
@@ -65,14 +79,7 @@ const Project = () => {
             button:true,
             sortable:false,
         },
-        // {
-        //     name:'Del',
-        //     selector: "delete",
-        //     cell: () => <Icon.Trash />,
-        //     grow:0,
-        //     width:'auto',
-        //     wrap: true
-        // },
+       
         {
           name: "Code",
           selector: "project_code",
@@ -123,6 +130,29 @@ const Project = () => {
 <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs/>
+        <Card>
+          <CardBody>
+            <Row>
+              <Col md="2">
+                <FormGroup>
+                  <Label>Select</Label>
+                  <Input
+                    type="text"
+                    name="general"
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    value={companyName}
+                    >
+                    </Input>
+                </FormGroup>
+              </Col>
+              <Col md="1" className="mt-3">
+                <Button color="primary" className="shadow-none" onClick={() => handleSearch()}>
+                  Go
+                </Button>
+                </Col>
+                </Row>
+                </CardBody>
+                </Card>
 
         <CommonTable
                 loading={loading}

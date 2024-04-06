@@ -27,6 +27,9 @@ const Project = () => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [userSearchData, setUserSearchData] = useState('');
+    const [categoryName, setCategoryName] = useState('');
+
+
 
     
     const getProject = () =>{
@@ -51,18 +54,28 @@ const Project = () => {
         });
       };
 
-      const handleSearch = () => {
-        const newData = project
-          .filter((x) =>
-            endDate && startDate
-              ? x.start_date <= (endDate === '' ? x.start_date : endDate) &&
-                x.start_date >= (startDate === '' ? x.start_date : startDate)
-              : startDate
-              ? x.start_date === (startDate === '' ? x.start_date : startDate)
-              : x.start_date === (endDate === '' ? x.start_date : endDate),
-          );
-          setUserSearchData(newData);
-        }
+     const handleSearch = () => {
+  let newData = project;
+
+  // Apply date filter
+  newData = newData.filter(x =>
+    endDate && startDate
+      ? x.start_date <= (endDate === '' ? x.start_date : endDate) &&
+        x.start_date >= (startDate === '' ? x.start_date : startDate)
+      : startDate
+      ? x.start_date === (startDate === '' ? x.start_date : startDate)
+      : x.start_date === (endDate === '' ? x.start_date : endDate)
+  );
+
+  // Apply general filter
+  if (categoryName === "general") {
+    newData = newData.filter(x => x.general === 1);
+}
+
+
+  setUserSearchData(newData);
+};
+       
     useEffect(() => {
         getProject()
 
@@ -211,6 +224,19 @@ const Project = () => {
                 <Input type="date" name="endDate" onChange={(e) => setEndDate(e.target.value)} />
               </FormGroup>
             </Col>
+            <Col md="3">
+                                <FormGroup>
+                                    <Label>Search Category</Label>
+                                    <Input
+                                        type="select"
+                                        value={categoryName}
+                                        onChange={(e) => setCategoryName(e.target.value)}
+                                    >
+                                        <option value="">Select</option>
+                                        <option value="general">General</option>
+                                    </Input>
+                                </FormGroup>
+                            </Col>
            
             <Col md="1" className="mt-3">
               <Button color="primary" className="shadow-none" onClick={() => handleSearch()}>Go</Button>

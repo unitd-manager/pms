@@ -12,7 +12,8 @@ import LeadStat2 from '../../components/dashboard/ProjectStats/LeadStat2';
 import LeadStat3 from '../../components/dashboard/ProjectStats/LeadStat3';
 import ProjectTitle from '../../components/dashboard/ProjectTitle';
 import LeadCallStats from '../../components/dashboard/ProjectStats/LeadCallStats';
-import MainChart from '../charts/DonutChart';
+import DonutDashboard from '../../components/dashboard/DonutChart';
+//import MainChart from '../charts/DonutChart';
 // import StatusCards from '../../components/dashboard/StatusCards';
 
 const Classic = () => {
@@ -20,8 +21,9 @@ const Classic = () => {
     <>
       {/*********************Sales Overview ************************/}
       <Row>
-        <Col md='6'>
-          <MainChart/>
+        <Col md='12'>
+          {/* <MainChart/> */}
+          <DonutDashboard/>
         </Col>
       </Row>
       <Row>

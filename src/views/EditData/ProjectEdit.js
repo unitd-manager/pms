@@ -296,12 +296,9 @@ const ProjectEdit = () => {
                   >
                     <option defaultValue="selected">Please Select</option>
                     <option value="WIP">WIP</option>
-                    <option value="Billable">Billable</option>
-                    <option value="Billed">Billed</option>
                     <option value="Complete">Complete</option>
                     <option value="Cancelled">Cancelled</option>
                     <option value="On Hold">On Hold</option>
-                    <option value="Latest">Latest</option>
                   </Input>
                 </FormGroup>
               </Col>

@@ -10,47 +10,39 @@ const DonutChart = ({ data, onClick }) => {
   DonutChart.propTypes = {
     data: PropTypes.any,
     onClick: PropTypes.func,
-    
+   
     //onSuccess:PropTypes.any
   };
   return <Doughnut data={data} options={{ onClick }} />;
 };
 
-const SubcategoryChart = ({ data }) => {
-  SubcategoryChart.propTypes = {
-    data: PropTypes.any,
+
+
+const MainChart = ({projectStatsTitle,handleChartClick}) => {
+  MainChart.propTypes = {
+    projectStatsTitle: PropTypes.any,
+    handleChartClick: PropTypes.func,
    
     //onSuccess:PropTypes.any
   };
-  return <Doughnut data={data} />;
-};
+  // useEffect(()=>{
+  //   // Get the current URL
+  //   const url = new URL(window.location.href);
+    
+  //   console.log('url',url)
+  //   // Get the value of the 'categoryid' parameter
+  //   const categoryId = url.searchParams.get('category');
+  //   const hash = window.location.hash;
 
-const MainChart = () => {
-  const [selectedSegment, setSelectedSegment] = useState(null);
-  const [projectStatsTitle, setProjectStatsTitle] = useState([]);
-  const navigate=useNavigate();
-    // Get the project statistics for ProjectTitle
-    const getStatsTitle = () => {
-      api
-        .get('stats/ProjectTitleStats')
-        .then((res) => {
-          setProjectStatsTitle(res.data.data);
-        })
-        .catch((error) => {
-          console.log('Error fetching project statistics:', error);
-        });
-    };
-
-  const handleChartClick = (event, chartElements) => {
-    if (chartElements.length > 0) {
-      console.log('chartElements',chartElements[0])
-      setSelectedSegment(chartElements[0]._index);
-      const segmentindex = chartElements[0]._index;
-      const id = projectStatsTitle[segmentindex].project_id;
-       // Assuming you have routes like '/project/:projectId'
- navigate(`/ProjectEdit/${id}`);
-    }
-  };
+  //   console.log('categoryId',categoryId)
+  //   console.log('hash',hash)
+  //   // Extract the categoryid parameter from the hash
+  //   const categoryIdParam = new URLSearchParams(hash.substring(1)).get('category');
+  //   const categoryIds = hash.split('=')[1];
+  //   setCategoryId(categoryIds)
+  //   console.log('categoryIds',categoryIds)
+  // console.log('categoryId',categoryIdParam)
+  // },[categoryId])
   const customTooltip = (tooltipModel) => {
     if (tooltipModel.body) {
       const label = tooltipModel.mainChartData.labels[tooltipModel.dataIndex];
@@ -86,50 +78,16 @@ const MainChart = () => {
     },
   };
   
-  const subcategoryChartData = {
-    '0': {
-      labels: ['Subcategory 1A', 'Subcategory 1B', 'Subcategory 1C'],
-      datasets: [
-        {
-          data: [100, 50, 200],
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-          hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        },
-      ],
-    },
-    '1': {
-      labels: ['Subcategory 2A', 'Subcategory 2B', 'Subcategory 2C'],
-      datasets: [
-        {
-          data: [50, 150, 80],
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-          hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        },
-      ],
-    },
-    '2': {
-      labels: ['Subcategory 3A', 'Subcategory 3B', 'Subcategory 3C'],
-      datasets: [
-        {
-          data: [80, 120, 50],
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-          hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        },
-      ],
-    },
-  };
+  
   useEffect(() => {
     
-    getStatsTitle();
     
   }, []);
   return (
     <div>
-      {/* {selectedSegment !== null ? (
-        <SubcategoryChart data={subcategoryChartData[selectedSegment.toString()]} />
-      ) : ( */}
+      
         <DonutChart data={mainChartData} onClick={handleChartClick} options={options}/>
-      {/* )} */}
+    
     </div>
   );
 };

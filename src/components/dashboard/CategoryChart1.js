@@ -2,20 +2,26 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Row, Col, Card, CardBody } from 'reactstrap';
+import PropTypes from 'prop-types';
 import api from '../../constants/api';
 import MainChart from '../../views/charts/DonutChart';
 
 
-const DonutDashboard = () => {
+const CategoryChart1 = ({ categoryId, setCategoryId}) => {
+    CategoryChart1.propTypes = {
+        categoryId: PropTypes.any,
+        setCategoryId: PropTypes.func,
+        //onSuccess:PropTypes.any
+      };
   const [projectStats, setProjectStats] = useState([]);
   const [projectStatsTitle, setProjectStatsTitle] = useState([]);
   const [projectStatsEmployee, setProjectStatsEmployee] = useState([]);
   const navigate=useNavigate();
   const [selectedSegment, setSelectedSegment] = useState(null);
-  const [categoryId, setCategoryId] = useState(null);
-
-    
  
+
+    console.log('category',categoryId);
+    console.log('setcategory',setCategoryId);
   // Get the project statistics for StatusCards
   const getStats = () => {
     api
@@ -56,9 +62,9 @@ const DonutDashboard = () => {
       console.log('chartElements',chartElements[0])
       setSelectedSegment(chartElements[0]._index);
       const segmentindex = chartElements[0]._index;
-      const id = projectStatsTitle[segmentindex].project_id;
+      const id = projectStatsTitle[segmentindex].id;
        // Assuming you have routes like '/project/:projectId'
- navigate(`?category=${id}`);
+ navigate(`?category=${categoryId}?subcategory=${categoryId}`);
 
     }
   };
@@ -80,7 +86,7 @@ const DonutDashboard = () => {
           // config.seriesIndex gives the index of the clicked segment
           const { seriesIndex } = opts;
  // Access the project ID associated with the clicked segment
- const projectId = projectStatsTitle[seriesIndex].project_id;
+ const projectId = projectStatsEmployee[seriesIndex].project_id;
 
  // Assuming you have routes like '/project/:projectId'
  navigate(`/ProjectEdit/${projectId}`);
@@ -93,7 +99,7 @@ const DonutDashboard = () => {
       formatter(val, opts) {
         console.log('opts',opts);
         const { seriesIndex } = opts;
-        return projectStatsTitle[seriesIndex].task_title_count;
+        return projectStatsEmployee[seriesIndex].task_title_count;
       },
     },
     plotOptions: {
@@ -177,14 +183,14 @@ const DonutDashboard = () => {
             <CardBody>
               <Row>
                 <Col md="4">
-                  <h5>Overall Statistics</h5>
+                  <h5>Category Statistics</h5>
                   {/* <Chart
                     options={{ ...optionsDonut, labels: labelsDonut }}
                     series={seriesDonut}
                     type="donut"
                     height="360"
                   /> */}
-                  <MainChart projectStatsTitle={projectStatsTitle} handleChartClick={handleChartClick}/>
+                  <MainChart projectStatsTitle={projectStatsEmployee} handleChartClick={handleChartClick}/>
                 </Col>
                 <Col md="6">
                   <h5 className="status-heading">Status</h5>
@@ -281,4 +287,4 @@ const DonutDashboard = () => {
   );
 };
 
-export default DonutDashboard;
+export default CategoryChart1;

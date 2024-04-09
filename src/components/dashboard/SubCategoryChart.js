@@ -3,19 +3,31 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Row, Col, Card, CardBody } from 'reactstrap';
 import api from '../../constants/api';
+import PropTypes from 'prop-types';
 import MainChart from '../../views/charts/DonutChart';
 
 
-const DonutDashboard = () => {
+const SubCategoryChart = ({categoryId,subCategoryId,setCategoryId,setSubCategoryId}) => {
+    SubCategoryChart.propTypes = {
+        categoryId: PropTypes.any,
+        setCategoryId: PropTypes.func,
+        subCategoryId: PropTypes.any,
+        setSubCategoryId: PropTypes.func,
+        
+        //onSuccess:PropTypes.any
+      };
   const [projectStats, setProjectStats] = useState([]);
   const [projectStatsTitle, setProjectStatsTitle] = useState([]);
   const [projectStatsEmployee, setProjectStatsEmployee] = useState([]);
   const navigate=useNavigate();
   const [selectedSegment, setSelectedSegment] = useState(null);
-  const [categoryId, setCategoryId] = useState(null);
+  
 
     
- 
+  console.log('category',categoryId);
+  console.log('setcategory',setCategoryId);
+  console.log('subCategory',subCategoryId);
+  console.log('setSubcategory',setSubCategoryId);
   // Get the project statistics for StatusCards
   const getStats = () => {
     api
@@ -177,7 +189,7 @@ const DonutDashboard = () => {
             <CardBody>
               <Row>
                 <Col md="4">
-                  <h5>Overall Statistics</h5>
+                  <h5>Sub category Statistics</h5>
                   {/* <Chart
                     options={{ ...optionsDonut, labels: labelsDonut }}
                     series={seriesDonut}
@@ -281,4 +293,4 @@ const DonutDashboard = () => {
   );
 };
 
-export default DonutDashboard;
+export default SubCategoryChart;

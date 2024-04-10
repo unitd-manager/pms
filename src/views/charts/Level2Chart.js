@@ -13,13 +13,13 @@ const DonutChart = ({ data, onClick }) => {
    
     //onSuccess:PropTypes.any
   };
-  return <Doughnut data={data} options={{ onClick }} />;
+  return <Doughnut data={data} options={{ onClick }} width={10} height={20} />;
 };
 
 
 
-const MainChart = ({projectStatsTitle,handleChartClick}) => {
-  MainChart.propTypes = {
+const Level2Chart = ({projectStatsTitle,handleChartClick}) => {
+  Level2Chart.propTypes = {
     projectStatsTitle: PropTypes.any,
     handleChartClick: PropTypes.func,
    
@@ -52,16 +52,16 @@ const MainChart = ({projectStatsTitle,handleChartClick}) => {
     return '';
   };
   const mainChartData = {
-    labels: projectStatsTitle.map(item => item.title),
+   labels: projectStatsTitle.map(item => item.first_name),
   
     datasets: [
-      {data: projectStatsTitle.map(item => item.task_title_count),
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56','#56F488','#34AA21','#12AA34','#F16384', '#C6A2EB', '#BFCE56','#A6F418','#114421','#BBAA34'],
+      {data: projectStatsTitle.map(item => item.task_count),
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56','#56F488','#34AA21','#12AA34','#F16384', '#C6A2EB', '#BFCE56','#A6F418','#114421','#BBAA34',,'#F16E84', '#C619EB', '#BFB356','#A64F18','#11CC21','#BB1134'],
         hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
       },
     ],
   };
-  const count=200;
+  const count=20;
   const options = {
     tooltips: {
       callbacks: {
@@ -92,4 +92,4 @@ const MainChart = ({projectStatsTitle,handleChartClick}) => {
   );
 };
 
-export default MainChart;
+export default Level2Chart;

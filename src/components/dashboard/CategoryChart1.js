@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Row, Col, Card, CardBody } from 'reactstrap';
 import PropTypes from 'prop-types';
 import api from '../../constants/api';
-import MainChart from '../../views/charts/DonutChart';
+//import MainChart from '../../views/charts/DonutChart';
+import Level2Chart from '../../views/charts/Level2Chart';
 
 
 const CategoryChart1 = ({ categoryId, setCategoryId}) => {
@@ -25,7 +26,7 @@ const CategoryChart1 = ({ categoryId, setCategoryId}) => {
   // Get the project statistics for StatusCards
   const getStats = () => {
     api
-      .get('stats/ProjectTitleCards')
+      .get('stats/ProjectTitleCards',{project_id:categoryId})
       .then((res) => {
         setProjectStats(res.data.data);
       })
@@ -62,7 +63,7 @@ const CategoryChart1 = ({ categoryId, setCategoryId}) => {
       console.log('chartElements',chartElements[0])
       setSelectedSegment(chartElements[0]._index);
       const segmentindex = chartElements[0]._index;
-      const id = projectStatsTitle[segmentindex].id;
+      const id = projectStatsEmployee[segmentindex].employee_id;
        // Assuming you have routes like '/project/:projectId'
  navigate(`?category=${categoryId}?subcategory=${categoryId}`);
 
@@ -86,10 +87,10 @@ const CategoryChart1 = ({ categoryId, setCategoryId}) => {
           // config.seriesIndex gives the index of the clicked segment
           const { seriesIndex } = opts;
  // Access the project ID associated with the clicked segment
- const projectId = projectStatsEmployee[seriesIndex].project_id;
+ const projectId = projectStatsEmployee[seriesIndex].employee_id;
 
  // Assuming you have routes like '/project/:projectId'
- navigate(`/ProjectEdit/${projectId}`);
+//  navigate(`/ProjectEdit/${projectId}`);
         
         }
       }
@@ -99,7 +100,7 @@ const CategoryChart1 = ({ categoryId, setCategoryId}) => {
       formatter(val, opts) {
         console.log('opts',opts);
         const { seriesIndex } = opts;
-        return projectStatsEmployee[seriesIndex].task_title_count;
+        return projectStatsEmployee[seriesIndex].first_name;
       },
     },
     plotOptions: {
@@ -190,7 +191,7 @@ const CategoryChart1 = ({ categoryId, setCategoryId}) => {
                     type="donut"
                     height="360"
                   /> */}
-                  <MainChart projectStatsTitle={projectStatsEmployee} handleChartClick={handleChartClick}/>
+                  <Level2Chart projectStatsTitle={projectStatsEmployee} handleChartClick={handleChartClick}/>
                 </Col>
                 <Col md="6">
                   <h5 className="status-heading">Status</h5>

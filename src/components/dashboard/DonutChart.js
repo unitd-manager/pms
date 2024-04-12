@@ -58,7 +58,7 @@ const DonutDashboard = () => {
       const segmentindex = chartElements[0]._index;
       const id = projectStatsTitle[segmentindex].project_id;
        // Assuming you have routes like '/project/:projectId'
- navigate(`?category=${id}`);
+ navigate(`?project=${id}`);
 
     }
   };
@@ -177,7 +177,7 @@ const DonutDashboard = () => {
             <CardBody>
               <Row>
                 <Col md="4">
-                  <h5>Overall Statistics</h5>
+                  <h5>Project Stats</h5>
                   {/* <Chart
                     options={{ ...optionsDonut, labels: labelsDonut }}
                     series={seriesDonut}

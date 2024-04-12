@@ -50,7 +50,7 @@ const CategoryChart1 = ({ categoryId, setCategoryId}) => {
   // Get the project statistics for ProjectTitle
   const getStatsEmployeeTask = () => {
     api
-      .get('stats/ProjectEmployeeStats')
+      .post('stats/ProjectEmployeeStatsById',{project_id:categoryId})
       .then((res) => {
         setProjectStatsEmployee(res.data.data);
       })
@@ -65,7 +65,7 @@ const CategoryChart1 = ({ categoryId, setCategoryId}) => {
       const segmentindex = chartElements[0]._index;
       const id = projectStatsEmployee[segmentindex].employee_id;
        // Assuming you have routes like '/project/:projectId'
- navigate(`?category=${categoryId}?subcategory=${categoryId}`);
+ navigate(`?project=${categoryId}?emp=${categoryId}`);
 
     }
   };
@@ -184,7 +184,7 @@ const CategoryChart1 = ({ categoryId, setCategoryId}) => {
             <CardBody>
               <Row>
                 <Col md="4">
-                  <h5>Category Statistics</h5>
+                  <h5>Team-Tasks</h5>
                   {/* <Chart
                     options={{ ...optionsDonut, labels: labelsDonut }}
                     series={seriesDonut}

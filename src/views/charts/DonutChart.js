@@ -13,7 +13,7 @@ const DonutChart = ({ data, onClick }) => {
    
     //onSuccess:PropTypes.any
   };
-  return <Doughnut data={data} options={{ onClick }} />;
+  return <Doughnut data={data} options={{ onClick }} width={10} height={20} redraw={true}/>;
 };
 
 
@@ -58,11 +58,17 @@ const MainChart = ({projectStatsTitle,handleChartClick}) => {
       {data: projectStatsTitle.map(item => item.task_title_count),
         backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56','#56F488','#34AA21','#12AA34','#F16384', '#C6A2EB', '#BFCE56','#A6F418','#114421','#BBAA34'],
         hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        cutoutPercentage: 90, // Change the percentage to adjust the width of the circle
+        borderWidth: 1,
       },
     ],
   };
   const count=200;
   const options = {
+    legend: {
+      display: true,
+      position: 'bottom',
+    },
     tooltips: {
       callbacks: {
         label: customTooltip,

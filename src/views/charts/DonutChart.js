@@ -52,7 +52,7 @@ const MainChart = ({projectStatsTitle,handleChartClick}) => {
     return '';
   };
   const mainChartData = {
-    labels: projectStatsTitle.map(item => item.title),
+    labels: projectStatsTitle.map(item => item.title.split(" ")[0]),
   
     datasets: [
       {data: projectStatsTitle.map(item => item.task_title_count),

@@ -52,7 +52,7 @@ const Level2Chart = ({projectStatsTitle,handleChartClick}) => {
     return '';
   };
   const mainChartData = {
-   labels: projectStatsTitle.map(item => item.first_name),
+   labels: projectStatsTitle.map(item => item.first_name.split(" ")[0]),
   
     datasets: [
       {data: projectStatsTitle.map(item => item.task_count),

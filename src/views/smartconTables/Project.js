@@ -35,12 +35,12 @@ console.log('project',project)
         pagingType: 'full_numbers',
         pageLength: 20,
         processing: true,
-        dom: 'Bfrtip',
-        buttons: [ {
-          extend: 'print',
-          text: "Print",
-          className:"shadow-none btn btn-primary",
-      }],
+        // dom: 'Bfrtip',
+      //   buttons: [ {
+      //     extend: 'print',
+      //     text: "Print",
+      //     className:"shadow-none btn btn-primary",
+      // }],
       });
       setLoading(false)
     }).catch(()=>{
@@ -225,7 +225,7 @@ console.log('project',project)
           <tbody>
           {userSearchData &&
            userSearchData
-          .filter(element => status ?element:["WIP"].includes(element.status))
+          .filter(element => status || categoryName ?element:["WIP"].includes(element.status)&& element.general !== 1)
           .map((element, i) => {
           return(
         <tr key={element.project_id}>

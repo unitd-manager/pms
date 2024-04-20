@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Form, FormGroup, TabContent,
   TabPane,
-  NavItem,
-  NavLink,
-  Nav } from 'reactstrap';
+  // NavItem,
+  // NavLink,
+  // Nav 
+} from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer } from 'react-toastify';
 //import * as Icon from 'react-feather';
@@ -139,7 +140,7 @@ const LeadEdit = () => {
               applyChanges={applyChanges}
               backToList={backToList}
               module="Lead"
-            ></ApiButton>
+            ></ApiButton> 
           </ComponentCardV2>
         </FormGroup>
       </Form>
@@ -159,7 +160,7 @@ const LeadEdit = () => {
                 sourceLinked={sourceLinked}
               ></LeadMainDetails>
             </div>
-            <Nav tabs>
+           {/* <Nav tabs>
             <NavItem>
               <NavLink
                 className={activeTab === '1' ? 'active' : ''}
@@ -171,14 +172,14 @@ const LeadEdit = () => {
               </NavLink>
             </NavItem>
             </Nav>
-            <TabContent className="p-4" activeTab={activeTab}>
+             <TabContent className="p-4" activeTab={activeTab}>
             <TabPane tabId="1">
             <ComponentCard title="Add a note">
         <AddNote recordId={id} roomName="LeadInfo" />
         <ViewNote recordId={id} roomName="LeadInfo" />
       </ComponentCard>
             </TabPane>
-            </TabContent>
+            </TabContent> */}
 
           </ComponentCard>
         </FormGroup>

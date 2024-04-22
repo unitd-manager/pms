@@ -4,12 +4,11 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 //import ComponentCard from '../ComponentCard';
 
-export default function LeadMainDetails({ handleInputs, lead, allCountries, projectdetails,sourceLinked,potentialType,statusType, }) {
+export default function LeadMainDetails({ handleInputs, lead, allCountries, projectdetails,sourceLinked,potentialType, }) {
   LeadMainDetails.propTypes = {
     handleInputs: PropTypes.func,
     sourceLinked:PropTypes.any,
     potentialType:PropTypes.any,
-    statusType:PropTypes.any,
     allCountries: PropTypes.any,
     lead: PropTypes.any,
     projectdetails: PropTypes.any,
@@ -192,16 +191,14 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
                 value={lead && lead.lead_status}
                 name="lead_status"
               >
-               <option defaultValue="selected" value="">
-                  Please Select
-                </option>
-                {statusType &&
-                  statusType.map((status) => (
-                    <option key={status.valuelist_id} value={status.value}>
-                      {status.value}
-                    </option>
-                    ))}
+        <option>Please Select</option>
+                <option>New</option>
+                <option>On Hold</option>
+                <option>In Progress</option>
+                <option>Pending Approval</option>
+                <option>Completed</option>
               </Input>
+              
             </FormGroup>
           </Col>
           <Col md="3">

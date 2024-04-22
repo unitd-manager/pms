@@ -5,7 +5,7 @@ import ActualHour from '../../components/dashboard/ActualHour';
 import PriorityStats from '../../components/dashboard/PriorityStats';
 import MilestoneCompleted from '../../components/dashboard/MilestoneCompletedChart';
 import AverageIssues from '../../components/dashboard/AverageIssues';
-
+import LeaveSummary from '../../components/dashboard/LeaveSummary';
 
 // import SalesOverview from '../../components/dashboard/classicDashboard/ProjectOverview';
 // import TenderSummaryCard from '../../components/dashboard/TenderSummaryCard';
@@ -33,6 +33,7 @@ const Classic = () => {
           <WorkpermitExpirySummary/> */}
           {/* <SalesOverview /> */}
           <Row>
+        
         <Col sm="4" lg="6" xl="6" xxl="6">
           <Stats />
         </Col>
@@ -53,6 +54,9 @@ const Classic = () => {
       <br />
       <PriorityStats />
         </Col>
+       
+          <LeaveSummary />
+       
       </Row>
       {/*********************Email & Visitor ************************/}
       {/* <Row>

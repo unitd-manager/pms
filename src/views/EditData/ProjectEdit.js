@@ -300,7 +300,6 @@ const ProjectEdit = () => {
                     <option value="Complete">Complete</option>
                     <option value="Cancelled">Cancelled</option>
                     <option value="On Hold">On Hold</option>
-                    <option value="Latest">Latest</option>
                   </Input>
                 </FormGroup>
               </Col>
@@ -400,6 +399,28 @@ const ProjectEdit = () => {
                   </Input>
                 </FormGroup>
               </Col>
+              <Col md="3">
+              <FormGroup>
+                <Label>General</Label>
+                <br></br>
+                <Input
+                  name="general"
+                  value="1"
+                  type="radio"
+                  defaultChecked={projectDetail && projectDetail.general === 1 && true}
+                  onChange={handleInputs}
+                />
+                <Label>Yes</Label>
+                <Input
+                  name="general"
+                  value="0"
+                  type="radio"
+                  defaultChecked={projectDetail && projectDetail.general === 0 && true}
+                  onChange={handleInputs}
+                />
+                <Label>No</Label>
+              </FormGroup>
+            </Col>
             </Row>
           </ComponentCard>
         </FormGroup>

@@ -33,6 +33,7 @@ const LeadEdit = () => {
   const [allCountries, setallCountries] = useState();
   const [sourceLinked, setSourceLinked] = useState();
   const [activeTab, setActiveTab] = useState('1');
+  const [potentialType, setPotentialType] = useState();
 
   //navigation and parameters
   const { id } = useParams();
@@ -107,6 +108,11 @@ const LeadEdit = () => {
     });
   };
 
+  const getPotentialType = () => {
+    api.get('/lead/getPotentialTypeFromValueList', potentialType).then((res) => {
+      setPotentialType(res.data.data);
+    });
+  };
   //Update milestone
   const editLead = () => {
     api
@@ -125,6 +131,7 @@ const LeadEdit = () => {
     getCompanyname();
     getAllCountries();
     getSourceType();
+    getPotentialType();
   }, [id]);
 
   return (
@@ -158,6 +165,7 @@ const LeadEdit = () => {
                 companydetails={companydetails}
                 allCountries={allCountries}
                 sourceLinked={sourceLinked}
+                potentialType={potentialType}
               ></LeadMainDetails>
             </div>
            {/* <Nav tabs>

@@ -280,6 +280,7 @@ const ProjectEdit = () => {
                     <option value="Maintenance">Maintenance</option>
                     <option value="Tenancy Project">Tenancy Project</option>
                     <option value="Tenancy Work">Tenancy Work</option>
+                    <option value="Sales">Sales</option>
                   </Input>
                 </FormGroup>
               </Col>
@@ -295,8 +296,6 @@ const ProjectEdit = () => {
                   >
                     <option defaultValue="selected">Please Select</option>
                     <option value="WIP">WIP</option>
-                    <option value="Billable">Billable</option>
-                    <option value="Billed">Billed</option>
                     <option value="Complete">Complete</option>
                     <option value="Cancelled">Cancelled</option>
                     <option value="On Hold">On Hold</option>

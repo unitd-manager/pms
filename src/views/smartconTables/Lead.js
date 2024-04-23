@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
-import { Button } from 'reactstrap';
+import { Button, Col,Row } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -12,40 +12,44 @@ import 'datatables.net-buttons/js/buttons.print';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { ToastContainer } from 'react-toastify';
+import readXlsxFile from 'read-excel-file';
 import api from '../../constants/api';
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 // import Flag from '../../components/Flag';
-// import message from '../../components/Message';
+import message from '../../components/Message';
 
 const Lead = () => {
   //Const Variables
   const [lead, setLead] = useState(null);
-  const [loading, setLoading] = useState(false)
-
+  const [loading, setLoading] = useState(false);
 
   // get Clients
   const getLead = () => {
-    api.get('/lead/getLead').then((res) => {
-      setLead(res.data.data);
-      $('#example').DataTable({
-        pagingType: 'full_numbers',
-        pageLength: 20,
-        processing: true,
-        dom: 'Bfrtip',
-        buttons: [ {
-          extend: 'print',
-          text: "Print",
-          className:"shadow-none btn btn-primary",
-      }],
+    api
+      .get('/lead/getLead')
+      .then((res) => {
+        setLead(res.data.data);
+        $('#example').DataTable({
+          pagingType: 'full_numbers',
+          pageLength: 20,
+          processing: true,
+          dom: 'Bfrtip',
+          buttons: [
+            {
+              extend: 'print',
+              text: 'Print',
+              className: 'shadow-none btn btn-primary',
+            },
+          ],
+        });
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
       });
-      setLoading(false)
-    }).catch(()=>{
-      setLoading(false)
-    });
   };
 
-    
   // update publish
   // const updateFlag = (obj) => {
   //   obj.flag = !obj.flag;
@@ -60,8 +64,68 @@ const Lead = () => {
   //     });
   // };
 
+  // TRIGGER TO IMPORT EXCEL SHEET
+  const importExcel = () => {
+    $('#import_excel').trigger('click');
+  };
+
+  // UPLOAD FILE ON THER SERVER
+  const uploadOnServer = (arr) => {
+    api
+      .post('/lead/import2/excel', { data: JSON.stringify(arr) })
+      .then(() => {
+        message('File uploaded successfully', 'success');
+        $('#upload_file').val(null);
+      })
+      .catch(() => {
+        message('Failed to upload.', 'error');
+      });
+  };
+
+  // PROCESSING AND FORMATTING THE DATA
+  const processData = (rows) => {
+    const arr = [];
+    rows.shift();
+
+    console.log(rows[0]);
+    for (let x = 0; x < rows.length; x++) {
+      arr.push({
+        CompanyName: rows[x][0],
+        Store: rows[x][1],
+        Address: rows[x][2],
+        PhoneNo: rows[x][3],
+        Status: rows[x][4],
+        Country: rows[x][5],
+        SourceOfLinked: rows[x][6],
+      });
+    }
+
+    uploadOnServer(arr);
+  };
+
+  // IMPORTING EXCEL FILE
+  const importExcelFile = (e) => {
+    console.log(e.target.id);
+    message('test1', 'success');
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        readXlsxFile(e.target.files[0])
+          .then((rows) => {
+            processData(rows);
+            message('Uploading File On The Server', 'info');
+          })
+          .finally(() => {
+            $('#upload_file').val(null);
+          })
+          .catch((err) => console.log('Error Found:', err));
+      }
+    };
+    if (e.target.files[0]) {
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
   useEffect(() => {
-  
     getLead();
   }, []);
   //  stucture of client list view
@@ -98,8 +162,14 @@ const Lead = () => {
       grow: 0,
       wrap: true,
     },
-    
-       {
+    {
+      name: 'Store',
+      selector: 'source_of_lead',
+      sortable: true,
+      grow: 2,
+      wrap: true,
+    },
+    {
       name: 'Source of lead',
       selector: 'source_of_lead',
       sortable: true,
@@ -127,7 +197,7 @@ const Lead = () => {
       grow: 0,
       wrap: true,
     },
-    
+
     {
       name: 'Sales Person',
       selector: 'first_name',
@@ -143,14 +213,37 @@ const Lead = () => {
         {/* ClientDetailsn Add Button */}
         <ToastContainer></ToastContainer>
         <CommonTable
-        loading={loading}
+          loading={loading}
           title="Lead List"
           Button={
-            <Link to="/LeadDetails">
-              <Button color="primary" className="shadow-none">
-                Add New
-              </Button>
-            </Link>
+            <>
+              <Row>
+                <Col md="4">
+                  <Link to="/LeadDetails">
+                    <Button color="primary" className="shadow-none">
+                      New
+                    </Button>
+                  </Link>
+                </Col>
+                <Col md="4">
+                  {/* <Link to=""> */}
+                  <Button
+                    color="primary"
+                    className="shadow-none mr-2"
+                    onClick={() => importExcel()}
+                  >
+                    Import
+                  </Button>
+                  {/* </Link> */}
+                  <input
+                    type="file"
+                    style={{ display: 'none' }}
+                    id="import_excel"
+                    onChange={importExcelFile}
+                  />
+                </Col>
+              </Row>
+            </>
           }
         >
           <thead>
@@ -181,9 +274,12 @@ const Lead = () => {
                       </span>
                     </td> */}
                     <td>{element.lead_title}</td>
+                    <td>{element.store}</td>
                     <td>{element.source_of_lead}</td>
                     <td>{element.lead_status}</td>
-                    <td>{element.lead_date ? moment(element.lead_date).format('DD-MM-YYYY') : ''}</td>
+                    <td>
+                      {element.lead_date ? moment(element.lead_date).format('DD-MM-YYYY') : ''}
+                    </td>
                     <td>{element.country}</td>
                     <td>{element.first_name}</td>
                   </tr>
@@ -191,7 +287,6 @@ const Lead = () => {
               })}
           </tbody>
         </CommonTable>
-
       </div>
     </div>
   );

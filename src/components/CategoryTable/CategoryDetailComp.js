@@ -25,8 +25,8 @@ export default function CategoryDetailComp({ categoryDetails, handleInputs, sect
                   <Input
                     type="text"
                     onChange={handleInputs}
-                    value={categoryDetails && categoryDetails.category_title}
-                    name="category_title"
+                    value={categoryDetails && categoryDetails.title}
+                    name="title"
                   />
                 </FormGroup>
               </Col>

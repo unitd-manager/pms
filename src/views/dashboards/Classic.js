@@ -6,11 +6,17 @@ import Stats from '../../components/dashboard/classicDashboard/Stats';
 import ProjectTable from '../../components/dashboard/classicDashboard/ProjectTable';
 import RecentComments from '../../components/dashboard/classicDashboard/RecentComments';
 import Chat from '../../components/dashboard/classicDashboard/Chat';
+import MainChart from '../charts/DonutChart';
 
 const Classic = () => {
   return (
     <>
       {/*********************Sales Overview ************************/}
+      <Row>
+        <Col md='6'>
+          <MainChart/>
+        </Col>
+      </Row>
       <Row>
         <Col lg="12">
           <SalesOverview />

@@ -18,6 +18,8 @@ import api from '../../constants/api';
     //All State Variable
     const [employee, setEmployee] = useState();
     const [totalPastleavesDetails, setTotalPastLeavesDetails] = useState();
+    //const [totalPastPermissionsDetails, setTotalPermissionsDetails] = useState();
+
 
     const [leaveInsertData, setLeaveInsertData] = useState({
       employee_id: '',
@@ -36,6 +38,7 @@ import api from '../../constants/api';
 
     console.log('loggevdInuser',loggedInuser.first_name)
     console.log('loggevdInuseremail',loggedInuser.email)
+    console.log("totalPastleavesDetails",totalPastleavesDetails)
 
       // getEmployee dropDown
       const getEmployee = () => {
@@ -50,9 +53,9 @@ import api from '../../constants/api';
         });
       };
 
-    const TotalLeavePastHistoryById = () => {
+    // const TotalLeavePastHistoryById = () => {
 
-    };
+    // };
 
 
     const handleInputs = (e) => {
@@ -76,52 +79,54 @@ import api from '../../constants/api';
 
 
     // send Email To Admin
-    const SendEmailWeekly = (emailData,LeaveIds) => {
-      console.log('employeelgg',emailData.employee_id)
+    const SendEmailWeekly = (emailData, LeaveIds) => {
       api
-      .post('/leave/getTotalPastLeaveHistoryById', { employee_id: emailData.employee_id })
-      .then((res) => {
-        setTotalPastLeavesDetails(res.data.data);
-      })
-      .catch(() => {
-        message('leaves Data Not Found', 'info');
-      });
-
-      const to = employee.email; // baad m admin ki email id aayegi yaha
-      const subject = "Leave Mail";
-      console.log('email',employee.email)
-    console.log('emailData',emailData)
-      if (emailData && totalPastleavesDetails) {
-        const name = loggedInuser.first_name
-        const fromDate = moment(emailData.from_date).format('DD-MM-YYYY');
-        const toDate = moment(emailData.to_date).format('DD-MM-YYYY');
-        const leaveType = emailData.leave_type;
-        const leaveReason = emailData.reason;
-        const leaveId = LeaveIds;
-        const totalLeaveThisMonth = totalPastleavesDetails[0]?.TotalLeaveThisMonth
-        const totalLeaveThisYear = totalPastleavesDetails[0]?.TotalLeaveThisYear
-
-        api
-          .post('/commonApi/sendUseremailBooking', {
-            to,
-            subject,
-            fromDate,
-            toDate,
-            leaveType,
-            name,
-            leaveReason,
-            leaveId,
-            totalLeaveThisMonth,
-            totalLeaveThisYear
-          })
-          .then(response => {
-            if (response.status === 200) {
-              alert('Leave request Email Sent successfully');
-            } else {
-              console.error('Error');
-            }
-          });
-      }
+        .post('/leave/getTotalPastLeaveHistoryById', { employee_id: emailData.employee_id })
+        .then((res) => {
+          const totalPastLeavesData = res.data.data;
+          setTotalPastLeavesDetails(totalPastLeavesData);
+    
+          const subject = "Leave Mail";
+    
+          if (emailData && res.data.data) {
+            const name = loggedInuser.first_name
+            const fromDate = moment(emailData.from_date).format('DD-MM-YYYY');
+            const toDate = moment(emailData.to_date).format('DD-MM-YYYY');
+            const leaveType = emailData.leave_type;
+            const leaveReason = emailData.reason;
+            const leaveId = LeaveIds;
+            const totalLeaveThisMonth = res.data.data[0]?.TotalLeaveThisMonth;
+            const totalLeaveThisYear = res.data.data[0]?.TotalLeaveThisYear;
+            const totalPermissionThisMonth = res.data.data[0]?.TotalPermissionThisMonth;
+            const totalPermissionThisYear = res.data.data[0]?.TotalPermissionThisYear;
+    
+            api
+              .post('/commonApi/sendUseremailBooking', {
+                //to,
+                subject,
+                fromDate,
+                toDate,
+                leaveType,
+                name,
+                leaveReason,
+                leaveId,
+                totalLeaveThisMonth,
+                totalLeaveThisYear,
+                totalPermissionThisMonth,
+                totalPermissionThisYear
+              })
+              .then(response => {
+                if (response.status === 200) {
+                  alert('Leave request Email Sent successfully');
+                } else {
+                  console.error('Error');
+                }
+              });
+          }
+        })
+        .catch(() => {
+          message('Leaves Data Not Found', 'info');
+        });
     };
 
     console.log('employee', employee);
@@ -169,8 +174,10 @@ import api from '../../constants/api';
 
     useEffect(() => {
       getEmployee();
-      TotalLeavePastHistoryById()
+      // TotalLeavePastHistoryById()
     }, []);
+
+    
 
     return (
       <div>

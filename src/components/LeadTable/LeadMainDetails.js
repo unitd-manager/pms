@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 //import ComponentCard from '../ComponentCard';
 
-export default function LeadMainDetails({ handleInputs, lead, allCountries, projectdetails,sourceLinked }) {
+export default function LeadMainDetails({ handleInputs, lead, allCountries, projectdetails,sourceLinked,potentialType, }) {
   LeadMainDetails.propTypes = {
     handleInputs: PropTypes.func,
     sourceLinked:PropTypes.any,
+    potentialType:PropTypes.any,
     allCountries: PropTypes.any,
     lead: PropTypes.any,
     projectdetails: PropTypes.any,
@@ -172,6 +173,17 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
           </Col>
           <Col md="3">
             <FormGroup>
+              <Label>Revenue</Label>
+              <Input
+                type="text"
+                onChange={handleInputs}
+                value={lead && lead.revenue}
+                name="revenue"
+              />
+            </FormGroup>
+          </Col>
+          <Col md="3">
+            <FormGroup>
               <Label>Status</Label>
               <Input
                 type="select"
@@ -179,12 +191,34 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
                 value={lead && lead.lead_status}
                 name="lead_status"
               >
-                <option>Please Select</option>
+        <option>Please Select</option>
                 <option>New</option>
-                <option>In Progress</option>
                 <option>On Hold</option>
+                <option>In Progress</option>
                 <option>Pending Approval</option>
                 <option>Completed</option>
+              </Input>
+              
+            </FormGroup>
+          </Col>
+          <Col md="3">
+            <FormGroup>
+              <Label>Potential</Label>
+              <Input
+                type="select"
+                onChange={handleInputs}
+                value={lead && lead.potential}
+                name="potential"
+              > 
+                 <option defaultValue="selected" value="">
+                  Please Select
+                </option>
+                {potentialType &&
+                  potentialType.map((potential) => (
+                    <option key={potential.valuelist_id} value={potential.value}>
+                      {potential.value}
+                    </option>
+                    ))}
               </Input>
             </FormGroup>
           </Col>
@@ -204,7 +238,7 @@ export default function LeadMainDetails({ handleInputs, lead, allCountries, proj
               </Input>
             </FormGroup>
           </Col>
-          <Col md="4">
+          <Col md="3">
               <FormGroup>
                 
                 <Label>Cold Call</Label>

@@ -51,14 +51,10 @@ const DonutDashboard = () => {
         console.log('Error fetching project statistics:', error);
       });
   };
-  const handleChartClick = (event, chartElements) => {
-    if (chartElements.length > 0) {
-      console.log('chartElements',chartElements[0])
-      setSelectedSegment(chartElements[0]._index);
-      const segmentindex = chartElements[0]._index;
-      const id = projectStatsTitle[segmentindex].project_id;
-       // Assuming you have routes like '/project/:projectId'
- navigate(`?project=${id}`);
+  const handleChartClick = (y) => {
+    console.log('yyyy',y)
+    if (y) {
+ navigate(`?project=${y}`);
 
     }
   };

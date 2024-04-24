@@ -5,16 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import { Doughnut } from 'react-chartjs-2';
 import PropTypes from 'prop-types';
 import api from '../../constants/api';
+import D3DonutChart from '../../components/D3Donut/D3Donut';
 
-const DonutChart = ({ data, onClick }) => {
-  DonutChart.propTypes = {
-    data: PropTypes.any,
-    onClick: PropTypes.func,
+// const DonutChart = ({ data, onClick }) => {
+//   DonutChart.propTypes = {
+//     data: PropTypes.any,
+//     onClick: PropTypes.func,
    
-    //onSuccess:PropTypes.any
-  };
-  return <Doughnut data={data} options={{ onClick }} width={10} height={20} redraw={true}/>;
-};
+//     //onSuccess:PropTypes.any
+//   };
+//   return <Doughnut data={data} options={{ onClick }} width={10} height={20} redraw={true}/>;
+// };
 
 
 
@@ -60,6 +61,7 @@ const MainChart = ({projectStatsTitle,handleChartClick}) => {
         hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
         cutoutPercentage: 90, // Change the percentage to adjust the width of the circle
         borderWidth: 1,
+        borderRadius: 20,
       },
     ],
   };
@@ -84,7 +86,7 @@ const MainChart = ({projectStatsTitle,handleChartClick}) => {
     },
   };
   
-  
+  const filteredData = projectStatsTitle.filter(d => d.task_title_count > 0);
   useEffect(() => {
     
     
@@ -92,8 +94,8 @@ const MainChart = ({projectStatsTitle,handleChartClick}) => {
   return (
     <div>
       
-        <DonutChart data={mainChartData} onClick={handleChartClick} options={options}/>
-    
+       
+    <D3DonutChart data={filteredData} onClick={handleChartClick} width={600} height={600}/>
     </div>
   );
 };

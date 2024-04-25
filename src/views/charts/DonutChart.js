@@ -85,8 +85,11 @@ const MainChart = ({projectStatsTitle,handleChartClick}) => {
       },
     },
   };
+ 
+    const newData = projectStatsTitle.filter(x => x.general !== 1);
+
   
-  const filteredData = projectStatsTitle.filter(d => d.task_title_count > 0);
+  const filteredData = newData.filter(d => d.task_title_count > 0);
   useEffect(() => {
     
     

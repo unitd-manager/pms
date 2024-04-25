@@ -58,14 +58,10 @@ const CategoryChart1 = ({ categoryId, setCategoryId}) => {
         console.log('Error fetching project statistics:', error);
       });
   };
-  const handleChartClick = (event, chartElements) => {
-    if (chartElements.length > 0) {
-      console.log('chartElements',chartElements[0])
-      setSelectedSegment(chartElements[0]._index);
-      const segmentindex = chartElements[0]._index;
-      const id = projectStatsEmployee[segmentindex].employee_id;
-       // Assuming you have routes like '/project/:projectId'
- navigate(`?project=${categoryId}?emp=${categoryId}`);
+  const handleChartClick = (y) => {
+   
+    if (y) {
+ navigate(`?project=${categoryId}?emp=${y}`);
 
     }
   };

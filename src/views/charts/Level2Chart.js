@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { Doughnut } from 'react-chartjs-2';
 import PropTypes from 'prop-types';
 import api from '../../constants/api';
+//import D3DonutChart from '../../components/D3Donut/D3Donut';
+import D3DonutCategory from '../../components/D3Donut/D3DonutCategory';
 
 const DonutChart = ({ data, onClick }) => {
   DonutChart.propTypes = {
@@ -78,16 +80,15 @@ const Level2Chart = ({projectStatsTitle,handleChartClick}) => {
     },
   };
   
-  
+  const filteredData = projectStatsTitle.filter(d => d.task_count > 0);
   useEffect(() => {
     
     
   }, []);
   return (
     <div>
-      
-        <DonutChart data={mainChartData} onClick={handleChartClick} options={options}/>
-    
+
+        <D3DonutCategory data={filteredData} onClick={handleChartClick} width={600} height={600}/>
     </div>
   );
 };

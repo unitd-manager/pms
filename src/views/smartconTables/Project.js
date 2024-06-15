@@ -208,7 +208,7 @@ console.log('project',project)
         loading={loading}
           title="Project List"
           Button={
-            <Link to="/BookingDetails">
+            <Link to="/ProjectDetails">
               <Button color="primary" className="shadow-none">
                 Add New
               </Button>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Col, FormGroup, Label, Input, Row } from 'reactstrap';
 import Chart from 'react-apexcharts';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
+import moment from 'moment';
 import ComponentCard from '../../ComponentCard';
 import api from '../../../constants/api';
 
@@ -9,52 +10,43 @@ const LeadCallStats = () => {
   const [coldCallCountsData, setColdCallCountsData] = useState([]);
   const [leadTitles, setLeadTitles] = useState([]);
   const [projects, setProjects] = useState([]);
-  const [LeadID, setLeadId] = useState(false);
+  //const [LeadID, setLeadId] = useState(null);
   const [months] = useState([
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
   ]);
-  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState(''); // Ensure this is the correct value
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState('');
 
-  const fetchLeadData = (selectedEmployeeId) => {
+  const fetchLeadData = (employeeId, month) => {
     api
-      .post('/lead/getLeadsById', { employee_id: selectedEmployeeId })
+      .post('/lead/getLeadId', { employee_id: employeeId, month })
       .then((response) => {
-        if (response.data && response.data.data && response.data.data.length > 0) {
-          const leadData = response.data.data;
+        const leadData = response.data?.data || [];
 
-          // Filter lead data where cold_call is equal to 1 and count cold calls for each lead
-          const coldCallCounts = leadData.map((item) => ({
+        if (month) {
+          const monthIndex = months.indexOf(month);
+          const filteredData = leadData.filter(
+            (lead) => moment(lead.lead_date).month() === monthIndex
+          );
+
+          const coldCallCounts = filteredData.map((item) => ({
             leadId: item.lead_id,
             leadTitle: item.lead_title,
-            coldCallCount: item.cold_call === 1 ? 1 : 0,
+            coldCallCount: item.cold_call_count,
           }));
-          console.log('leadlength', leadData.length);
-          // Set the lead ID using the first lead's ID
-          const firstLeadId = leadData.length > 0 ? leadData[0].lead_id : null;
-          setLeadId(firstLeadId);
-          // Calculate total cold call count for each lead
+
+          // const firstLeadId = filteredData.length > 0 ? filteredData[0].lead_id : null;
+          // setLeadId(firstLeadId);
           const groupedColdCallCounts = coldCallCounts.reduce((accumulator, currentValue) => {
             accumulator[currentValue.leadTitle] =
               (accumulator[currentValue.leadTitle] || 0) + currentValue.coldCallCount;
             return accumulator;
           }, {});
 
-          // Update state with the cold call counts for each lead
           setColdCallCountsData(Object.values(groupedColdCallCounts));
           setLeadTitles(Object.keys(groupedColdCallCounts));
         } else {
-          // If there are no leads, reset the cold call counts
           setColdCallCountsData([]);
           setLeadTitles([]);
         }
@@ -64,7 +56,7 @@ const LeadCallStats = () => {
       });
   };
 
-  useEffect(() => {
+   useEffect(() => {
     api
       .get('lead/getEmployeeName')
       .then((res) => {
@@ -75,33 +67,54 @@ const LeadCallStats = () => {
       });
   }, []);
 
+  // Effect to fetch data when selectedMonth or selectedEmployeeId changes
+  useEffect(() => {
+    if (selectedEmployeeId && selectedMonth) {
+      fetchLeadData(selectedEmployeeId, selectedMonth);
+    }
+  }, [selectedMonth, selectedEmployeeId]); // Runs when these states change
+
+  const handleMonthChange = (e) => {
+    const newSelectedMonth = e.target.value;
+    setSelectedMonth(newSelectedMonth); // Update state
+  };
+
+  const handleEmployeeChange = (e) => {
+    const newSelectedEmployeeId = e.target.value;
+    setSelectedEmployeeId(newSelectedEmployeeId); // Update state
+  };
+
   const options = {
     colors: ['#745af2'],
     chart: {
       fontFamily: "'Rubik', sans-serif",
       type: 'bar',
     },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        endingShape: 'rounded',
-        columnWidth: '55%',
-      },
-      events: {
-        dataPointSelection: (event, chartContext, config) => {
-          const selectedLeadTitle = leadTitles[config.dataPointIndex];
-          const selectedLead = LeadID.find((lead) => lead.leadTitle === selectedLeadTitle);
-          const selectedLeadId = LeadID.find((lead) => lead.leadId === selectedLeadTitle);
-          console.log('1', selectedLead);
-          console.log('select', selectedLeadId);
-          if (selectedLead) {
-            window.location.href = `/LeadEdit/${selectedLeadId}`;
+   // Ensure that the dataPointSelection event retrieves the correct data and navigates to the right page
+plotOptions: {
+  bar: {
+    events: {
+      dataPointSelection: (event, chartContext, config) => {
+        const selectedLeadTitle = leadTitles[config.dataPointIndex];
+        const selectedLead = coldCallCountsData.find(
+          (item) => item.leadTitle === selectedLeadTitle
+        );
+
+        if (selectedLead) {
+          // Check for leadId and ensure it's valid before redirecting
+          const { leadId } = selectedLead;
+          if (leadId) {
+            // Redirect to the correct LeadEdit page
+            window.location.href = `/LeadEdit/${leadId}`;
           } else {
-            console.error('Lead not found for selected lead title:', selectedLeadTitle);
+            console.error('Lead ID not found for the selected title:', selectedLeadTitle);
           }
-        },
+        }
       },
     },
+  },
+},
+
     dataLabels: {
       enabled: false,
     },
@@ -166,10 +179,7 @@ const LeadCallStats = () => {
                 <Input
                   type="select"
                   value={selectedMonth}
-                  onChange={(e) => {
-                    const month = e.target.value;
-                    setSelectedMonth(month);
-                  }}
+                  onChange={handleMonthChange} // Call the handler
                 >
                   {months.map((month) => (
                     <option key={month} value={month}>
@@ -181,29 +191,24 @@ const LeadCallStats = () => {
             </Col>
             <Col md={6}>
               <FormGroup>
-                <Label for="projectSelect">Select Employee</Label>
+                <Label>Select Employee</Label>
                 <Input
                   type="select"
-                  name="employee_id"
-                  onChange={(e) => {
-                    const selectedEmployeeId = e.target.value;
-                    fetchLeadData(selectedEmployeeId);
-                  }}
+                  value={selectedEmployeeId} // Ensure it reflects current state
+                  onChange={handleEmployeeChange} // Call the handler
                 >
                   <option value="">Select Employee</option>
-                  {projects &&
-                    projects.map((element) => (
-                      <option key={element.employee_id} value={element.employee_id}>
-                        {element.first_name}
-                      </option>
-                    ))}
+                  {projects.map((element) => (
+                    <option key={element.employee_id} value={element.employee_id}>
+                      {element.first_name}
+                    </option>
+                  ))}
                 </Input>
               </FormGroup>
             </Col>
           </Row>
-          <Link to={`/LeadEdit/${LeadID}`}>
+         
             <Chart options={options} series={series} type="bar" height="300" />
-          </Link>
         </ComponentCard>
       </Col>
     </Row>

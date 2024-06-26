@@ -36,6 +36,7 @@
     "datatables.net-dt": "^1.12.1",
     "datatables.net-fixedheader": "^3.3.1",
     "date-fns": "^2.29.3",
+    "dotenv": "^16.4.5",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
     "formik": "^2.2.9",
@@ -123,7 +124,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "ftp-deploy --server 43.228.126.245 --username ftp_pmsuts --password \"LnYsA6NcshPmrtRY\""
+    "deploy": "ftp-deploy --server 192.64.114.83 --username ftp_pmsdemo --password \"YMHTWydFCKWGFCKz\""
   },
   "eslintConfig": {
     "extends": [

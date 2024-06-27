@@ -68,7 +68,7 @@ const ProjectEdit = () => {
   // Start for tab refresh navigation
   const tabs = [
     { id: '1', name: 'Analytics' },
-    { id: '2', name: 'Costing Summary' },
+    { id: '2', name: 'Budget Planing' },
     { id: '3', name: 'Milestones' },
     { id: '4', name: 'Team' },
     { id: '5', name: 'Task' },

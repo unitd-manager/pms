@@ -1221,7 +1221,7 @@ const TenderEdit = () => {
                 toggle('1');
               }}
             >
-              Costing Summary
+              Budget Planning
             </NavLink>
           </NavItem>
           <NavItem>
@@ -1257,14 +1257,14 @@ const TenderEdit = () => {
                     setEditCostingSummaryModel(true);
                   }}
                 >
-                  Edit Costing Summary
+                  Edit Budget Planning
                 </Button>
               </Col>
             </Row>
             <Row>
               <Col md="3">
                 <FormGroup>
-                  <h3>Costing Summary</h3>{' '}
+                  <h3>Budget Planning</h3>{' '}
                 </FormGroup>
               </Col>
               <Col md="3">

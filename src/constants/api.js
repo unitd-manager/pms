@@ -1,34 +1,25 @@
-// import axios from 'axios';
-
-// // let baseURL;
-
-// // if (process.env.NODE_ENV === 'production') {
-// //   baseURL = 'http://43.228.126.245:3007';
-// // } else {
-// //   baseURL = 'http://localhost:3007';
-// // }
-// const baseURL = 'http://localhost:3007';
-// console.log('NODE_ENV:', process.env.NODE_ENV);
-// const api = axios.create({
-//   baseURL, // Use the baseURL variable here
-// });
-
-
-// export default api;
-
 import axios from 'axios';
+import dotenv from 'dotenv';
 
+
+dotenv.config();
 let baseURL;
 
-if (process.env.NODE_ENV === 'production') {
-  baseURL = 'http://43.228.126.245:3007';
-} else {
-  baseURL = 'http://localhost:3007';
-}
-console.log('NODE_ENV:', process.env.NODE_ENV);
-const api = axios.create({
-  baseURL, // Use the baseURL variable here
-});
+const { hostname } = window.location;
+console.log('prod',process.env.REACT_APP_PRODUCTION_URL)
 
+if (hostname === 'pmsdemo.zaitunsoftsolutions.com') {
+  baseURL = process.env.REACT_APP_PRODUCTION_URL;
+} else if (hostname === 'pmsuts.unitdtechnologies.com') { 
+  baseURL = process.env.REACT_APP_TEST_URL;
+} else {
+ 
+  baseURL = process.env.REACT_APP_LOCAL_URL;
+}
+
+console.log('Current Hostname:', hostname);
+const api = axios.create({
+  baseURL,
+});
 
 export default api;

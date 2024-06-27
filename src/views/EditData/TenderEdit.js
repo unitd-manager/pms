@@ -44,10 +44,12 @@ import api from '../../constants/api';
 //import TenderButtons from '../../components/TenderTable/TenderButtons';
 import PdfQuote from '../../components/PDF/PdfQuote';
 import ApiButton from '../../components/ApiButton';
+import AddCostingSummaryModal from '../../components/Tender/AddCostingSummaryModal';
+
 
 const TenderEdit = () => {
   const [activeTab, setActiveTab] = useState('1');
-  const [costingsummary, setCostingSummary] = useState(null);
+  const [costingsummary, setCostingSummary] = useState([]);
   const [quote, setQuote] = useState({});
   const [lineItem, setLineItem] = useState([]);
   const [tenderDetails, setTenderDetails] = useState();
@@ -57,6 +59,8 @@ const TenderEdit = () => {
   };
 
   const [editCostingSummaryModel, setEditCostingSummaryModel] = useState(false);
+  const [addCostingSummaryModel, setAddCostingSummaryModel] = useState(false);
+  const [costingcostingDetails, setCostingChargesDetails] = useState();
   const [quotationsModal, setquotationsModal] = useState(false);
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [viewLineModal, setViewLineModal] = useState(false);
@@ -64,6 +68,7 @@ const TenderEdit = () => {
   const [addCompanyModal, setAddCompanyModal] = useState(false);
   const [editQuoteModal, setEditQuoteModal] = useState(false);
   const [editLineModal, setEditLineModal] = useState(false);
+  
   // const [editCostingSummaryData, seteditCostingSummaryData] = useState(null);
   const [contact, setContact] = useState();
   const [company, setCompany] = useState();
@@ -90,18 +95,29 @@ const TenderEdit = () => {
 
   // Get Costing Summary Data
   const getCostingbySummary = () => {
-    api
-      .post('/tender/getCostingSummaryById', { opportunity_id: id })
-      .then((res) => {
-        setCostingSummary(res.data.data);
-        //seteditCostingSummaryData(res.data.data)
-        console.log('costing summary', res.data.data);
-      })
-      .catch(() => {
-        message('Costing Summary not found', 'info');
-      });
+    api.post('/tender/getTabCostingSummaryById', { opportunity_id: id }).then((res) => {
+      setCostingSummary(res.data.data);
+      //seteditCostingSummaryData(res.data.data)
+    });
+  };
+  const [costingsummaries, setCostingSummaries] = useState([]);
+
+  const getCostingbySummaries = () => {
+    api.post('/tender/getTabCostingSummaryById', { opportunity_id: id }).then((res) => {
+      setCostingSummaries(res.data.data[0]);
+      //seteditCostingSummaryData(res.data.data)
+    });
   };
 
+  const getCostingSummaryChargesById = () => {
+    api
+      .post('/tender/getTabOpportunityCostingSummary', {
+        opportunity_id: id,
+      })
+      .then((res) => {
+        setCostingChargesDetails(res.data.data);
+      });
+  };
   // Get Company Data
   const getCompany = () => {
     api
@@ -320,6 +336,8 @@ const TenderEdit = () => {
     getQuote();
     getIncharge();
     getCompany();
+    getCostingbySummaries();
+    getCostingSummaryChargesById();
     console.log(lineItem);
   }, [id]);
 
@@ -1195,6 +1213,13 @@ const TenderEdit = () => {
         <ToastContainer></ToastContainer>
 
         {/* Call Edit Costing Summary Modal */}
+        {addCostingSummaryModel && (
+          <AddCostingSummaryModal
+            addCostingSummaryModel={addCostingSummaryModel}
+            setAddCostingSummaryModel={setAddCostingSummaryModel}
+            projectInfo={id}
+          ></AddCostingSummaryModal>
+        )}
 
         <EditCostingSummaryModal
           editCostingSummaryModel={editCostingSummaryModel}
@@ -1247,108 +1272,148 @@ const TenderEdit = () => {
         </Nav>
 
         <TabContent className="p-4" activeTab={activeTab}>
-          <TabPane tabId="1">
+        <TabPane tabId="1">
             <Row>
-              <Col md="12" className="mb-4">
-                <Button
-                  color="primary"
-                  className="shadow-none"
-                  onClick={() => {
-                    setEditCostingSummaryModel(true);
-                  }}
-                >
-                  Edit Budget Planning
-                </Button>
-              </Col>
+              {Object.keys(costingsummary).length !== 0 && (
+                <Col md="3" className="mb-4 d-flex justify-content-between">
+                  <Button
+                    color="primary"
+                    className="shadow-none"
+                    onClick={() => {
+                      setEditCostingSummaryModel(true);
+                    }}
+                  >
+                    Edit Costing Summary
+                  </Button>
+                </Col>
+              )}
+              {Object.keys(costingsummary).length === 0 && (
+                <Col md="3" className="mb-4 d-flex justify-content-between">
+                  <Button
+                    color="primary"
+                    className="shadow-none"
+                    onClick={() => {
+                      setAddCostingSummaryModel(true);
+                    }}
+                  >
+                    Add Costing Summary
+                  </Button>
+                </Col>
+              )}
             </Row>
-            <Row>
-              <Col md="3">
-                <FormGroup>
-                  <h3>Budget Planning</h3>{' '}
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Total Cost : {costingsummary && costingsummary.total_cost}</Label>{' '}
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>PO Price (S$ W/o GST) : {costingsummary && costingsummary.po_price}</Label>{' '}
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>
-                    Profit Margin : {costingsummary && costingsummary.profit_percentage} %
-                  </Label>{' '}
-                </FormGroup>
-              </Col>
-            </Row>
-            <hr />
-            <Row>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Total Material</Label>
-                  <br />
-                  <span>{costingsummary && costingsummary.total_material_price}</span>
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Transport Charges</Label>
-                  <br />
-                  <span>{costingsummary && costingsummary.transport_charges}</span>
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Total Labour Charges</Label>
-                  <br />
-                  <span>{costingsummary && costingsummary.total_labour_charges}</span>
-                </FormGroup>
-              </Col>
+            {Object.keys(costingsummary).length !== 0 && (
+              <Row>
+                <Row>
+                  <Col md="3">
+                    <FormGroup>
+                      <h3>Costing Summary</h3>{' '}
+                    </FormGroup>
+                  </Col>
+                  <Col md="3">
+                    <FormGroup>
+                      <Label>Total Cost : {costingsummaries && costingsummaries.total_cost}</Label>{' '}
+                    </FormGroup>
+                  </Col>
+                  {/* <Col md="3">
+                    <FormGroup>
+                      <Label>
+                        PO Price (S$ W/o GST) : {costingsummary && costingsummary.po_price}
+                      </Label>{' '}
+                    </FormGroup>
+                  </Col> */}
+                  <Col md="3">
+                    <FormGroup>
+                      <Label>
+                        Profit Margin : {costingsummaries && costingsummaries.profit_percentage} %
+                      </Label>{' '}
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <hr />
+                <Row>
+                  <Col md="3">
+                    <FormGroup>
+                      <Label>Total Material</Label>
+                      <br />
+                      <span>{costingsummaries && costingsummaries.total_material_price}</span>
+                    </FormGroup>
+                  </Col>
+                  <Col md="3">
+                    <FormGroup>
+                      <Label>Transport Charges</Label>
+                      <br />
+                      <span>{costingsummaries && costingsummaries.transport_charges}</span>
+                      <span>
+                        {costingcostingDetails && costingcostingDetails.transport_charges}
+                      </span>
+                    </FormGroup>
+                  </Col>
+                  <Col md="3">
+                    <FormGroup>
+                      <Label>Total  Charges</Label>
+                      <br />
+                      <span>{costingsummaries && costingsummaries.total_labour_charges}</span>
+                    </FormGroup>
+                  </Col>
 
-              <Col md="3">
-                <FormGroup>
-                  <Label>Salesman Commission</Label>
-                  <br />
-                  <span>{costingsummary && costingsummary.salesman_commission}</span>
-                </FormGroup>
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col md="3">
-                <FormGroup>
-                  <Label> Finance Charges </Label>
-                  <br />
-                  <span>{costingsummary && costingsummary.finance_charges}</span>
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Office Overheads</Label>
-                  <br />
-                  <span>{costingsummary && costingsummary.office_overheads}</span>
-                </FormGroup>
-              </Col>
-              <Col md="3">
-                <FormGroup>
-                  <Label>Other Charges</Label>
-                  <br />
-                  <span>{costingsummary && costingsummary.other_charges}</span>
-                </FormGroup>
-              </Col>
+                  <Col md="3">
+                    <FormGroup>
+                      <Label>Salesman Commission</Label>
+                      <br />
+                      <span>{costingsummaries && costingsummaries.salesman_commission}</span>
+                      <span>
+                        {costingcostingDetails && costingcostingDetails.salesman_commission}
+                      </span>
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <br />
+                <Row>
+                  <Col md="3">
+                    <FormGroup>
+                      <Label> Finance Charges </Label>
+                      <br />
+                      <span>{costingsummaries && costingsummaries.finance_charges}</span>
+                      <span>{costingcostingDetails && costingcostingDetails.finance_charges}</span>
+                    </FormGroup>
+                  </Col>
+                  <Col md="3">
+                    <FormGroup>
+                      <Label>Office Overheads</Label>
+                      <br />
+                      <span>{costingsummaries && costingsummaries.office_overheads}</span>
+                      <span>{costingcostingDetails && costingcostingDetails.office_overheads}</span>
+                    </FormGroup>
+                  </Col>
+                  <Col md="3">
+                    <FormGroup>
+                      <Label>Other Charges</Label>
+                      <br />
+                      <span>{costingsummaries && costingsummaries.other_charges}</span>
+                      <span>{costingcostingDetails && costingcostingDetails.other_charges}</span>
+                    </FormGroup>
+                  </Col>
 
-              <Col md="3">
-                <FormGroup>
-                  <Label> TOTAL COST </Label>
-                  <br />
-                  <span>{costingsummary && costingsummary.total_cost}</span>
-                </FormGroup>
-              </Col>
-            </Row>
+                  <Col md="3">
+                    <FormGroup>
+                      <Label> TOTAL COST </Label>
+                      <br />
+                      <span>{costingsummaries && costingsummaries.total_cost}</span>
+
+                      {/* <span>{costingcostingDetails && costingcostingDetails.total_cost}</span> */}
+                      {/* <span>
+                    {(costingcostingDetails && costingcostingDetails.transport_charges) +
+                      (costingcostingDetails && costingcostingDetails.other_charges) +
+                      (costingcostingDetails && costingcostingDetails.salesman_commission) +
+                      (costingcostingDetails && costingcostingDetails.finance_charges) +
+                      (costingcostingDetails && costingcostingDetails.office_overheads) +
+                      (costingcostingDetails && costingcostingDetails.total_labour_charges)}
+                  </span> */}
+                    </FormGroup>
+                  </Col>
+                </Row>
+              </Row>
+            )}
           </TabPane>
 
           <TabPane tabId="2">

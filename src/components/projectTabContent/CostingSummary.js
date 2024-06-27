@@ -11,7 +11,7 @@ export default function CostingSummary({ getCostingSummary, gTotal,gTotal1,gTota
       <Row>
         <Col md="3">
           <FormGroup>
-            <h3>Costing Summary</h3>{' '}
+            <h3>Budget Planner</h3>{' '}
           </FormGroup>
         </Col>
         <Col md="2">

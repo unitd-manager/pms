@@ -21,14 +21,14 @@ import ComponentCardV2 from '../../components/ComponentCardV2';
 import CalendarApp from '../apps/calendar/CalendarApp';
 import creationdatetime from '../../constants/creationdatetime';
 import AppContext from '../../context/AppContext';
-// import ActualHour from '../../components/dashboard/ActualHour';
-// import AverageIssues from '../../components/dashboard/AverageIssues';
 import StatsPmsProjectId from '../../components/dashboard/ProjectStats/StatsPmsProjectId';
 import MilestoneStatsProject from '../../components/dashboard/ProjectStats/MilestoneStatsProject';
 import ActualHourStatsProject from '../../components/dashboard/ProjectStats/ActualHourStatsProject';
 import PriorityStatsProject from '../../components/dashboard/ProjectStats/PriorityStatsProject';
 import AverageStatsProject from '../../components/dashboard/ProjectStats/AverageStatsProject';
 import DueStatsProject from '../../components/dashboard/ProjectStats/DueStatsProject';
+import CostingSummary from '../../components/projectTabContent/CostingSummary';
+
 
 const ProjectEdit = () => {
   const { id } = useParams();
@@ -68,7 +68,7 @@ const ProjectEdit = () => {
   // Start for tab refresh navigation
   const tabs = [
     { id: '1', name: 'Analytics' },
-    { id: '2', name: 'Costing Summary' },
+    { id: '2', name: 'Budget Planing' },
     { id: '3', name: 'Milestones' },
     { id: '4', name: 'Team' },
     { id: '5', name: 'Task' },
@@ -459,7 +459,9 @@ const ProjectEdit = () => {
             <PriorityStatsProject id={id}></PriorityStatsProject>
           </TabPane>
           {/* Tab 2 */}
-          <TabPane tabId="2"></TabPane>
+          <TabPane tabId="2" eventkey="costingSummary">
+            <CostingSummary></CostingSummary>
+          </TabPane>
           {/* Tab 3 Milestone */}
           <TabPane tabId="3">
             <br />

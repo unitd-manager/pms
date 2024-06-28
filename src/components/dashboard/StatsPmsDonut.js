@@ -11,7 +11,7 @@ const StatsPmsDue = () => {
 
   // Get the list of employees from the API
   const getEmployeeStats = (employeeId) => {
-    api.post('/stats/getDueStatsEmployeeId', { employee_id: employeeId })
+    api.post('/stats/getDuechartStats', { employee_id: employeeId })
       .then((res) => {
         setData(res.data.data);
       })

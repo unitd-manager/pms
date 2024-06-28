@@ -67,9 +67,20 @@ const CostingSummaryModal = ({ addCostingSummaryModal, setAddCostingSummaryModal
     if (costingsummaryinsertdetails.amount && costingsummaryinsertdetails.amount !== '') {
       api
         .post('/projecttabcostingsummary/insertCostingCharges', costingsummaryinsertdetails)
-        .then((res) => {
-          setCostingSummaryInsertDetails(res.data.data);
+        .then(() => {
+          //setCostingSummaryInsertDetails(res.data.data);
+          setCostingSummaryInsertDetails({
+            project_id: id,
+            title: type,
+            date: new Date().toISOString().slice(0, 10),
+            amount:'',
+            description:''
+          })
           getsummaryChargesById();
+          setTimeout(()=>{
+            window.location.reload();
+          },400)
+          
           message('Costing summary Charges Data Inserted Successfully', 'success');
         })
         .catch(() => {

@@ -5,15 +5,16 @@ import ActualHour from '../../components/dashboard/ActualHour';
 import PriorityStats from '../../components/dashboard/PriorityStats';
 import MilestoneCompleted from '../../components/dashboard/MilestoneCompletedChart';
 import AverageIssues from '../../components/dashboard/AverageIssues';
-import LinkedinBarStats from '../../components/dashboard/LinkedinBarStats';
+// import LinkedinBarStats from '../../components/dashboard/LinkedinBarStats';
 import TaskSummary from '../../components/dashboard/TenderSummary';
-import LeadStats from '../../components/dashboard/ProjectStats/LeadStats';
+// import LeadStats from '../../components/dashboard/ProjectStats/LeadStats';
 import LeadStat2 from '../../components/dashboard/ProjectStats/LeadStat2';
 import LeadStat3 from '../../components/dashboard/ProjectStats/LeadStat3';
-import ProjectTitle from '../../components/dashboard/ProjectTitle';
+// import ProjectTitle from '../../components/dashboard/ProjectTitle';
 import LeadCallStats from '../../components/dashboard/ProjectStats/LeadCallStats';
+import Gantt from '../../components/dashboard/ProjectStats/Gantt';
 //import DonutDashboard from '../../components/dashboard/DonutChart';
-import MultiChart from '../charts/MultiCharts';
+// import MultiChart from '../charts/MultiCharts';
 //import IgniteChart from '../../components/IgniteChart';
 //import Chartj from '../../components/chartj';
 //import DonutChartWithOutsideLabels from '../../components/Donut/DonutChart';
@@ -28,33 +29,28 @@ const Classic = () => {
       {/*********************Sales Overview ************************/}
      
        
-      <Row>
-        <Col md='12'>
+      {/* <Row>
+        <Col md='12'> */}
          
           {/* <MainChart/> */}
           {/* <DonutDashboard/> */}
-          <MultiChart/>
+          {/* <MultiChart/>
         </Col>
-      </Row>
+      </Row> */}
       <Row>
       <Col lg="12">
-      <ProjectTitle/>
-      <br />
-      <LeadStats/>
+      {/* <ProjectTitle/> */}
+      {/* <br />
+      <LeadStats/> */}
       <br />
       <LeadStat2/>
       <br />
       <LeadCallStats />
       </Col>
-
      <br />
-
-
         <Col lg="12">
           <TaskSummary />
-
           <Row>
-        
         <Col sm="4" lg="6" xl="6" xxl="6">
           <Stats />
         </Col>
@@ -74,18 +70,20 @@ const Classic = () => {
       <ActualHour />
       <br />
       <PriorityStats/>
-      <br />
+      {/* <br />
       <LinkedinBarStats />
-      <br />
-      <PriorityStats />
-      <br />
-      <LeadStats/>
-      <br />
-      <LeadStat2/>
+      <br /> */}
+      {/* <PriorityStats /> */}
+      {/* <br />
+      <LeadStats/> */}
+      {/* <br />
+      <LeadStat2/> */}
       <br />
       <LeadStat3/>
       <br/>
       <LeadCallStats />
+      <br/>
+      <Gantt/>
         </Col>
        
           {/* <LeaveSummary /> */}

@@ -204,6 +204,13 @@ const Lead = () => {
       sortable: true,
       grow: 0,
     },
+
+    {
+      name: 'Potential',
+      selector: 'potential',
+      sortable: true,
+      grow: 0,
+    },
   ];
 
   return (
@@ -282,6 +289,7 @@ const Lead = () => {
                     </td>
                     <td>{element.country}</td>
                     <td>{element.first_name}</td>
+                    <td>{element.potential}</td>
                   </tr>
                 );
               })}

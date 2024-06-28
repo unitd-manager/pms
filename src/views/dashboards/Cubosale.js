@@ -42,6 +42,7 @@ const Classic = () => {
       {/* <ProjectTitle/> */}
       {/* <br />
       <LeadStats/> */}
+      <Gantt/>
       <br />
       <LeadStat2/>
       <br />
@@ -83,7 +84,7 @@ const Classic = () => {
       <br/>
       <LeadCallStats />
       <br/>
-      <Gantt/>
+      
         </Col>
        
           {/* <LeaveSummary /> */}

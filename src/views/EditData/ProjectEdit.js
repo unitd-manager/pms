@@ -28,6 +28,8 @@ import PriorityStatsProject from '../../components/dashboard/ProjectStats/Priori
 import AverageStatsProject from '../../components/dashboard/ProjectStats/AverageStatsProject';
 import DueStatsProject from '../../components/dashboard/ProjectStats/DueStatsProject';
 import CostingSummary from '../../components/projectTabContent/CostingSummary';
+import AddCostingSummaryModal from '../../components/projectTabContent/AddCostingSummaryModal';
+
 
 
 const ProjectEdit = () => {
@@ -64,6 +66,8 @@ const ProjectEdit = () => {
   const [addContactModalTeam, setAddContactModalTeam] = useState(false);
   //get staff details
   const { loggedInuser } = useContext(AppContext);
+  const [addCostingSummaryModel, setAddCostingSummaryModel] = useState(false);
+
 
   // Start for tab refresh navigation
   const tabs = [
@@ -78,6 +82,14 @@ const ProjectEdit = () => {
   const toggle = (tab) => {
     setActiveTab(tab);
   }
+  const [costingsummary, setCostingSummary] = useState([]);
+
+  const getCostingbySummary = () => {
+    api.post('/projecttabcostingsummary/getTabCostingSummaryById', { project_id: id }).then((res) => {
+      setCostingSummary(res.data.data);
+      //seteditCostingSummaryData(res.data.data)
+    });
+  };
 
   // End for tab refresh navigation
 
@@ -185,6 +197,8 @@ const ProjectEdit = () => {
   };
 
   useEffect(() => {
+    getCostingbySummary();
+
     getProjectById();
     getMilestoneById();
     getTaskById();
@@ -460,6 +474,27 @@ const ProjectEdit = () => {
           </TabPane>
           {/* Tab 2 */}
           <TabPane tabId="2" eventkey="costingSummary">
+          {Object.keys(costingsummary).length === 0 && (
+                <Col md="3" className="mb-4 d-flex justify-content-between">
+                  <Button
+                    color="primary"
+                    className="shadow-none"
+                    onClick={() => {
+                      setAddCostingSummaryModel(true);
+                    }}
+                  >
+                    Add Costing Summary
+                  </Button>
+                </Col>
+              )}
+          {addCostingSummaryModel && (
+          <AddCostingSummaryModal
+            addCostingSummaryModel={addCostingSummaryModel}
+            setAddCostingSummaryModel={setAddCostingSummaryModel}
+            projectInfo={id}
+          ></AddCostingSummaryModal>
+        )}
+
             <CostingSummary></CostingSummary>
           </TabPane>
           {/* Tab 3 Milestone */}

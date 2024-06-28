@@ -120,7 +120,7 @@ const formattedProfitMargin = isNaN(profitMargin) ? 0 : profitMargin;
             </Label>{' '}
           </FormGroup>
         </Col>
-        <Col md="2">
+        {/* <Col md="2">
           <FormGroup>
             <Label>
               PO Price (S$ W/o GST) : <b>{quotation && quotation.totalamount}</b>
@@ -135,7 +135,7 @@ const formattedProfitMargin = isNaN(profitMargin) ? 0 : profitMargin;
               <b>{receive && receive.amount}</b>
             </Label>{' '}
           </FormGroup>
-        </Col>
+        </Col> */}
         <Col md="2">
           <FormGroup>
           <Label>
@@ -152,7 +152,7 @@ const formattedProfitMargin = isNaN(profitMargin) ? 0 : profitMargin;
           <FormGroup>
             <Label>Total Material</Label>
             <br />
-            <span>{totalMaterial?.total_cost_price * totalMaterial?.total_qty ?? 'N/A'}</span>
+            <span>{getCostingSummary && getCostingSummary.total_material_price}</span>
           </FormGroup>
         </Col>
         <Col md="3">
@@ -197,9 +197,7 @@ const formattedProfitMargin = isNaN(profitMargin) ? 0 : profitMargin;
               </div>
             </Label>
             <br />
-            <span>{chargesdetails && chargesdetails.labour_charges}(  {(getCostingSummary && getCostingSummary.no_of_days_worked) *
-                (getCostingSummary && getCostingSummary.labour_rates_per_day) *
-                (getCostingSummary && getCostingSummary.no_of_worker_used)})</span>
+            <span>{chargesdetails && chargesdetails.labour_charges}(  {(getCostingSummary && getCostingSummary.total_labour_charges) })</span>
           </FormGroup>
         </Col>
 

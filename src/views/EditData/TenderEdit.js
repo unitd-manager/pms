@@ -1224,7 +1224,8 @@ const TenderEdit = () => {
         <EditCostingSummaryModal
           editCostingSummaryModel={editCostingSummaryModel}
           setEditCostingSummaryModel={setEditCostingSummaryModel}
-          costingsummary={costingsummary}
+          costingsummaries={costingsummaries}
+          setCostingSummaries={setCostingSummaries}
         />
 
         {/* End Call Edit Costing Summary Modal */}

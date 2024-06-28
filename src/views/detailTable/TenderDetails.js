@@ -12,7 +12,7 @@ import {
     Button,Modal, ModalHeader, ModalBody,ModalFooter
   } from 'reactstrap';
   import { ToastContainer } from 'react-toastify';
-  import { useNavigate } from 'react-router-dom';
+  import { useNavigate,useParams } from 'react-router-dom';
 
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import ComponentCard from '../../components/ComponentCard';
@@ -20,6 +20,7 @@ import api from '../../constants/api';
 import message from '../../components/Message';
 
 const BasicForm = () => {
+  const { id } = useParams();
 
 const [company, setCompany] = useState();
 const [contact, setContact] = useState();
@@ -42,8 +43,8 @@ const getCompany = () =>{
 }
 
 // Api call for getting Contact
-const getContact = (id) =>{
-  api.post('/company/getContactByCompanyId',{company_id:id})
+const getContact = (cid) =>{
+  api.post('/company/getContactByCompanyId',{company_id:cid})
   .then((res)=> {
      setContact(res.data.data)
      console.log(contact)
@@ -102,6 +103,8 @@ const [tenderForms, setTenderForms] = useState({
   company_id:"",
   contact_id:"",
   category_id:"",
+  opportunity_id:"",
+
 });
 
 
@@ -115,9 +118,12 @@ const insertTender = () => {
   tenderForms.company_id !== '' && 
   tenderForms.title !== ''){
   api.post('/tender/insertTender',tenderForms)
-  .then(()=> {
+  .then((res)=> { 
+    const insertedDataId = res.data.data.insertId;
     message('Tender inserted successfully.','success')
-    window.location.reload()
+    setTimeout(() => {
+      navigate(`/TenderEdit/${insertedDataId}`);
+    }, 1000);
   })
   .catch(() => {
     message('Network connection error.','error')
@@ -130,7 +136,7 @@ const insertTender = () => {
 
   useEffect(() => {
     getCompany()
-  }, [])
+  }, [id])
   
 
   return (

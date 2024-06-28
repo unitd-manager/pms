@@ -13,7 +13,6 @@ if (hostname === 'pmsdemo.zaitunsoftsolutions.com') {
 } else if (hostname === 'pmsuts.unitdtechnologies.com') { 
   baseURL = process.env.REACT_APP_TEST_URL;
 } else {
- 
   baseURL = process.env.REACT_APP_LOCAL_URL;
 }
 

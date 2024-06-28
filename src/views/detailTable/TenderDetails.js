@@ -107,6 +107,17 @@ const [tenderForms, setTenderForms] = useState({
 
 });
 
+const getTendersById = () => {
+  api
+    .post('/tender/getTendersById', { opportunity_id: id })
+    .then((res) => {
+      setTenderForms(res.data.data);
+      // getContact(res.data.data.company_id);
+    })
+    .catch(() => { });
+};
+
+
 
 const handleInputsTenderForms = (e) => {
   setTenderForms({...tenderForms, [e.target.name]:e.target.value});
@@ -120,9 +131,11 @@ const insertTender = () => {
   api.post('/tender/insertTender',tenderForms)
   .then((res)=> { 
     const insertedDataId = res.data.data.insertId;
+    getTendersById();
     message('Tender inserted successfully.','success')
+
     setTimeout(() => {
-      navigate(`/TenderEdit/${insertedDataId}`);
+      navigate(`/TenderEdit/${insertedDataId}?tab=1`);
     }, 1000);
   })
   .catch(() => {
@@ -133,7 +146,16 @@ const insertTender = () => {
   }
 
 }
-
+const generateCode = () => {
+  api
+    .post('/tender/getCodeValue', { type: 'opportunity' })
+    .then((res) => {
+      insertTender(res.data.data);
+    })
+    .catch(() => {
+      insertTender('');
+    });
+};
   useEffect(() => {
     getCompany()
   }, [id])
@@ -194,10 +216,16 @@ const insertTender = () => {
                 </Row>
                 <Row>
                     <div className="pt-3 mt-3 d-flex align-items-center gap-2">
-                        <Button type="button" color='primary' className="btn mr-2 shadow-none" onClick={()=>{
-                          insertTender() }}>
-                        Save & Continue
-                        </Button>
+                    <Button
+                    type="button"
+                    color="primary"
+                    className="btn mr-2 shadow-none"
+                    onClick={() => {
+                      generateCode();
+                    }}
+                  >
+                    Save & Continue
+                  </Button>
                         <Button onClick={()=>{
                           navigate(-1)
                         }} type="button" className="btn btn-dark shadow-none">

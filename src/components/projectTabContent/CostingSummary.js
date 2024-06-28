@@ -98,7 +98,7 @@ const formattedProfitMargin = isNaN(profitMargin) ? 0 : profitMargin;
       <Row>
         <Col md="3">
           <FormGroup>
-            <h3>Costing Summary</h3>{' '}
+            <h3>Budget Planing</h3>{' '}
           </FormGroup>
         </Col>
         <Col md="2">

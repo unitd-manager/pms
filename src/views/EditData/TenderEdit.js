@@ -93,7 +93,7 @@ const TenderEdit = () => {
     setAddCompanyModal(!addCompanyModal);
   };
 
-  // Get Costing Summary Data
+  // Get Budget Planning Data
   const getCostingbySummary = () => {
     api.post('/tender/getTabCostingSummaryById', { opportunity_id: id }).then((res) => {
       setCostingSummary(res.data.data);
@@ -1210,7 +1210,7 @@ const TenderEdit = () => {
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
 
-        {/* Call Edit Costing Summary Modal */}
+        {/* Call Edit Budget Planning Modal */}
         {addCostingSummaryModel && (
           <AddCostingSummaryModal
             addCostingSummaryModel={addCostingSummaryModel}
@@ -1226,7 +1226,7 @@ const TenderEdit = () => {
           setCostingSummaries={setCostingSummaries}
         />
 
-        {/* End Call Edit Costing Summary Modal */}
+        {/* End Call Edit Budget Planning Modal */}
 
         {/* Call View Quote Log Modal */}
 
@@ -1245,7 +1245,7 @@ const TenderEdit = () => {
                 toggle('1');
               }}
             >
-              Budget Planning
+              Budget Planing
             </NavLink>
           </NavItem>
           <NavItem>
@@ -1282,7 +1282,7 @@ const TenderEdit = () => {
                       setEditCostingSummaryModel(true);
                     }}
                   >
-                    Edit Costing Summary
+                    Edit Budget Planing
                   </Button>
                 </Col>
               )}
@@ -1295,7 +1295,7 @@ const TenderEdit = () => {
                       setAddCostingSummaryModel(true);
                     }}
                   >
-                    Add Costing Summary
+                    Add Budget Planing
                   </Button>
                 </Col>
               )}
@@ -1305,7 +1305,7 @@ const TenderEdit = () => {
                 <Row>
                   <Col md="3">
                     <FormGroup>
-                      <h3>Costing Summary</h3>{' '}
+                      <h3>Budget Planing</h3>{' '}
                     </FormGroup>
                   </Col>
                   <Col md="3">

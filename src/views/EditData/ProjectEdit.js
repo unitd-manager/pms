@@ -483,7 +483,7 @@ const ProjectEdit = () => {
                       setAddCostingSummaryModel(true);
                     }}
                   >
-                    Add Costing Summary
+                    Add Budget Planning
                   </Button>
                 </Col>
               )}

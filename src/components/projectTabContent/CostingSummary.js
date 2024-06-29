@@ -92,7 +92,7 @@ export default function CostingSummary() {
 
 const formattedProfitMargin = isNaN(profitMargin) ? 0 : profitMargin;
 
-
+console.log("qq",formattedProfitMargin)
   return (
     <>
       <Row>
@@ -140,7 +140,7 @@ const formattedProfitMargin = isNaN(profitMargin) ? 0 : profitMargin;
           <FormGroup>
           <Label>
   Profit Margin :{' '}
-  <b>{formattedProfitMargin}% ({getCostingSummary && getCostingSummary.profit})</b>
+  <b>{getCostingSummary && getCostingSummary.profit_percentage}% ({getCostingSummary && getCostingSummary.profit})</b>
 </Label>
 {' '}
           </FormGroup>

@@ -34,6 +34,7 @@ const LeadEdit = () => {
   const [sourceLinked, setSourceLinked] = useState();
   const [activeTab, setActiveTab] = useState('1');
   const [potentialType, setPotentialType] = useState();
+  const [valuelist, setValuelist] = useState();
 
   //navigation and parameters
   const { id } = useParams();
@@ -101,7 +102,16 @@ const LeadEdit = () => {
         //message('Country Data Not Found', 'info');
       });
   };
-
+  const getValuelist = () => {
+    api
+      .get('/lead/getValueList')
+      .then((res) => {
+        setValuelist(res.data.data);
+      })
+      .catch(() => {
+        message('valuelist not found', 'info');
+      });
+  };
   const getSourceType = () => {
     api.get('/lead/getSourceTypeFromValueList', sourceLinked).then((res) => {
       setSourceLinked(res.data.data);
@@ -132,6 +142,7 @@ const LeadEdit = () => {
     getAllCountries();
     getSourceType();
     getPotentialType();
+    getValuelist();
   }, [id]);
 
   return (
@@ -166,6 +177,7 @@ const LeadEdit = () => {
                 allCountries={allCountries}
                 sourceLinked={sourceLinked}
                 potentialType={potentialType}
+                valuelist={valuelist}
               ></LeadMainDetails>
             </div>
            {/* <Nav tabs>

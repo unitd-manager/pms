@@ -150,25 +150,25 @@ export default function LeadMainDetails({ handleInputs, valuelist, lead, allCoun
                   </Input>
             </FormGroup>
           </Col>
-          <Col md="3">
-            <FormGroup>
-              <Label>Software Category</Label>
-              <Input
-                type="select"
-                onChange={handleInputs}
-                value={lead && lead.source_of_lead}
-                name="software_category"
-              >
-              <option defaultValue="selected" value="">
-                  Please Select
-                </option>
-                {valuelist &&
+          <Col md="4">
+                <FormGroup>
+                  <Label> Software Category</Label>
+                  <Input
+                    type="select"
+                    onChange={handleInputs}
+                    value={lead && lead.software_category}
+                    name="software_category"
+                  >
+                    <option defaultValue="selected">
+                      Please Select
+                    </option>
+                    {valuelist &&
                       valuelist.map((e) => {
                         return <option key={e.value} value={e.value}>{e.value}</option>;
                       })}
                   </Input>
-            </FormGroup>
-          </Col>
+                </FormGroup>
+              </Col>
 
           <Col md="3">
             <FormGroup>

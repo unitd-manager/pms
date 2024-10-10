@@ -6,7 +6,6 @@ dotenv.config();
 let baseURL;
 
 const { hostname } = window.location;
-console.log('prod',process.env.REACT_APP_PRODUCTION_URL)
 
 if (hostname === 'pmsdemo.unitdtechnologies.com') {
   baseURL = process.env.REACT_APP_PRODUCTION_URL;

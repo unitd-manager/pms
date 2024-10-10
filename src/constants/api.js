@@ -8,7 +8,7 @@ let baseURL;
 const { hostname } = window.location;
 console.log('prod',process.env.REACT_APP_PRODUCTION_URL)
 
-if (hostname === 'pmsdemo.zaitunsoftsolutions.com') {
+if (hostname === 'pmsdemo.unitdtechnologies.com') {
   baseURL = process.env.REACT_APP_PRODUCTION_URL;
 } else if (hostname === 'pmsuts.unitdtechnologies.com') { 
   baseURL = process.env.REACT_APP_TEST_URL;

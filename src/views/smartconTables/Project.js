@@ -48,6 +48,22 @@ console.log('project',project)
     });
   };
 
+const [users, setLoggedInUser] = useState({});
+  
+  const getUser = () => {
+    let user = localStorage.getItem('user');
+    user = JSON.parse(user);
+    setLoggedInUser(user);
+       
+  };
+  React.useEffect(() => {
+    getUser();
+    return () => {
+      getUser();
+    };
+  }, []);
+
+  console.log("qwdew",users?.staff_id);
 
   const handleSearch = () => {
     let newData = project;
@@ -208,11 +224,13 @@ console.log('project',project)
         loading={loading}
           title="Project List"
           Button={
-            <Link to="/ProjectDetails">
-              <Button color="primary" className="shadow-none">
-                Add New
-              </Button>
-            </Link>
+            users?.staff_id === 81 || users?.staff_id === 9 ? (
+              <Link to="/ProjectDetails">
+                <Button color="primary" className="shadow-none">
+                  Add New
+                </Button>
+              </Link>
+            ) : null
           }
         >
           <thead>

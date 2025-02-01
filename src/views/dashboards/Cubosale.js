@@ -37,6 +37,7 @@ const Classic = () => {
           {/* <MultiChart/>
         </Col>
       </Row> */}
+          <TaskSummary />
       <Row>
       <Col lg="12">
       {/* <ProjectTitle/> */}
@@ -50,7 +51,7 @@ const Classic = () => {
       </Col>
      <br />
         <Col lg="12">
-          <TaskSummary />
+      
           <Row>
         <Col sm="4" lg="6" xl="6" xxl="6">
           <Stats />

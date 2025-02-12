@@ -53,10 +53,10 @@ const MainChart = ({projectStatsTitle,handleChartClick}) => {
     return '';
   };
   const mainChartData = {
-    labels: projectStatsTitle.map(item => item.title.split(" ")[0]),
+    labels: projectStatsTitle?.map(item => item.title.split(" ")[0]),
   
     datasets: [
-      {data: projectStatsTitle.map(item => item.task_title_count),
+      {data: projectStatsTitle?.map(item => item.task_title_count),
         backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56','#56F488','#34AA21','#12AA34','#F16384', '#C6A2EB', '#BFCE56','#A6F418','#114421','#BBAA34'],
         hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
         cutoutPercentage: 90, // Change the percentage to adjust the width of the circle
@@ -78,7 +78,7 @@ const MainChart = ({projectStatsTitle,handleChartClick}) => {
     },
     elements: {
       center: {
-        text: count.toString(),
+        text: count?.toString(),
         color: '#000000', // Text color
         fontStyle: 'Arial', // Font style
         sidePadding: 20, // Padding around text
@@ -86,10 +86,10 @@ const MainChart = ({projectStatsTitle,handleChartClick}) => {
     },
   };
  
-    const newData = projectStatsTitle.filter(x => x.general !== 1);
+    const newData = projectStatsTitle?.filter(x => x.general !== 1);
 
   
-  const filteredData = newData.filter(d => d.task_title_count > 0);
+  const filteredData = newData?.filter(d => d.task_title_count > 0);
   useEffect(() => {
     
     

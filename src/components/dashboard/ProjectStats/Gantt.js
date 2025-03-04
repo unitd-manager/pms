@@ -14,7 +14,7 @@ const Gantt = () => {
     };
 
     const fetchData = () => {
-        api.get('/project/getProjects')
+        api.get('/project/getProjectss')
             .then(response => {
                 console.log('API Response:', response.data);
 

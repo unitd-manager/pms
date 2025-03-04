@@ -12,7 +12,7 @@ if (hostname === 'pmsdemo.unitdtechnologies.com') {
 } else if (hostname === 'pmsuts.unitdtechnologies.com') { 
   baseURL = process.env.REACT_APP_TEST_URL;
 } else {
-  baseURL = process.env.REACT_APP_LOCAL_URL;
+  baseURL = process.env.REACT_APP_TEST_URL;
 }
 
 console.log('Current Hostname:', hostname);

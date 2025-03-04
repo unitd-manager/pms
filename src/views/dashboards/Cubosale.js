@@ -14,7 +14,7 @@ import LeadStat3 from '../../components/dashboard/ProjectStats/LeadStat3';
 import LeadCallStats from '../../components/dashboard/ProjectStats/LeadCallStats';
 import Gantt from '../../components/dashboard/ProjectStats/Gantt';
 //import DonutDashboard from '../../components/dashboard/DonutChart';
-// import MultiChart from '../charts/MultiCharts';
+ import MultiChart from '../charts/MultiCharts';
 //import IgniteChart from '../../components/IgniteChart';
 //import Chartj from '../../components/chartj';
 //import DonutChartWithOutsideLabels from '../../components/Donut/DonutChart';
@@ -29,14 +29,15 @@ const Classic = () => {
       {/*********************Sales Overview ************************/}
      
        
-      {/* <Row>
-        <Col md='12'> */}
+      <Row>
+        <Col md='12'>
          
           {/* <MainChart/> */}
           {/* <DonutDashboard/> */}
-          {/* <MultiChart/>
+          <MultiChart/>
         </Col>
-      </Row> */}
+      </Row>
+          <TaskSummary />
       <Row>
       <Col lg="12">
       {/* <ProjectTitle/> */}
@@ -50,7 +51,7 @@ const Classic = () => {
       </Col>
      <br />
         <Col lg="12">
-          <TaskSummary />
+      
           <Row>
         <Col sm="4" lg="6" xl="6" xxl="6">
           <Stats />

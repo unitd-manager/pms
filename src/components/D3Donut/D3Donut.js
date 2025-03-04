@@ -27,7 +27,7 @@ const colors = [
 console.log('data',data);
   const radius = Math.min(width - 2 * MARGIN_X, height - 2 * MARGIN_Y) / 2
   const innerRadius = radius / 2
-  const totalValues = data.reduce((acc, curr) => acc + curr.task_title_count, 0);
+  const totalValues = data?.reduce((acc, curr) => acc + curr.task_title_count, 0);
   const pie = useMemo(() => {
     const pieGenerator = d3.pie().value(d => d.task_title_count)
     return pieGenerator(data)

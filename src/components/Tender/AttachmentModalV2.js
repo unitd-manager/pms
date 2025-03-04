@@ -80,11 +80,11 @@ const AttachmentModalV2 = ({
           setTimeout(() => {
             setAttachmentModal(false);
             getFiles()
+            window.location.reload();
           }, 100);
           
         })
         .catch(() => {
-          message('Unable to upload File', 'error');
         });
     } else {
       message('No files selected', 'info');

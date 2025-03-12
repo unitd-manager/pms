@@ -1,177 +1,47 @@
-/*eslint-disable*/
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Row, Col, Card, CardBody } from 'reactstrap';
 import PropTypes from 'prop-types';
 import api from '../../constants/api';
-//import MainChart from '../../views/charts/DonutChart';
 import Level2Chart from '../../views/charts/Level2Chart';
 
+const CategoryChart1 = ({ categoryId }) => {
+  CategoryChart1.propTypes = {
+    categoryId: PropTypes.any,
+  };
 
-const CategoryChart1 = ({ categoryId, setCategoryId}) => {
-    CategoryChart1.propTypes = {
-        categoryId: PropTypes.any,
-        setCategoryId: PropTypes.func,
-        //onSuccess:PropTypes.any
-      };
-  const [projectStats, setProjectStats] = useState([]);
-  const [projectStatsTitle, setProjectStatsTitle] = useState([]);
   const [projectStatsEmployee, setProjectStatsEmployee] = useState([]);
-  const navigate=useNavigate();
-  const [selectedSegment, setSelectedSegment] = useState(null);
- 
+  const navigate = useNavigate();
 
-    console.log('category',categoryId);
-    console.log('setcategory',setCategoryId);
-  // Get the project statistics for StatusCards
-  const getStats = () => {
-    api
-      .get('stats/ProjectTitleCards',{project_id:categoryId})
-      .then((res) => {
-        setProjectStats(res.data.data);
-      })
-      .catch((error) => {
-        console.log('Error fetching project statistics:', error);
-      });
-  };
-
-  // Get the project statistics for ProjectTitle
-  const getStatsTitle = () => {
-    api
-      .get('stats/ProjectTitleStats')
-      .then((res) => {
-        setProjectStatsTitle(res.data.data);
-      })
-      .catch((error) => {
-        console.log('Error fetching project statistics:', error);
-      });
-  };
-
-  // Get the project statistics for ProjectTitle
-  const getStatsEmployeeTask = () => {
-    api
-      .post('stats/ProjectEmployeeStatsById',{project_id:categoryId})
-      .then((res) => {
-        setProjectStatsEmployee(res.data.data);
-      })
-      .catch((error) => {
-        console.log('Error fetching project statistics:', error);
-      });
-  };
-  const handleChartClick = (y) => {
-   
-    if (y) {
- navigate(`?project=${categoryId}?emp=${y}`);
-
+  // Fetch Employees for selected category
+  const getStatsEmployeeTask = (categoryId) => {
+    if (categoryId) {
+      api
+        .post('project/getProjectEmployees', { project_id: categoryId })
+        .then((res) => {
+          console.log("Fetched Employees in CategoryChart1:", res.data.data); // Debugging
+          setProjectStatsEmployee(res.data.data);
+        })
+        .catch((error) => console.log('Error fetching employees:', error));
     }
   };
+
+  // Handle employee click navigation
+  const handleChartClick = (employeeId) => {
+    if (employeeId) {
+      navigate(`?project=${categoryId}&emp=${employeeId}`);
+    }
+  };
+
+  // Fetch employees when categoryId changes
   useEffect(() => {
-    getStats();
-    getStatsTitle();
-    getStatsEmployeeTask();
-  }, []);
+    console.log("Category ID changed:", categoryId); // Debugging
+    if (categoryId) {
+      getStatsEmployeeTask(categoryId);
+    }
+  }, [categoryId]);
 
-  const optionsDonut = {
-    chart: {
-      id: 'donut-chart',
-      fontFamily: "'Rubik', sans-serif",
-      events: {
-        click:(event, chartContext, opts)=> {
-          console.log('event',event);
-          console.log('chartContext',chartContext);
-          console.log('opts',opts);
-          // config.seriesIndex gives the index of the clicked segment
-          const { seriesIndex } = opts;
- // Access the project ID associated with the clicked segment
- const projectId = projectStatsEmployee[seriesIndex].employee_id;
-
- // Assuming you have routes like '/project/:projectId'
-//  navigate(`/ProjectEdit/${projectId}`);
-        
-        }
-      }
-    },
-    dataLabels: {
-      enabled: true,
-      formatter(val, opts) {
-        console.log('opts',opts);
-        const { seriesIndex } = opts;
-        return projectStatsEmployee[seriesIndex].first_name;
-      },
-    },
-    plotOptions: {
-      pie: {
-        donut: {
-          size: '70px',
-          labels: {
-            show: true,
-            total: {
-              show: true,
-              label: 'Total',
-              color: '#99abb4',
-            },
-          },
-        },
-      },
-    },
-    
-    legend: {
-      show: true,
-      position: 'bottom',
-      width: '50px',
-      fontFamily: "'Montserrat', sans-serif",
-    },
-    tooltip: {
-      fillSeriesColor: false,
-      theme: 'dark',
-    },
-  };
-
-  const optionsDonut1 = {
-    chart: {
-      id: 'donut-chart',
-      fontFamily: "'Rubik', sans-serif",
-    },
-    dataLabels: {
-      enabled: true,
-      formatter(val, opts) {
-        const { seriesIndex } = opts;
-
-        return projectStatsEmployee[seriesIndex].task_count;
-      },
-    },
-    plotOptions: {
-      pie: {
-        donut: {
-          size: '70px',
-          labels: {
-            show: true,
-            total: {
-              show: true,
-              label: 'Total',
-              color: '#99abb4',
-            },
-          },
-        },
-      },
-    },
-    legend: {
-      show: true,
-      position: 'bottom',
-      width: '50px',
-      fontFamily: "'Montserrat', sans-serif",
-    },
-    tooltip: {
-      fillSeriesColor: false,
-      theme: 'dark',
-    },
-  };
-
-  const seriesDonut = projectStatsTitle.map((stat) => stat.task_title_count);
-  const labelsDonut = projectStatsTitle.map((stat) => stat.title);
-
-  const seriesDonut1 = projectStatsEmployee.map((stat) => stat.task_count);
-  const labelsDonut1 = projectStatsEmployee.map((stat) => stat.first_name);
   return (
     <>
       <Row>
@@ -181,78 +51,7 @@ const CategoryChart1 = ({ categoryId, setCategoryId}) => {
               <Row>
                 <Col md="4">
                   <h5>Team-Tasks</h5>
-                  {/* <Chart
-                    options={{ ...optionsDonut, labels: labelsDonut }}
-                    series={seriesDonut}
-                    type="donut"
-                    height="360"
-                  /> */}
-                  <Level2Chart projectStatsTitle={projectStatsEmployee} handleChartClick={handleChartClick}/>
-                </Col>
-                <Col md="6">
-                  <h5 className="status-heading">Status</h5>
-                  <Row>
-                    {projectStats.map((project) => (
-                      <Col sm="6" lg="2" key={project.id}>
-                        <Card className="custom-card">
-                          <CardBody>
-                            <div className="d-flex align-items-center">
-                              <div>
-                                <h6 className="font-12 mb-0">In Progress</h6>
-                                <h4 className="mt-1 fw-bolder mb-0">
-                                  {' '}
-                                  {project.in_progress_task_count}
-                                </h4>
-                              </div>
-                            </div>
-                          </CardBody>
-                        </Card>
-                      </Col>
-                    ))}
-
-                    {projectStats.map((project) => (
-                      <Col sm="6" lg="2" key={project.id}>
-                        <Card className="custom-card1">
-                          <CardBody>
-                            <div className="d-flex align-items-center">
-                              <div>
-                                <h6 className="font-12 mb-0">Completed</h6>
-                                <h4 className="mt-1 fw-bolder mb-0"> {project.completed}</h4>
-                              </div>
-                            </div>
-                          </CardBody>
-                        </Card>
-                      </Col>
-                    ))}
-                    {projectStats.map((project) => (
-                      <Col sm="6" lg="2" key={project.id}>
-                        <Card className="custom-card2">
-                          <CardBody>
-                            <div className="d-flex align-items-center">
-                              <div>
-                                <h6 className="font-12 mb-0">On Hold</h6>
-                                <h4 className="mt-1 fw-bolder mb-0"> {project.on_hold}</h4>
-                              </div>
-                            </div>
-                          </CardBody>
-                        </Card>
-                      </Col>
-                    ))}
-                    {projectStats.map((project) => (
-                      <Col sm="12" lg="3" key={project.id}>
-                        <Card className="custom-card3">
-                          <CardBody>
-                            <div className="d-flex align-items-center">
-                              <div>
-                                <h6 className="font-12 mb-0">Not Started</h6>
-                                <h4 className="mt-1 fw-bolder mb-0"> {project.not_started_task}</h4>
-                              </div>
-                            </div>
-                          </CardBody>
-                        </Card>
-                      </Col>
-                    ))}
-                  </Row>
+                  <Level2Chart projectStatsTitle={projectStatsEmployee} handleChartClick={handleChartClick} />
                 </Col>
               </Row>
             </CardBody>
@@ -260,26 +59,30 @@ const CategoryChart1 = ({ categoryId, setCategoryId}) => {
         </Col>
       </Row>
 
-      {/* <Row>
-        <Col md="12">
-          <Card>
-            <CardBody>
-              <Row>
-                <Col md="4">
-                  <h5>Overall Employee Statistics</h5>
-                  {/* <Chart
-                    options={{ ...optionsDonut1, labels: labelsDonut1 }}
-                    series={seriesDonut1}
-                    type="donut"
-                    height="360"
-                  /> */}
-                  {/* <MainChart/>
-                </Col>
-              </Row>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row> */} 
+      {/* Employee Card Section */}
+      {projectStatsEmployee?.length > 0 && (
+        <Row>
+          <Col md="12">
+            <Card>
+              <CardBody>
+                <h5>Employees Working on Project</h5>
+                <Row>
+                  {projectStatsEmployee.map((employee) => (
+                    <Col sm="4" key={employee.employee_id}>
+                      <Card className="custom-card" onClick={() => handleChartClick(employee.employee_id)}>
+                        <CardBody>
+                          <h6 className="font-12 mb-0">{employee.first_name} {employee.last_name}</h6>
+                          {employee.task_count && <p className="mb-0">Tasks: {employee.task_count}</p>}
+                        </CardBody>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      )}
     </>
   );
 };

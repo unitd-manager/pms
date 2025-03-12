@@ -19,7 +19,7 @@ const DonutDashboard = () => {
   // Get the project statistics for StatusCards
   const getStats = () => {
     api
-      .get('stats/ProjectTitleCards')
+      .get('project/getProjectGeneralCardt')
       .then((res) => {
         setProjectStats(res.data.data);
       })
@@ -31,7 +31,7 @@ const DonutDashboard = () => {
   // Get the project statistics for ProjectTitle
   const getStatsTitle = () => {
     api
-      .get('stats/ProjectTitleStats')
+      .get('project/getProjectDonut')
       .then((res) => {
         setProjectStatsTitle(res.data.data);
       })
@@ -43,7 +43,7 @@ const DonutDashboard = () => {
   // Get the project statistics for ProjectTitle
   const getStatsEmployeeTask = () => {
     api
-      .get('stats/ProjectEmployeeStats')
+      .get('project/getProjectDonutEmp')
       .then((res) => {
         setProjectStatsEmployee(res.data.data);
       })
@@ -190,12 +190,9 @@ const DonutDashboard = () => {
                         <Card className="custom-card">
                           <CardBody>
                             <div className="d-flex align-items-center">
-                              <div>
-                                <h6 className="font-12 mb-0">In Progress</h6>
-                                <h4 className="mt-1 fw-bolder mb-0">
-                                  {' '}
-                                  {project.in_progress_task_count}
-                                </h4>
+                            <div>
+                                <h6 className="font-12 mb-0">{project.project_type}</h6>
+                                <h4 className="mt-1 fw-bolder mb-0">{project.project_count}</h4>
                               </div>
                             </div>
                           </CardBody>
@@ -203,49 +200,8 @@ const DonutDashboard = () => {
                       </Col>
                     ))}
 
-                    {projectStats.map((project) => (
-                      <Col sm="6" lg="2" key={project.id}>
-                        <Card className="custom-card1">
-                          <CardBody>
-                            <div className="d-flex align-items-center">
-                              <div>
-                                <h6 className="font-12 mb-0">Completed</h6>
-                                <h4 className="mt-1 fw-bolder mb-0"> {project.completed}</h4>
-                              </div>
-                            </div>
-                          </CardBody>
-                        </Card>
-                      </Col>
-                    ))}
-                    {projectStats.map((project) => (
-                      <Col sm="6" lg="2" key={project.id}>
-                        <Card className="custom-card2">
-                          <CardBody>
-                            <div className="d-flex align-items-center">
-                              <div>
-                                <h6 className="font-12 mb-0">On Hold</h6>
-                                <h4 className="mt-1 fw-bolder mb-0"> {project.on_hold}</h4>
-                              </div>
-                            </div>
-                          </CardBody>
-                        </Card>
-                      </Col>
-                    ))}
-                    {projectStats.map((project) => (
-                      <Col sm="12" lg="3" key={project.id}>
-                        <Card className="custom-card3">
-                          <CardBody>
-                            <div className="d-flex align-items-center">
-                              <div>
-                                <h6 className="font-12 mb-0">Not Started</h6>
-                                <h4 className="mt-1 fw-bolder mb-0"> {project.not_started_task}</h4>
-                              </div>
-                            </div>
-                          </CardBody>
-                        </Card>
-                      </Col>
-                    ))}
-                  </Row>
+                
+                   </Row>
                 </Col>
               </Row>
             </CardBody>
@@ -277,4 +233,4 @@ const DonutDashboard = () => {
   );
 };
 
-export default DonutDashboard;
+export default DonutDashboard; 

@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Button, Label, FormGroup, Container, Row, Col, Card, CardBody, Input } from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-
 import PropTypes from 'prop-types';
 import { usePermify } from '@permify/react-role';
 import AuthLogo from '../../layouts/logo/AuthLogo';
@@ -20,10 +19,14 @@ const LoginFormik = ({ setToken }) => {
   const { setUser } = usePermify();
   const getPermissions = (user) => {
     loginApi
-      .post('/usergroup/getusergroupForLoginUser', { user_group_id: user.user_group_id })
+      .post('/usergroup/getusergroupForLoginUser1', {
+        user_group_id: user.user_group_id,
+        email: user.email // ✅ Add email so backend can detect "Fatema"
+      })
       .then((res) => {
         const apiData = res.data.data;
-        setUserEmail(res.data.data.email); 
+        setUserEmail(user.email); // Optional, if you want to show it in UI
+  
         const permissionArray = [];
         apiData.forEach((element) => {
           if (element.edit) permissionArray.push(`${element.section_title}-edit`);
@@ -37,6 +40,7 @@ const LoginFormik = ({ setToken }) => {
           if (element.publish) permissionArray.push(`${element.section_title}-publish`);
           if (element.remove) permissionArray.push(`${element.section_title}-remove`);
         });
+  
         localStorage.setItem('user', JSON.stringify(user));
         setToken('123');
         setUser({
@@ -44,13 +48,15 @@ const LoginFormik = ({ setToken }) => {
           roles: ['admin'],
           permissions: permissionArray,
         });
-      
-      window.location.reload()
+  
+        window.location.reload();
       })
       .catch(() => {
         message('Network connection error.', 'error');
       });
   };
+  
+  
 
   const UserLogin = (value) => {
     loginApi

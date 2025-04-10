@@ -17,48 +17,70 @@ import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 import CommonTable from '../../components/CommonTable';
 
 const ProjectTask = () => {
-  //All state variable
   const [projectTask, setProjectTask] = useState([]);
   const [loading, setLoading] = useState(false);
   const [companyName, setCompanyName] = useState('');
   const [categoryName, setCategoryName] = useState('');
-  const [userSearchData, setUserSearchData] = useState('');
-  const [employee, setEmployee] = useState();
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [userSearchData, setUserSearchData] = useState([]);
+  const [employee, setEmployee] = useState([]);
+  const [page, setPage] = useState(0);
 
-  //getting data from projectTask
+  const employeesPerPage = 20;
+  const numberOfEmployeesVisited = page * employeesPerPage;
+
   const getProjectTask = () => {
     setLoading(true);
     api
       .get('/projecttask/getProjectTask')
       .then((res) => {
-        setProjectTask(res.data.data);
-        setUserSearchData(res.data.data);
-        $('#example').DataTable({
-          pagingType: 'full_numbers',
-          pageLength: 20,
-          processing: true,
-          dom: 'Bfrtip',
-          searching: true,
-          buttons: [
-            {
-              extend: 'print',
-              text: 'Print',
-              className: 'shadow-none btn btn-primary',
-            },
-          ],
+        const allTasks = res.data.data;
+
+        // Filter for current month
+        const currentMonth = moment().month();
+        const currentYear = moment().year();
+        const filteredTasks = allTasks.filter((task) => {
+          const taskDate = moment(task.start_date);
+          return taskDate.month() === currentMonth && taskDate.year() === currentYear;
         });
+
+        // Sort by start date descending
+        const sortedTasks = filteredTasks.sort((a, b) =>
+          moment(b.start_date).diff(moment(a.start_date))
+        );
+
+        setProjectTask(sortedTasks);
+        setUserSearchData(sortedTasks);
         setLoading(false);
+
+        // Initialize DataTables only once
+        setTimeout(() => {
+          $('#example').DataTable({
+            destroy: true,
+            pagingType: 'full_numbers',
+            pageLength: 20,
+            processing: true,
+            dom: 'Bfrtip',
+            searching: false,
+            buttons: [
+              {
+                extend: 'print',
+                text: 'Print',
+                className: 'shadow-none btn btn-primary',
+              },
+            ],
+          });
+        }, 500);
       })
       .catch(() => {
         setLoading(false);
       });
   };
-  // Gettind data from Job By Id
+
   const editJobById = () => {
     api
       .get('/projecttask/getEmployee')
       .then((res) => {
-        console.log(res.data.data);
         setEmployee(res.data.data);
       })
       .catch(() => {});
@@ -68,66 +90,62 @@ const ProjectTask = () => {
     getProjectTask();
     editJobById();
   }, []);
+
   const handleSearch = () => {
-    const newData = projectTask
-      .filter((y) => y.first_name === (companyName === '' ? y.first_name : companyName))
-      .filter((x) => x.status === (categoryName === '' ? x.status : categoryName));
-    setUserSearchData(newData);
+    let filtered = projectTask;
+
+    if (companyName !== '') {
+      filtered = filtered.filter((y) => y.first_name === companyName);
+    }
+
+    if (categoryName !== '') {
+      filtered = filtered.filter((x) => x.status === categoryName);
+    }
+
+    if (searchKeyword !== '') {
+      filtered = filtered.filter((task) =>
+        task.first_name?.toLowerCase().includes(searchKeyword.toLowerCase())
+      );
+    }
+
+    setUserSearchData(filtered);
   };
-  // const handleSearch = () => {
 
-  //   const filteredData = projectTask.filter(
-  //     (y) => y.employee_id === (companyName === '' ? y.employee_id : companyName),
-  //   );
-  //   console.log('Filtered Data:', filteredData);
-
-  //   setProjectTask(filteredData);
-  // };
-  const [page, setPage] = useState(0);
-
-  const employeesPerPage = 20;
-  const numberOfEmployeesVistited = page * employeesPerPage;
   const displayEmployees = userSearchData.slice(
-    numberOfEmployeesVistited,
-    numberOfEmployeesVistited + employeesPerPage,
+    numberOfEmployeesVisited,
+    numberOfEmployeesVisited + employeesPerPage
   );
-  console.log('displayEmployees', displayEmployees);
+
   const totalPages = Math.ceil(userSearchData.length / employeesPerPage);
+
   const changePage = ({ selected }) => {
     setPage(selected);
   };
 
-  //structure of projectTask list view
   const columns = [
-    {
-      name: '#',
-      selector: 'project_task_id',
-      grow: 0,
-      wrap: true,
-      width: '4%',
-    },
+    { name: '#', selector: 'project_task_id', grow: 0, wrap: true, width: '4%' },
     {
       name: 'Edit',
       selector: 'edit',
-      cell: () => <Icon.Edit2 />,
+      cell: (row) => (
+        <Link to={`/TaskEdit/${row.project_task_id}`}>
+          <Icon.Edit2 />
+        </Link>
+      ),
       grow: 0,
       width: 'auto',
       button: true,
       sortable: false,
     },
-    {
-      name: 'Title',
-      selector: 'task_title',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
+    { name: 'Title', selector: 'task_title', sortable: true, grow: 0, wrap: true },
     {
       name: 'Start date',
       selector: 'start_date',
       sortable: true,
       grow: 2,
       wrap: true,
+      cell: (row) =>
+        row.start_date ? moment(row.start_date).format('DD-MM-YYYY') : '',
     },
     {
       name: 'End Date',
@@ -135,69 +153,21 @@ const ProjectTask = () => {
       sortable: true,
       grow: 0,
       wrap: true,
+      cell: (row) => (row.end_date ? moment(row.end_date).format('DD-MM-YYYY') : ''),
     },
-    {
-      name: 'Completion',
-      selector: 'completion',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
-    {
-      name: 'Status',
-      selector: 'status',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
-    {
-      name: 'Task Type',
-      selector: 'task_type',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
-    {
-      name: 'Priority',
-      selector: 'priority',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
-    {
-      name: 'Actual Hours',
-      selector: '',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
-    {
-      name: 'Est Hours',
-      selector: 'estimated_hours',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
-    {
-      name: 'Name',
-      selector: 'first_name',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
-    {
-      name: 'Description',
-      selector: 'description',
-      sortable: true,
-      grow: 0,
-      wrap: true,
-    },
-    
+    { name: 'Completion', selector: 'completion', sortable: true, grow: 0, wrap: true },
+    { name: 'Status', selector: 'status', sortable: true, grow: 0, wrap: true },
+    { name: 'Task Type', selector: 'task_type', sortable: true, grow: 0, wrap: true },
+    { name: 'Priority', selector: 'priority', sortable: true, grow: 0, wrap: true },
+    { name: 'Actual Hours', selector: 'actual_hours', sortable: true, grow: 0, wrap: true },
+    { name: 'Est Hours', selector: 'estimated_hours', sortable: true, grow: 0, wrap: true },
+    { name: 'Name', selector: 'first_name', sortable: true, grow: 0, wrap: true },
+    { name: 'Description', selector: 'description', sortable: true, grow: 0, wrap: true },
   ];
 
   return (
     <div className="MainDiv">
-      <div className=" pt-xs-25">
+      <div className="pt-xs-25">
         <BreadCrumbs />
         <Card>
           <CardBody>
@@ -208,19 +178,15 @@ const ProjectTask = () => {
                   <Input
                     type="select"
                     name="employee_id"
-                    onChange={(e) => setCompanyName(e.target.value)} // Update companyName state
+                    onChange={(e) => setCompanyName(e.target.value)}
                   >
                     <option value="">Please Select</option>
                     {employee &&
-                      employee.map((ele) => {
-                        return (
-                          // ele.e_count === 0 && (
-                          <option key={ele.employee_id} value={ele.first_name}>
-                            {ele.first_name}
-                          </option>
-                        );
-                        // );
-                      })}
+                      employee.map((ele) => (
+                        <option key={ele.employee_id} value={ele.first_name}>
+                          {ele.first_name}
+                        </option>
+                      ))}
                   </Input>
                 </FormGroup>
               </Col>
@@ -232,89 +198,98 @@ const ProjectTask = () => {
                     name="status"
                     onChange={(e) => setCategoryName(e.target.value)}
                   >
-                    {' '}
                     <option value="">Select Category</option>
                     <option value="Pending">Pending</option>
                     <option value="InProgress">InProgress</option>
                     <option value="Completed">Completed</option>
                     <option value="OnHold">OnHold</option>
-                    {/* <option value="tenancy work">Tenancy Work</option>
-                    <option value="maintenance">Maintenance</option> */}
                   </Input>
                 </FormGroup>
               </Col>
+              <Col md="3">
+                <FormGroup>
+                  <Label>Search Staff Name</Label>
+                  <Input
+                    type="text"
+                    placeholder="Search by staff name..."
+                    value={searchKeyword}
+                    onChange={(e) => setSearchKeyword(e.target.value)}
+                  />
+                </FormGroup>
+              </Col>
               <Col md="1" className="mt-3">
-                <Button color="primary" className="shadow-none" onClick={() => handleSearch()}>
+                <Button color="primary" className="shadow-none" onClick={handleSearch}>
                   Go
                 </Button>
               </Col>
             </Row>
           </CardBody>
         </Card>
-       
-            <CommonTable
-              loading={loading}
-              title="Task List"
-              Button={
-                <Link to="/ProjectTaskDetails">
-                  <Button color="primary" className="shadow-none">
-                    Add New
-                  </Button>
-                </Link>
-              }
-            >
-              <thead>
-                <tr>
-                  {columns.map((cell) => {
-                    return <td key={cell.name}>{cell.name}</td>;
-                  })}
+
+        <CommonTable
+          loading={loading}
+          title="Task List"
+          Button={
+            <Link to="/ProjectTaskDetails">
+              <Button color="primary" className="shadow-none">
+                Add New
+              </Button>
+            </Link>
+          }
+        >
+          <thead>
+            <tr>
+              {columns.map((cell) => (
+                <td key={cell.name}>{cell.name}</td>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {displayEmployees &&
+              displayEmployees.map((element, index) => (
+                <tr key={element.project_task_id}>
+                  <td>{numberOfEmployeesVisited + index + 1}</td>
+                  <td>
+                    <Link to={`/TaskEdit/${element.project_task_id}`}>
+                      <Icon.Edit2 />
+                    </Link>
+                  </td>
+                  <td>{element.task_title}</td>
+                  <td>
+                    {element.start_date
+                      ? moment(element.start_date).format('DD-MM-YYYY')
+                      : ''}
+                  </td>
+                  <td>
+                    {element.end_date
+                      ? moment(element.end_date).format('DD-MM-YYYY')
+                      : ''}
+                  </td>
+                  <td>{element.completion}</td>
+                  <td>{element.status}</td>
+                  <td>{element.task_type}</td>
+                  <td>{element.priority}</td>
+                  <td>{element.actual_hours}</td>
+                  <td>{element.estimated_hours}</td>
+                  <td>{element.first_name}</td>
+                  <td>{element.description}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {displayEmployees &&
-                  displayEmployees.map((element, index) => {
-                    return (
-                      <tr key={element.project_task_id}>
-                        <td>{index + 1}</td>
-                        <td>
-                          <Link to={`/TaskEdit/${element.project_task_id}`}>
-                            <Icon.Edit2 />
-                          </Link>
-                        </td>
-                        <td>{element.task_title}</td>
-                        <td>
-                          {element.start_date
-                            ? moment(element.start_date).format('DD-MM-YYYY')
-                            : ''}
-                        </td>
-                        <td>
-                          {element.end_date ? moment(element.end_date).format('DD-MM-YYYY') : ''}
-                        </td>
-                        <td>{element.completion}</td>
-                        <td>{element.status}</td>
-                        <td>{element.task_type}</td>
-                        <td>{element.priority}</td>
-                        <td>{element.actual_hours}</td>
-                        <td>{element.estimated_hours}</td>
-                        <td>{element.first_name}</td>
-                        <td>{element.description}</td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </CommonTable>
-            <ReactPaginate
-              previousLabel="Previous"
-              nextLabel="Next"
-              pageCount={totalPages}
-              onPageChange={changePage}
-              containerClassName="navigationButtons"
-              previousLinkClassName="previousButton"
-              nextLinkClassName="nextButton"
-              disabledClassName="navigationDisabled"
-              activeClassName="navigationActive"
-            />
-         </div>
+              ))}
+          </tbody>
+        </CommonTable>
+
+        <ReactPaginate
+          previousLabel="Previous"
+          nextLabel="Next"
+          pageCount={totalPages}
+          onPageChange={changePage}
+          containerClassName="navigationButtons"
+          previousLinkClassName="previousButton"
+          nextLinkClassName="nextButton"
+          disabledClassName="navigationDisabled"
+          activeClassName="navigationActive"
+        />
+      </div>
     </div>
   );
 };

@@ -27,7 +27,7 @@ jobs:
       - name: 🔧  Install & Build (no lockfile)
         shell: pwsh
         run: |
-          Remove-Item -Recurse -Force node_modules, package-lock.json
+          Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
           npm install --legacy-peer-deps --no-optional
           npm run build
 

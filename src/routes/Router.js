@@ -153,6 +153,7 @@ const InvoiceByMonth = Loadable(lazy(() => import('../views/smartconTables/Invoi
 const EmployeeSalaryReport = Loadable(lazy(() => import('../views/smartconTables/EmployeeSalaryReport')));
 const PayslipGeneratedReports = Loadable(lazy(() => import('../views/smartconTables/PayslipGeneratedReports')));
 const IR8AReport = Loadable(lazy(() => import('../views/smartconTables/IR8AReport')));
+const PaymentReminderTable = Loadable(lazy(() => import('../components/PaymentReminderTable')));
 
 
 // Details Table
@@ -639,6 +640,7 @@ const Routernew = () => {
           <Route path="/EmployeeSalaryReport" name="reports" element={<EmployeeSalaryReport />}></Route>
           <Route path="/PayslipGeneratedReports" name="reports" element={<PayslipGeneratedReports />}></Route>
           <Route path="/IR8AReport" name="reports" element={<IR8AReport />}></Route>
+<Route path="/PaymentReminder" name="paymentReminder" element={<PaymentReminderTable />}></Route>
           <Route path="/PurchaseGstReport" name="reports" element={<PurchaseGstReport />}></Route>
 
           <Route

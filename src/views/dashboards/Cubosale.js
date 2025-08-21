@@ -12,6 +12,7 @@ import LeadStat2 from '../../components/dashboard/ProjectStats/LeadStat2';
 import LeadStat3 from '../../components/dashboard/ProjectStats/LeadStat3';
 // import ProjectTitle from '../../components/dashboard/ProjectTitle';
 import LeadCallStats from '../../components/dashboard/ProjectStats/LeadCallStats';
+import PaymentReminderTable from '../../components/PaymentReminderTable';
 import Gantt from '../../components/dashboard/ProjectStats/Gantt';
 //import DonutDashboard from '../../components/dashboard/DonutChart';
  import MultiChart from '../charts/MultiCharts';
@@ -34,7 +35,10 @@ const Classic = () => {
          
           {/* <MainChart/> */}
           {/* <DonutDashboard/> */}
+          
+
           <MultiChart/>
+          <PaymentReminderTable/>
         </Col>
       </Row>
           <TaskSummary />

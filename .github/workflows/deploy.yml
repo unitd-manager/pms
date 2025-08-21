@@ -14,19 +14,21 @@ jobs:
       - name: 📦 Checkout Code
         uses: actions/checkout@v3
 
-      - name: Use Node.js 16.18.0
+      - name: 🟢 Use Node.js 16.18.0
         uses: actions/setup-node@v3
         with:
           node-version: 16.18.0
+          cache: 'npm'
 
-      - name: Use Python 3.9
+      - name: 🐍 Use Python 3.9
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
-      - name: 🔧 Install Dependencies & Build
+      - name: 🔧 Clean Install & Build
         run: |
-          npm install --force
+          rm -rf node_modules package-lock.json
+          npm ci --legacy-peer-deps
           npm run build
 
           # ✅ Move contents from build/ to project root

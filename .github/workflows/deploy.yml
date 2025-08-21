@@ -8,8 +8,7 @@ on:
 jobs:
   deploy:
     if: ${{ github.actor == 'SyedJasmine1991' }}
-    runs-on: ubuntu-latest
-
+    runs-on: windows-latest
     steps:
       - name: 📦 Checkout Code
         uses: actions/checkout@v3
@@ -26,16 +25,17 @@ jobs:
           python-version: '3.9'
 
       - name: 🔧  Install & Build (no lockfile)
+        shell: pwsh
         run: |
-         rm -rf node_modules package-lock.json
-                 npm install --legacy-peer-deps --no-optional
-             npm run build
+          Remove-Item -Recurse -Force node_modules, package-lock.json
+          npm install --legacy-peer-deps --no-optional
+          npm run build
 
           # ✅ Move contents from build/ to project root
-          shopt -s dotglob
-          mv build/* . || true
-          mv build/.* . || true
-          rm -rf build
+          Get-ChildItem -Path build -Force | ForEach-Object {
+            Move-Item $_.FullName . -Force
+          }
+          Remove-Item -Recurse -Force build
 
       - name: 📤 Deploy to aaPanel (after move)
         uses: appleboy/scp-action@v0.1.7

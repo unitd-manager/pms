@@ -25,16 +25,16 @@ jobs:
           python-version: '3.9'
 
       - name: 🔧 Install Dependencies & Build
+        shell: pwsh
         run: |
           npm install --legacy-peer-deps
           npm run build
 
           # ✅ Move contents from build/ to project root
-            shell: pwsh
-            Get-ChildItem -Path build -Force | ForEach-Object {
-              Move-Item $_.FullName . -Force
-            }
-            Remove-Item -Recurse -Force build
+          Get-ChildItem -Path build -Force | ForEach-Object {
+            Move-Item $_.FullName . -Force
+          }
+          Remove-Item -Recurse -Force build
 
 
       - name: 📤 Deploy to aaPanel (after move)

@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     if: ${{ github.actor == 'SyedJasmine1991' }}
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: 📦 Checkout Code
@@ -26,7 +26,7 @@ jobs:
 
       - name: 🔧 Install Dependencies & Build
         run: |
-          npm install
+          npm install --legacy-peer-deps
           npm run build
 
           # ✅ Move contents from build/ to project root

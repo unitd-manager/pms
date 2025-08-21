@@ -28,7 +28,7 @@ jobs:
       - name: 🔧  Install & Build (no lockfile)
         run: |
          rm -rf node_modules package-lock.json
-            npm install --legacy-peer-deps
+                 npm install --legacy-peer-deps --no-optional
              npm run build
 
           # ✅ Move contents from build/ to project root

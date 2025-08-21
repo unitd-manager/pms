@@ -25,10 +25,10 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: 🔧 Clean Install & Build
+      - name: 🔧  Install & Build (no lockfile)
         run: |
-          rm -rf node_modules package-lock.json
-          npm ci --legacy-peer-deps
+         rm -rf node_modules
+           npm install --legacy-peer-deps
           npm run build
 
           # ✅ Move contents from build/ to project root

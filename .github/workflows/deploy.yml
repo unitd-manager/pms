@@ -27,9 +27,9 @@ jobs:
 
       - name: 🔧  Install & Build (no lockfile)
         run: |
-         rm -rf node_modules
-           npm install --legacy-peer-deps
-          npm run build
+         rm -rf node_modules package-lock.json
+            npm install --legacy-peer-deps
+             npm run build
 
           # ✅ Move contents from build/ to project root
           shopt -s dotglob

@@ -23,13 +23,24 @@ import Gantt from '../../components/dashboard/ProjectStats/Gantt';
 //import DonutChartWithLeaderLines from '../../components/DonutlineChart';
 //import MainChart from '../charts/DonutChart';
 // import StatusCards from '../../components/dashboard/StatusCards';
+import AaPanelStorage from '../../components/dashboard/ProjectStats/AaPanelStorage';
 
 const Classic = () => {
   return (
     <>
       {/*********************Sales Overview ************************/}
      
-       
+       <Row>
+        <Col md='12'>
+         
+          {/* <MainChart/> */}
+          {/* <DonutDashboard/> */}
+          
+
+          
+          <AaPanelStorage/>
+        </Col>
+      </Row> 
       <Row>
         <Col md='12'>
          

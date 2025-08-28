@@ -1,63 +1,58 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Card, CardBody, CardTitle, Row, Col, Progress } from "reactstrap";
+import React, { useEffect, useState } from "react";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import api from '../../../constants/api';
 
-const AaPanelStorage = () => {
-  const [status, setStatus] = useState(null);
+const SysStatus = () => {
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    // Fetch system status from PMS backend
-    axios.get("/project/aapanel-status")
-      .then(res => setStatus(res.data))
-      .catch(() => setStatus(null));
+    api.get('/project/sys-status')
+      .then(response => {
+        if (response.data) {
+          setData(response.data);   // ✅ no need to check for array
+        }
+      })
+      .catch(err => console.error("Error fetching system status:", err));
   }, []);
 
-  if (!status) {
-    return (
-      <Card>
-        <CardBody>
-          <CardTitle tag="h5">aaPanel System Status</CardTitle>
-          <p>Loading system status...</p>
-        </CardBody>
-      </Card>
-    );
-  }
+  if (!data) return <p>Loading...</p>;
 
   return (
-    <Card>
-      <CardBody>
-        <CardTitle tag="h5">aaPanel System Status</CardTitle>
-        <Row>
-          <Col md="3">
-            <h6>Load Status</h6>
-            <Progress value={status.load.one * 10} color="success">
-              {status.load.one}
-            </Progress>
-          </Col>
-          <Col md="3">
-            <h6>CPU Usage</h6>
-            <Progress value={status.cpu} color="info">
-              {status.cpu}%
-            </Progress>
-          </Col>
-          <Col md="3">
-            <h6>RAM Usage</h6>
-            <Progress value={(status.memRealUsed / status.memTotal) * 100} color="warning">
-              {Math.round((status.memRealUsed / status.memTotal) * 100)}%
-            </Progress>
-            <small>{status.memRealUsed} / {status.memTotal} MB</small>
-          </Col>
-          <Col md="3">
-            <h6>Disk Usage</h6>
-            <Progress value={(status.disk.used / status.disk.total) * 100} color="danger">
-              {Math.round((status.disk.used / status.disk.total) * 100)}%
-            </Progress>
-            <small>{status.disk.used} / {status.disk.total} GB</small>
-          </Col>
-        </Row>
-      </CardBody>
-    </Card>
+    <div className="d-flex flex-row gap-5">
+      {/* CPU */}
+      <div className="p-4 shadow-lg rounded-2xl bg-white flex-grow-1">
+        <h3 className="text-lg font-semibold">CPU Usage</h3>
+        <CircularProgressbar
+          value={parseFloat(data.cpuUsage)}
+          text={`${data.cpuUsage}%`}
+          styles={buildStyles({ pathColor: "#00b894", textColor: "#2d3436" })}
+        />
+      </div>
+
+      {/* RAM */}
+      <div className="p-4 shadow-lg rounded-2xl bg-white flex-grow-1">
+        <h3 className="text-lg font-semibold">RAM Usage</h3>
+        <CircularProgressbar
+          value={parseFloat(data.ramUsage)}
+          text={`${data.ramUsage}%`}
+          styles={buildStyles({ pathColor: "#0984e3", textColor: "#2d3436" })}
+        />
+        <p>{data.ramUsed} GB / {data.ramTotal} GB</p>
+      </div>
+
+      {/* Disk */}
+      <div className="p-4 shadow-lg rounded-2xl bg-white flex-grow-1">
+        <h3 className="text-lg font-semibold">Disk Usage</h3>
+        <CircularProgressbar
+          value={parseFloat(data.diskUsage)}
+          text={`${data.diskUsage}%`}
+          styles={buildStyles({ pathColor: "#d63031", textColor: "#2d3436" })}
+        />
+        <p>{data.diskUsed} GB / {data.diskTotal} GB</p>
+      </div>
+    </div>
   );
 };
 
-export default AaPanelStorage;
+export default SysStatus;

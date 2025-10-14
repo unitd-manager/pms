@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import * as Icon from 'react-feather';
-import {Button } from 'reactstrap';
+import { Button, Input, FormGroup, Label, Row, Col } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -19,6 +19,9 @@ import AppContext from '../../context/AppContext';
 const Leaves = () => {
   //Const Variables
   const [leaves, setLeaves] = useState(null);
+  const [staffFilter, setStaffFilter] = useState('');
+  const [monthFilter, setMonthFilter] = useState('');
+  const [leaveTypeFilter, setLeaveTypeFilter] = useState('');
   const { loggedInuser } = useContext(AppContext);
   const [mail, setMail] = useState(null);
 
@@ -69,6 +72,35 @@ const Leaves = () => {
       getLeave();
     }
   }, [mail]);
+
+  // derive filtered leaves based on staff name and month
+  const filteredLeaves = React.useMemo(() => {
+    if (!leaves) return null;
+    return leaves.filter((l) => {
+      // staff filter
+      if (staffFilter && l.employee_name !== staffFilter) return false;
+
+      // leave type filter
+      if (leaveTypeFilter && l.leave_type !== leaveTypeFilter) return false;
+
+      // month filter (input type=month returns YYYY-MM)
+      if (monthFilter) {
+        try {
+          const from = moment(l.from_date);
+          const to = moment(l.to_date);
+          const monthStart = moment(`${monthFilter}-01`);
+          const monthEnd = monthStart.clone().endOf('month');
+
+          // include if ranges overlap
+          if (to.isBefore(monthStart, 'day') || from.isAfter(monthEnd, 'day')) return false;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [leaves, staffFilter, monthFilter, leaveTypeFilter]);
   //  stucture of leave list view
   const columns = [
     {
@@ -147,7 +179,72 @@ const Leaves = () => {
     <div className="MainDiv">
       <div className=" pt-xs-25">
         <BreadCrumbs/>
-        {/* <ApiButton></ApiButton> */}
+  {/* <ApiButton></ApiButton> */}
+        <Row className="mb-2 align-items-end">
+          <Col md="4">
+            <FormGroup>
+              <Label for="staffFilter">Staff Name</Label>
+              <Input
+                type="select"
+                id="staffFilter"
+                value={staffFilter}
+                onChange={(e) => setStaffFilter(e.target.value)}
+              >
+                <option value="">All Staff</option>
+                {leaves &&
+                  Array.from(new Set(leaves.map((l) => l.employee_name))).map((name) => (
+                    <option key={name} value={name}>
+                      {name}
+                    </option>
+                  ))}
+              </Input>
+            </FormGroup>
+          </Col>
+          <Col md="3">
+            <FormGroup>
+              <Label for="monthFilter">Month</Label>
+              <Input
+                type="month"
+                id="monthFilter"
+                value={monthFilter}
+                onChange={(e) => setMonthFilter(e.target.value)}
+              />
+            </FormGroup>
+          </Col>
+          <Col md="2">
+            <FormGroup>
+              <Label for="leaveTypeFilter">Leave Type</Label>
+              <Input
+                type="select"
+                id="leaveTypeFilter"
+                value={leaveTypeFilter}
+                onChange={(e) => setLeaveTypeFilter(e.target.value)}
+              >
+                <option value="">All Types</option>
+                {leaves && Array.from(new Set(leaves.map((l) => l.leave_type))).map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </Input>
+            </FormGroup>
+          </Col>
+          <Col md="2">
+            <div>
+              <Button
+                color="secondary"
+                className="shadow-none mt-2"
+                onClick={() => {
+                  setStaffFilter('');
+                  setMonthFilter('');
+                  setLeaveTypeFilter('');
+                }}
+              >
+                Clear Filters
+              </Button>
+            </div>
+          </Col>
+        </Row>
         <CommonTable
           title="Leave List"
           Button={
@@ -166,11 +263,11 @@ const Leaves = () => {
             </tr>
           </thead>
           <tbody>
-            {leaves &&
-              leaves.map((element,i) => {
+            {filteredLeaves &&
+              filteredLeaves.map((element, i) => {
                 return (
                   <tr key={element.leave_id}>
-                    <td>{i+1}</td>
+                    <td>{i + 1}</td>
                     <td>
                       <Link to={`/LeavesEdit/${element.leave_id}/${element.employee_id}`}>
                         <Icon.Edit2 />

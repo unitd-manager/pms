@@ -11,6 +11,7 @@ import AppContext from '../../context/AppContext';
 import api from '../../constants/api';
 
 
+
   const LeaveDetails = () => {
     //Navigation and parameters
     const navigate = useNavigate();
@@ -27,6 +28,7 @@ import api from '../../constants/api';
       to_date: '',
       leave_type: '',
       reason: '', 
+      permission_hour: '',
     });
 
 
@@ -59,8 +61,19 @@ import api from '../../constants/api';
 
 
     const handleInputs = (e) => {
-      console.log({ ...leaveInsertData, [e.target.name]: e.target.value })
-      setLeaveInsertData({ ...leaveInsertData, [e.target.name]: e.target.value });
+      const { name, value } = e.target;
+      const newData = { ...leaveInsertData };
+      if (name === 'leave_type') {
+        const trimmed = (value || '').trim();
+        newData[name] = trimmed;
+        if (trimmed.toLowerCase() !== 'permission') {
+          newData.permission_hour = '';
+        }
+      } else {
+        newData[name] = value;
+      }
+      console.log(newData);
+      setLeaveInsertData(newData);
     };
 
     function isDateInRange(dateToCheck, fromDateArray, toDateArray) {
@@ -76,6 +89,8 @@ import api from '../../constants/api';
 
       return false; // The date is not within any of the ranges
     }
+
+   
 
 
     // send Email To Admin
@@ -113,8 +128,10 @@ import api from '../../constants/api';
                 totalLeaveThisMonth,
                 totalLeaveThisYear,
                 totalPermissionThisMonth,
-                totalPermissionThisYear
-              })
+                totalPermissionThisYear,
+                emailCategory: leaveType,
+                permissionHour: emailData.permission_hour,
+                            })
               .then(response => {
                 if (response.status === 200) {
                   alert('Leave request Email Sent successfully');
@@ -199,7 +216,7 @@ import api from '../../constants/api';
                         onChange={handleInputs}
                         value={leaveInsertData && leaveInsertData.employee_id}
                       >
-                        <option value="selected">Please Select</option>
+                        <option value="">Please Select</option>
                         {employee &&
                           employee.map((ele) => {
                             return (
@@ -255,13 +272,36 @@ import api from '../../constants/api';
                         value={leaveInsertData && leaveInsertData.leave_type}
                         name="leave_type"
                       >
-                        <option value="selected">Please Select</option>
+                        <option value="">Please Select</option>
                         <option value="Permission">Permission</option>
                         <option value="Annual Leave">Annual Leave</option>
                         <option value="Hospitalization Leave">Hospitalization Leave</option>
                         <option value="Sick Leave">Sick Leave</option>
                       </Input>
                     </Col>
+                    {(leaveInsertData.leave_type || '').trim() === 'Permission' && (
+  <Col md="3">
+    <FormGroup>
+      <Label>
+        Permission Hours <span className="required">*</span>
+      </Label>
+      <Input
+        type="select"
+        name="permission_hour"
+        value={leaveInsertData.permission_hour}
+        onChange={handleInputs}
+      >
+        <option value="">Please Select</option>
+        <option value="1">1 Hour</option>
+        <option value="2">2 Hours</option>
+        <option value="3">3 Hours</option>
+        <option value="4">4 Hours</option>
+        <option value="5">5 Hours</option>
+      </Input>
+    </FormGroup>
+  </Col>
+)}
+
                     <Col md="3">
                 <FormGroup>
                   <Label>Reason</Label>

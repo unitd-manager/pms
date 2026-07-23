@@ -19,7 +19,7 @@ const LoginFormik = ({ setToken }) => {
   const { setUser } = usePermify();
   const getPermissions = (user) => {
     loginApi
-      .post('/usergroup/getusergroupForLoginUser1', {
+      .post('/usergroup/getusergroupForLoginUser', {
         user_group_id: user.user_group_id,
         email: user.email // ✅ Add email so backend can detect "Fatema"
       })

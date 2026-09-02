@@ -149,6 +149,8 @@ const PurchaseOrderTable = Loadable(lazy(() => import('../views/smartconTables/P
 const EmployeetrainingreportsTable = Loadable(lazy(() => import('../views/smartconTables/Employeetrainingreports')));
 const StatementofAccountsReport = Loadable(lazy(() => import('../views/Reports/StatementofAccountsReport')));
 const AgingReportsTable = Loadable(lazy(() => import('../views/smartconTables/AgingReports')));
+const WorkingHoursReportTable = Loadable(lazy(() => import('../views/smartconTables/WorkingHoursReport')));
+const LeavePermissionReportTable = Loadable(lazy(() => import('../views/smartconTables/LeavePermissionReport')));
 const InvoiceByMonth = Loadable(lazy(() => import('../views/smartconTables/InvoiceByMonth')));
 const EmployeeSalaryReport = Loadable(lazy(() => import('../views/smartconTables/EmployeeSalaryReport')));
 const PayslipGeneratedReports = Loadable(lazy(() => import('../views/smartconTables/PayslipGeneratedReports')));
@@ -635,6 +637,8 @@ const Routernew = () => {
           <Route path="/Employeetrainingreports" name="reports" element={<EmployeetrainingreportsTable />}></Route>
           <Route path="/StatementofAccountsReport" name="reports" element={<StatementofAccountsReport />}></Route>
           <Route path="/AgingReports" name="reports" element={<AgingReportsTable />}></Route>
+          <Route path="/WorkingHoursReport" name="reports" element={<WorkingHoursReportTable />}></Route>
+          <Route path="/LeavePermissionReport" name="reports" element={<LeavePermissionReportTable />}></Route>
           <Route path="/CpfSummaryreports" name="reports" element={<CpfSummaryReports />}></Route>
           <Route path="/InvoiceByMonth" name="reports" element={<InvoiceByMonth />}></Route>
           <Route path="/EmployeeSalaryReport" name="reports" element={<EmployeeSalaryReport />}></Route>

@@ -312,6 +312,20 @@ const SidebarData = [
         collapisble: false,
       },
       {
+        title: 'Working Hours Report',
+        href: '/WorkingHoursReport',
+        icon: <Icon.Disc />,
+        id: 1.3,
+        collapisble: false,
+      },
+      {
+        title: 'Leave & Permission Report',
+        href: '/LeavePermissionReport',
+        icon: <Icon.Disc />,
+        id: 1.3,
+        collapisble: false,
+      },
+      {
         title: 'CPF Summary Reports',
         href: '/CpfSummaryreports',
         icon: <Icon.Disc />,

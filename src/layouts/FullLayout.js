@@ -6,6 +6,7 @@ import Customizer from './customizer/Customizer';
 import Sidebar from './sidebars/vertical/Sidebar';
 import HorizontalHeader from './header/HorizontalHeader';
 import HorizontalSidebar from './sidebars/horizontal/HorizontalSidebar';
+import PmsChatWidget from '../components/PmsChat/PmsChatWidget';
 
 const FullLayout = () => {
   const customizerToggle = useSelector((state) => state.customizer.customizerSidebar);
@@ -43,6 +44,7 @@ const FullLayout = () => {
           </Container>
         </div>
       </div>
+      <PmsChatWidget />
     </main>
   );
 };

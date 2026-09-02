@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import moment from 'moment';
 import { Row, Col, Form, FormGroup, Label, Input, TabContent, TabPane, Button } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -29,7 +30,8 @@ import AverageStatsProject from '../../components/dashboard/ProjectStats/Average
 import DueStatsProject from '../../components/dashboard/ProjectStats/DueStatsProject';
 import CostingSummary from '../../components/projectTabContent/CostingSummary';
 import AddCostingSummaryModal from '../../components/projectTabContent/AddCostingSummaryModal';
-
+import ProjectWeeklyTarget from '../../components/ProjectWeeklyTarget';
+import ProjectWeeklyTargetEdit from '../../components/ProjectWeeklyTargetEdit';
 
 
 const ProjectEdit = () => {
@@ -60,13 +62,16 @@ const ProjectEdit = () => {
   const [contactDatass, setContactDatass] = useState();
   const [editTimeSheetModal, setEditTimeSheetEditModal] = useState(false);
   const [addContactModalss, setAddContactModalss] = useState(false);
-  const [teamById, setTeamById] = useState();
+  const [teamById, setTeamById] = useState([]);
   const [contactDataTeam, setContactDataTeam] = useState();
   const [editTeamModal, setEditTeamEditModal] = useState(false);
   const [addContactModalTeam, setAddContactModalTeam] = useState(false);
   //get staff details
   const { loggedInuser } = useContext(AppContext);
   const [addCostingSummaryModel, setAddCostingSummaryModel] = useState(false);
+  const [weeklyTargetById, setWeeklyTargetById] = useState([]);
+  const [weeklyTargetEditData, setWeeklyTargetEditData] = useState();
+  const [editWeeklyTargetModal, setEditWeeklyTargetModal] = useState(false);
 
 
   // Start for tab refresh navigation
@@ -78,6 +83,7 @@ const ProjectEdit = () => {
     { id: '5', name: 'Task' },
     { id: '6', name: 'Timesheet' },
     { id: '7', name: 'Calender' },
+    { id: '8', name: 'Weekly Target' }, 
   ];
   const toggle = (tab) => {
     setActiveTab(tab);
@@ -146,6 +152,19 @@ const ProjectEdit = () => {
       })
       .catch(() => { });
   };
+  const getWeeklyTargetById = (monthFilter, staffFilter) => {
+  const payload = { project_id: id };
+  if (monthFilter) {
+    payload.month_start = `${monthFilter}-01`;
+    payload.month_end = moment(`${monthFilter}-01`).endOf('month').format('YYYY-MM-DD');
+  }
+  if (staffFilter) payload.employee_id = staffFilter;
+
+  api
+    .post('/weeklytarget/getWeeklyTargetProjectById', payload)
+    .then((res) => setWeeklyTargetById(res.data.data))
+    .catch(() => {});
+};
   //Getting data from milestone
   const getTaskById = () => {
 
@@ -173,9 +192,11 @@ const ProjectEdit = () => {
     api
       .post('/projectteam/getTeamProjectById', { project_id: id })
       .then((res) => {
-        setTeamById(res.data.data);
+        setTeamById(Array.isArray(res.data.data) ? res.data.data : []);
       })
-      .catch(() => { });
+      .catch(() => {
+        setTeamById([]);
+      });
   };
 
   //Getting data from Company
@@ -201,6 +222,7 @@ const ProjectEdit = () => {
 
     getProjectById();
     getMilestoneById();
+    getWeeklyTargetById();
     getTaskById();
     getTimeSheetById();
     getTeamById();
@@ -584,6 +606,23 @@ const ProjectEdit = () => {
             <br />
             <CalendarApp projectDetail={projectDetail} id={id}></CalendarApp>
           </TabPane>
+          <TabPane tabId="8">
+  <br />
+  <ProjectWeeklyTarget
+    id={id}
+    weeklyTargetById={weeklyTargetById}
+    getWeeklyTargetById={getWeeklyTargetById}
+    setEditWeeklyTargetModal={setEditWeeklyTargetModal}
+    setWeeklyTargetEditData={setWeeklyTargetEditData}
+  />
+  <ProjectWeeklyTargetEdit
+            id={id}
+    editWeeklyTargetModal={editWeeklyTargetModal}
+    setEditWeeklyTargetModal={setEditWeeklyTargetModal}
+    weeklyTargetEditData={weeklyTargetEditData}
+    getWeeklyTargetById={getWeeklyTargetById}
+  />
+</TabPane>
         </TabContent>
       </ComponentCard>
     </>

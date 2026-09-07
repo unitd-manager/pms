@@ -96,6 +96,33 @@
     color: #2563eb;
     opacity: 1;
   }
+  button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+// Entry point button for Voice Mode (headset icon), sitting in the input
+// row next to Send — same look as the attach/mic buttons beside it.
+.pms-chat-voice-toggle {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pms-chat-voice-toggle:hover {
+  border-color: #2563eb;
+}
+.pms-chat-voice-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .pms-chat-messages {
@@ -146,12 +173,90 @@
   color: #991b1b;
 }
 
+// File chip shown inside a sent user bubble when a file was attached.
+.pms-chat-msg .file-chip-msg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.pms-chat-msg.bot .file-chip-msg {
+  background: rgba(37, 99, 235, 0.1);
+  color: #1e40af;
+}
+.pms-chat-msg .file-chip-msg .file-icon {
+  flex-shrink: 0;
+}
+.pms-chat-msg .file-chip-msg .file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .pms-chat-inputrow {
   display: flex;
   border-top: 1px solid #e5e7eb;
   padding: 8px;
   gap: 6px;
   flex-shrink: 0;
+  align-items: flex-end;
+}
+
+// Attach-file button, sitting alongside the mic button.
+.pms-chat-attach {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pms-chat-attach:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.pms-chat-attach.has-file {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+// Preview chip for the file currently staged to send, shown above the input row.
+.pms-chat-file-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 8px 8px;
+  padding: 6px 10px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #1e40af;
+}
+.pms-chat-file-preview .fname {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pms-chat-file-preview button {
+  background: none;
+  border: none;
+  color: #1e40af;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  padding: 0 2px;
 }
 
 // Microphone button for voice questions (EN/TA per the header toggle).
@@ -248,4 +353,135 @@
     margin: 4px 0;
     padding-left: 18px;
   }
+}
+
+// ===========================================================================
+// Voice Mode — full-screen pulsing orb + continuous call-style loop.
+// Same blue theme as the rest of the widget (#2563eb), not Chatbase's black.
+// ===========================================================================
+
+.pms-chat-voice-overlay {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  background: #f8fafc;
+}
+
+.pms-chat-voice-orb {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pms-chat-voice-orb-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(37, 99, 235, 0.12);
+}
+
+.pms-chat-voice-orb-core {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #2563eb;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+// Listening: soft outward pulse on the ring, core stays steady.
+.pms-chat-voice-orb.listening .pms-chat-voice-orb-ring {
+  animation: pms-voice-ring-pulse 1.4s ease-in-out infinite;
+}
+
+// Thinking: core turns a lighter blue and gently rotates/fades.
+.pms-chat-voice-orb.thinking .pms-chat-voice-orb-core {
+  background: #93c5fd;
+  animation: pms-voice-think-pulse 0.9s ease-in-out infinite;
+}
+
+// Speaking: core "bounces" a bit faster, like it's talking.
+.pms-chat-voice-orb.speaking .pms-chat-voice-orb-core {
+  animation: pms-voice-speak-bounce 0.5s ease-in-out infinite;
+}
+.pms-chat-voice-orb.speaking .pms-chat-voice-orb-ring {
+  animation: pms-voice-ring-pulse 0.7s ease-in-out infinite;
+}
+
+@keyframes pms-voice-ring-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 22px rgba(37, 99, 235, 0);
+  }
+}
+
+@keyframes pms-voice-think-pulse {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pms-voice-speak-bounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.16);
+  }
+}
+
+.pms-chat-voice-status {
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+}
+
+.pms-chat-voice-inputrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #e5e7eb;
+  padding: 10px 14px;
+  flex-shrink: 0;
+  gap: 10px;
+}
+
+.pms-chat-voice-hint {
+  font-size: 12px;
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pms-chat-voice-end {
+  flex-shrink: 0;
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.pms-chat-voice-end:hover {
+  background: #dc2626;
 }

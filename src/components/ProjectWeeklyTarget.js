@@ -221,18 +221,8 @@ export default function ProjectWeeklyTarget({
                 />
               </FormGroup>
             </Col>
-            <Col md="12">
-              <FormGroup>
-                <Label>Target</Label>
-                <Input
-                  type="text"
-                  name="target_title"
-                  onChange={handleInputs}
-                  value={insertTarget.target_title}
-                />
-              </FormGroup>
-            </Col>
-            <Col md="6">
+      
+            <Col md="4">
               <FormGroup>
                 <Label>Status</Label>
                 <Input type="select" name="status" onChange={handleInputs} value={insertTarget.status}>
@@ -244,13 +234,13 @@ export default function ProjectWeeklyTarget({
                 </Input>
               </FormGroup>
             </Col>
-            <Col md="6">
+            <Col md="4">
               <FormGroup>
                 <Label>DL (Due date)</Label>
                 <Input type="date" name="due_date" onChange={handleInputs} value={insertTarget.due_date} />
               </FormGroup>
             </Col>
-            <Col md="6">
+            <Col md="4">
               <FormGroup>
                 <Label>EDL (Extended due date)</Label>
                 <Input
@@ -261,12 +251,23 @@ export default function ProjectWeeklyTarget({
                 />
               </FormGroup>
             </Col>
-            <Col md="12">
+                  <Col md="6">
               <FormGroup>
-                <Label>Remarks</Label>
+                <Label>Target</Label>
                 <Input
-                  type="text"
-                  name="remarks"
+                  type="textarea"
+                  name="target_title"
+                  onChange={handleInputs}
+                  value={insertTarget.target_title}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="6">
+              <FormGroup>
+                <Label>Reason</Label>
+                <Input
+                  type="textarea"
+                  name="reason"
                   placeholder="Optional notes"
                   onChange={handleInputs}
                   value={insertTarget.remarks}
@@ -304,7 +305,7 @@ export default function ProjectWeeklyTarget({
                 <td>Status</td>
                 <td>Completion date</td>
                 <td>Delay days</td>
-                <td>Remarks</td>
+                <td>Reason</td>
                 <td>Actions</td>
               </tr>
             </thead>

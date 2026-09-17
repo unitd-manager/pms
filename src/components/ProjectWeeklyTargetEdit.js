@@ -54,19 +54,19 @@ const ProjectWeeklyTargetEdit = ({
       });
   };
 
-  const deleteWeeklyTarget = () => {
-    if (!window.confirm('Delete this weekly target?')) return;
-    api
-      .post('/weeklytarget/deleteWeeklyTarget', { weekly_target_id: targetEdit.weekly_target_id })
-      .then(() => {
-        message('Deleted successfully', 'success');
-        getWeeklyTargetById();
-        setEditWeeklyTargetModal(false);
-      })
-      .catch(() => {
-        message('Unable to delete record.', 'error');
-      });
-  };
+  // const deleteWeeklyTarget = () => {
+  //   if (!window.confirm('Delete this weekly target?')) return;
+  //   api
+  //     .post('/weeklytarget/deleteWeeklyTarget', { weekly_target_id: targetEdit.weekly_target_id })
+  //     .then(() => {
+  //       message('Deleted successfully', 'success');
+  //       getWeeklyTargetById();
+  //       setEditWeeklyTargetModal(false);
+  //     })
+  //     .catch(() => {
+  //       message('Unable to delete record.', 'error');
+  //     });
+  // };
 
   useEffect(() => {
     setTargetEdit(weeklyTargetEditData);
@@ -95,7 +95,7 @@ const ProjectWeeklyTargetEdit = ({
       <ModalBody>
         <Form>
           <Row>
-            <Col md="4">
+            <Col md="6">
               <FormGroup>
                 <Label>Staff</Label>
                 <Input
@@ -113,7 +113,7 @@ const ProjectWeeklyTargetEdit = ({
                 </Input>
               </FormGroup>
             </Col>
-            <Col md="8">
+            <Col md="6">
               <FormGroup>
                 <Label>Target</Label>
                 <Input
@@ -205,10 +205,10 @@ const ProjectWeeklyTargetEdit = ({
 
             <Col md="12">
               <FormGroup>
-                <Label>Remarks</Label>
+                <Label>Reason</Label>
                 <Input
                   type="textarea"
-                  name="remarks"
+                  name="reason"
                   onChange={handleInputs}
                   value={targetEdit && targetEdit.remarks}
                 />
@@ -221,9 +221,6 @@ const ProjectWeeklyTargetEdit = ({
         <div className="pt-3 mt-3 d-flex align-items-center gap-2">
           <Button color="primary" onClick={editWeeklyTarget}>
             Submit
-          </Button>
-          <Button color="danger" onClick={deleteWeeklyTarget}>
-            Delete
           </Button>
           <Button color="secondary" onClick={() => setEditWeeklyTargetModal(false)}>
             Cancel

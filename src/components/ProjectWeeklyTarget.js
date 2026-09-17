@@ -35,6 +35,12 @@ const STATUS_LABEL = {
   Pending: 'Pending',
 };
 
+// The backend now always returns date columns as plain 'YYYY-MM-DD'
+// strings (see DATE_FORMAT() in the SQL). Parsing with that explicit
+// format, instead of letting moment guess, guarantees no timezone
+// shift ever gets applied on the way to the screen.
+const fmtDate = (value) => (value ? moment(value, 'YYYY-MM-DD').format('DD/MM/YYYY') : '—');
+
 export default function ProjectWeeklyTarget({
   id,
   weeklyTargetById,
@@ -55,17 +61,28 @@ export default function ProjectWeeklyTarget({
   const [staffFilter, setStaffFilter] = useState('');
   const [employee, setEmployee] = useState([]);
 
-  const [insertTarget, setInsertTarget] = useState({
+  const emptyTarget = {
     employee_id: '',
     target_title: '',
     week_start_date: '',
     week_end_date: '',
     due_date: '',
     extended_due_date: '',
+    status: 'InProgress',
     remarks: '',
-  });
+  };
 
-  const toggleAdd = () => setAddModal((prev) => !prev);
+  const [insertTarget, setInsertTarget] = useState(emptyTarget);
+
+  // Reset the form every time the modal is opened, so a cancelled or
+  // just-submitted entry never carries over into the next "Add".
+  const toggleAdd = () => {
+    setAddModal((prev) => {
+      const next = !prev;
+      if (next) setInsertTarget(emptyTarget);
+      return next;
+    });
+  };
 
   const getStaffName = () => {
     api
@@ -92,6 +109,7 @@ export default function ProjectWeeklyTarget({
       .then(() => {
         message('Weekly target added successfully.', 'success');
         getWeeklyTargetById();
+        setInsertTarget(emptyTarget);
         setAddModal(false);
       })
       .catch(() => {
@@ -121,7 +139,7 @@ export default function ProjectWeeklyTarget({
       map[key].targets.push(t);
     });
     return Object.values(map).sort((a, b) =>
-      moment(a.week_start_date).diff(moment(b.week_start_date)),
+      moment(a.week_start_date, 'YYYY-MM-DD').diff(moment(b.week_start_date, 'YYYY-MM-DD')),
     );
   }, [weeklyTargetById]);
 
@@ -149,10 +167,10 @@ export default function ProjectWeeklyTarget({
             >
               <option value="">All staff</option>
               {employee.map((member) => (
-                  <option key={member.employee_id} value={member.employee_id}>
-                    {member.first_name}
-                  </option>
-                ))}
+                <option key={member.employee_id} value={member.employee_id}>
+                  {member.first_name}
+                </option>
+              ))}
             </Input>
           </FormGroup>
         </Col>
@@ -174,10 +192,10 @@ export default function ProjectWeeklyTarget({
                 <Input type="select" name="employee_id" onChange={handleInputs} value={insertTarget.employee_id}>
                   <option value="">Please Select</option>
                   {employee.map((member) => (
-                      <option key={member.employee_id} value={member.employee_id}>
-                        {member.first_name}
-                      </option>
-                    ))}
+                    <option key={member.employee_id} value={member.employee_id}>
+                      {member.first_name}
+                    </option>
+                  ))}
                 </Input>
               </FormGroup>
             </Col>
@@ -212,6 +230,18 @@ export default function ProjectWeeklyTarget({
                   onChange={handleInputs}
                   value={insertTarget.target_title}
                 />
+              </FormGroup>
+            </Col>
+            <Col md="6">
+              <FormGroup>
+                <Label>Status</Label>
+                <Input type="select" name="status" onChange={handleInputs} value={insertTarget.status}>
+                  {Object.keys(STATUS_LABEL).map((key) => (
+                    <option key={key} value={key}>
+                      {STATUS_LABEL[key]}
+                    </option>
+                  ))}
+                </Input>
               </FormGroup>
             </Col>
             <Col md="6">
@@ -261,8 +291,8 @@ export default function ProjectWeeklyTarget({
       {weeks.map((week) => (
         <div key={`${week.week_start_date}_${week.week_end_date}`} className="border rounded p-3 mb-3">
           <h6 className="mb-3">
-            Week ({moment(week.week_start_date).format('DD MMM')} –{' '}
-            {moment(week.week_end_date).format('DD MMM')})
+            Week ({moment(week.week_start_date, 'YYYY-MM-DD').format('DD MMM')} –{' '}
+            {moment(week.week_end_date, 'YYYY-MM-DD').format('DD MMM')})
           </h6>
           <Table className="display border border-secondary rounded" responsive>
             <thead>
@@ -283,14 +313,14 @@ export default function ProjectWeeklyTarget({
                 <tr key={t.weekly_target_id}>
                   <td>{t.first_name}</td>
                   <td>{t.target_title}</td>
-                  <td>{t.due_date ? moment(t.due_date).format('DD/MM/YYYY') : '—'}</td>
-                  <td>{t.extended_due_date ? moment(t.extended_due_date).format('DD/MM/YYYY') : '—'}</td>
+                  <td>{fmtDate(t.due_date)}</td>
+                  <td>{fmtDate(t.extended_due_date)}</td>
                   <td>
                     <Badge color={STATUS_COLOR[t.status] || 'secondary'}>
                       {STATUS_LABEL[t.status] || t.status}
                     </Badge>
                   </td>
-                  <td>{t.completion_date ? moment(t.completion_date).format('DD/MM/YYYY') : '—'}</td>
+                  <td>{fmtDate(t.completion_date)}</td>
                   <td className={t.delay_days > 0 ? 'text-danger fw-bold' : ''}>{t.delay_days || 0}</td>
                   <td>{t.remarks || '—'}</td>
                   <td>

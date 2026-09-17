@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react';
  *   GET {API_BASE_URL}/reports/getLeavePermissionReport?year=YYYY&month=M
  */
 
-const API_BASE_URL = 'http://localhost:3007'; // change to your live API URL when deploying
+const API_BASE_URL = 'https://pmsuts.unitdtechnologies.com:3008'; // change to your live API URL when deploying
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',

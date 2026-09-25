@@ -208,7 +208,7 @@ const ProjectWeeklyTargetEdit = ({
                 <Label>Reason</Label>
                 <Input
                   type="textarea"
-                  name="reason"
+                  name="remarks"
                   onChange={handleInputs}
                   value={targetEdit && targetEdit.remarks}
                 />

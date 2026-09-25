@@ -267,7 +267,7 @@ export default function ProjectWeeklyTarget({
                 <Label>Reason</Label>
                 <Input
                   type="textarea"
-                  name="reason"
+                  name="remarks"
                   placeholder="Optional notes"
                   onChange={handleInputs}
                   value={insertTarget.remarks}

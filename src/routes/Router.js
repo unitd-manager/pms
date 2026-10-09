@@ -27,6 +27,9 @@ const PdfData = Loadable(lazy(() => import('../views/smartconTables/Tickets')));
 const PdfNext = Loadable(lazy(() => import('../views/smartconTables/GeneratePdf')));
 const TicketsComponent = Loadable(lazy(() => import('../views/smartconTables/TicketsComponent')));
 const Classic = Loadable(lazy(() => import('../views/dashboards/Cubosale')));
+const MobileMarketingDashboardPreview = Loadable(
+  lazy(() => import('../views/dashboards/MobileMarketingDashboardPreview')),
+);
 const Crypto = Loadable(lazy(() => import('../views/dashboards/Crypto')));
 const Ecommerce = Loadable(lazy(() => import('../views/dashboards/Ecommerce')));
 const General = Loadable(lazy(() => import('../views/dashboards/General')));
@@ -411,6 +414,12 @@ const Routernew = () => {
           <Route path="/TicketsComponent" name="pdfData" element={<TicketsComponent />}></Route>
           <Route path="/projects" element={<DataTable />} />
           <Route path="/" element={<Classic />} />
+          <Route
+            path="/marketing-dashboard"
+            name="marketing-dashboard"
+            element={<MobileMarketingDashboardPreview />}
+          />
+        
           <Route path="/dashboards/crypto" name="Classic" element={<Crypto />}></Route>
           <Route path="/dashboards/ecommerce" name="ecommerce" element={<Ecommerce />}></Route>
           <Route path="/dashboards/general" name="general" element={<General />}></Route>

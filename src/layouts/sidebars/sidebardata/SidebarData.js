@@ -10,6 +10,13 @@ const SidebarData = [
     collapisble: false,
   },
   {
+    title: 'Digital Marketing Dashboard',
+    href: '/marketing-dashboard',
+    icon: <Icon.BarChart2 />,
+    id: 2.11,
+    collapisble: false,
+  },
+  {
     title: 'Task Module',
     href: '/Task',
     icon: <Icon.Edit />,

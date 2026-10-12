@@ -151,7 +151,7 @@ const PaymentReminderTable = () => {
             </Col>
           </Row>
           <Row className="mb-3">
-         
+          
             <Col md={4}>
               <FormGroup>
                 <Label for="domain_link">Domain Link</Label>

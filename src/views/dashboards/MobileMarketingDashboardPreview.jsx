@@ -78,6 +78,13 @@ const formatHours = (value) => (Number.parseFloat(value) || 0)
 
 const dateKey = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
+const monthKey = (date) => dateKey(date).slice(0, 7);
+
+const formatMonth = (key) => {
+  const [year, month] = key.split('-').map(Number);
+  return new Date(year, month - 1, 1).toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+};
+
 const fullName = (employee) => `${employee.first_name || ''} ${employee.last_name || ''}`.trim();
 
 const getEmployeeName = (item, employees) => {
@@ -277,6 +284,8 @@ const MobileMarketingDashboardPreview = () => {
   const [filters, setFilters] = useState(EMPTY_FILTERS);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [taskLimit, setTaskLimit] = useState(TASK_PAGE);
+  const [hoursByDayMonth, setHoursByDayMonth] = useState(() => monthKey(new Date()));
+  const [expandedTaskOwners, setExpandedTaskOwners] = useState(() => new Set());
   const [loadedAt, setLoadedAt] = useState(null);
 
   const loadProjectData = useCallback(async () => {
@@ -611,12 +620,21 @@ const MobileMarketingDashboardPreview = () => {
     .filter((r) => r.hours > 0)
     .sort((a, b) => b.hours - a.hours);
 
+  const hoursByDayMonths = useMemo(() => {
+    const months = new Set([monthKey(new Date()), hoursByDayMonth]);
+    timesheets.forEach((entry) => {
+      const date = parseDate(entry.date) || parseDate(entry.creation_date);
+      if (date) months.add(monthKey(date));
+    });
+    return [...months].sort((a, b) => b.localeCompare(a));
+  }, [timesheets, hoursByDayMonth]);
+
   const hoursByDay = useMemo(() => Object.entries(filteredTimesheets.reduce((acc, entry) => {
     const date = parseDate(entry.date) || parseDate(entry.creation_date);
-    if (!date) return acc;
+    if (!date || monthKey(date) !== hoursByDayMonth) return acc;
     const key = dateKey(date);
     return { ...acc, [key]: (acc[key] || 0) + (Number.parseFloat(entry.hours) || 0) };
-  }, {})).sort((a, b) => a[0].localeCompare(b[0])), [filteredTimesheets]);
+  }, {})).sort((a, b) => a[0].localeCompare(b[0])), [filteredTimesheets, hoursByDayMonth]);
 
   // ----- task list --------------------------------------------------------
   const taskList = useMemo(() => filteredTasks.map((task) => {
@@ -979,46 +997,90 @@ const MobileMarketingDashboardPreview = () => {
 
   const renderHoursByDaySection = () => (
     <Section title="Hours by day" count={`${hoursByDay.length} days`}>
+      <label className="marketing-month-filter" htmlFor="hours-by-day-month">
+        <span>Month</span>
+        <select
+          id="hours-by-day-month"
+          value={hoursByDayMonth}
+          onChange={(event) => setHoursByDayMonth(event.target.value)}
+        >
+          {hoursByDayMonths.map((month) => <option value={month} key={month}>{formatMonth(month)}</option>)}
+        </select>
+      </label>
       {renderHoursByDay()}
     </Section>
   );
 
-  const renderTasks = () => (
-    <Section title="Tasks" count={`${taskList.length} tasks`} note="Open tasks first, soonest due date on top.">
-      {taskList.length === 0 && <Empty>No tasks match these filters.</Empty>}
-      <div className="marketing-cards">
-        {taskList.slice(0, taskLimit).map((row) => {
-          const estimate = Number.parseFloat(row.task.estimated_hours) || 0;
-          return (
-            <article className="marketing-card" key={row.task.project_task_id}>
-              <div className="marketing-card__top">
-                <h4>{(row.task.task_title || 'Untitled task').trim()}</h4>
-                <StatusPill bucket={row.bucket} />
-              </div>
-              <p className="marketing-card__meta">
-                {row.owner}
-                {row.milestone ? ` · ${row.milestone}` : ''}
-              </p>
-              <p className="marketing-card__dates">
-                {row.due ? `${formatDate(row.due.date)}${row.due.approx ? ' (start date)' : ''}` : 'No due date'}
-                {row.due && row.bucket !== 'done' && <DueBadge days={row.days} />}
-              </p>
-              <p className="marketing-card__meta">
-                {estimate ? `Estimate ${formatHours(estimate)}h · ` : ''}
-                {`Logged ${formatHours(row.logged)}h`}
-                {estimate > 0 && row.logged > estimate && <span className="marketing-due marketing-due--overdue">Over estimate</span>}
-              </p>
-            </article>
-          );
-        })}
-      </div>
-      {taskList.length > taskLimit && (
-        <button type="button" className="marketing-more" onClick={() => setTaskLimit((n) => n + TASK_PAGE)}>
-          {`Show ${Math.min(TASK_PAGE, taskList.length - taskLimit)} more`}
-        </button>
-      )}
-    </Section>
-  );
+  const renderTasks = () => {
+    const taskGroups = taskList.slice(0, taskLimit).reduce((groups, row) => {
+      const group = groups.find((item) => item.owner === row.owner);
+      if (group) group.tasks.push(row);
+      else groups.push({ owner: row.owner, tasks: [row] });
+      return groups;
+    }, []);
+
+    return (
+      <Section title="Tasks" count={`${taskList.length} tasks`} note="Open tasks first, soonest due date on top.">
+        {taskList.length === 0 && <Empty>No tasks match these filters.</Empty>}
+        <div className="marketing-task-groups">
+          {taskGroups.map((group, index) => {
+            const isExpanded = expandedTaskOwners.has(group.owner);
+            const taskGroupId = `marketing-task-group-tasks-${index}`;
+            return (
+              <section className="marketing-task-group" key={group.owner}>
+                <div className="marketing-task-group__heading">
+                  <h3 className="marketing-task-group__title">{group.owner}</h3>
+                  <button
+                    type="button"
+                    className="marketing-task-group__toggle"
+                    aria-expanded={isExpanded}
+                    aria-controls={taskGroupId}
+                    aria-label={`${isExpanded ? 'Hide' : 'Show'} tasks for ${group.owner}`}
+                    onClick={() => setExpandedTaskOwners((current) => {
+                      const next = new Set(current);
+                      if (next.has(group.owner)) next.delete(group.owner);
+                      else next.add(group.owner);
+                      return next;
+                    })}
+                  >
+                    {isExpanded ? 'Hide tasks' : 'Show tasks'}
+                  </button>
+                </div>
+                <div className="marketing-cards" id={taskGroupId} hidden={!isExpanded}>
+                  {group.tasks.map((row) => {
+                    const estimate = Number.parseFloat(row.task.estimated_hours) || 0;
+                    return (
+                      <article className="marketing-card" key={row.task.project_task_id}>
+                        <div className="marketing-card__top">
+                          <h4>{(row.task.task_title || 'Untitled task').trim()}</h4>
+                          <StatusPill bucket={row.bucket} />
+                        </div>
+                        {row.milestone && <p className="marketing-card__meta">{row.milestone}</p>}
+                        <p className="marketing-card__dates">
+                          {row.due ? `${formatDate(row.due.date)}${row.due.approx ? ' (start date)' : ''}` : 'No due date'}
+                          {row.due && row.bucket !== 'done' && <DueBadge days={row.days} />}
+                        </p>
+                        <p className="marketing-card__meta">
+                          {estimate ? `Estimate ${formatHours(estimate)}h · ` : ''}
+                          {`Logged ${formatHours(row.logged)}h`}
+                          {estimate > 0 && row.logged > estimate && <span className="marketing-due marketing-due--overdue">Over estimate</span>}
+                        </p>
+                      </article>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })}
+        </div>
+        {taskList.length > taskLimit && (
+          <button type="button" className="marketing-more" onClick={() => setTaskLimit((n) => n + TASK_PAGE)}>
+            {`Show ${Math.min(TASK_PAGE, taskList.length - taskLimit)} more`}
+          </button>
+        )}
+      </Section>
+    );
+  };
 
   const renderDeadlinesGlance = () => (
     <Section title="Deadlines at a glance" count={`${deadlines.length} dated open items`}>
